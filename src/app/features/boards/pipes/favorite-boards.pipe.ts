@@ -7,7 +7,7 @@ import {IBoards} from "@shared/interfaces/boards.interface";
 export class FavoriteBoardsPipe implements PipeTransform {
 
   transform(items: IBoards[]): IBoards[] {
-
+    if (!items) return [];
     return [...items].sort((a, b) => {
       if (a.boardName < b.boardName)
         return -1;

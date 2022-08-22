@@ -42,7 +42,7 @@ export class BoardAddComponent implements OnInit {
     if (this.addBoardForm.invalid) {
       this.addBoardForm.markAllAsTouched();
     } else if (this.addBoardForm.valid) {
-      this.boards = this.boardsService.getBoards();
+      //this.boards = this.boardsService.getBoards();
       this.actionAdd.next(form);
       this.modalService.hide(1);
     }

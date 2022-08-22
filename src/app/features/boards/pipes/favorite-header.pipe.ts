@@ -7,6 +7,7 @@ import {IBoards} from "@shared/interfaces/boards.interface";
 export class FavoriteHeaderPipe implements PipeTransform {
 
   transform(items: IBoards[]) {
+    if (!items) return [];
     return !!items.some(item => item.boardFavorite === true);
   }
 }

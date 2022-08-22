@@ -3,6 +3,7 @@ import {AbstractControl, FormBuilder, FormGroup, Validators} from "@angular/form
 import {IUser} from "@shared/interfaces/user.interface";
 import {UsersService} from "@core/services/users.service";
 import {Router} from "@angular/router";
+import {AuthService} from "@core/auth/auth.service";
 
 @Component({
   selector: 'app-sign-in',
@@ -25,7 +26,8 @@ export class SignInComponent implements OnInit {
   constructor(public fb: FormBuilder,
               private router: Router,
               private usersService: UsersService,
-              ) {
+              private authService: AuthService,
+  ) {
   }
 
   ngOnInit() {
@@ -52,10 +54,14 @@ export class SignInComponent implements OnInit {
   signIn(): void {
     if (this.inSignForm.valid) {
       this.isAlarmForm = false;
-      this.checkForm(this.inSignForm.value);
-      if (!this.isAlarmEmail && !this.isAlarmPass) {
-        this.router.navigate(["/border"]);
-      }
+      this.authService.signIn(this.inSignForm.value).subscribe({
+        next: () => {
+          this.router.navigate(["/border"]);
+        },
+        error: (error) => {
+
+        }
+      });
     } else {
       this.inSignForm.markAllAsTouched();
       this.isAlarmForm = true;

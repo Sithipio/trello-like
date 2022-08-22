@@ -1,4 +1,4 @@
-import {Component} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {BoardsService} from "@core/services/boards.service";
 import {IBoards} from "@shared/interfaces/boards.interface";
 import {BoardAddComponent} from "../board-add/board-add.component";
@@ -9,10 +9,10 @@ import {BoardEditComponent} from "../board-edit/board-edit.component";
 @Component({
   selector: 'app-board-list',
   templateUrl: './board-list.component.html',
-  styleUrls: ['./board-list.component.scss']
+  styleUrls: ['./board-list.component.scss'],
 })
 
-export class BoardListComponent {
+export class BoardListComponent implements OnInit {
 
   public boards: IBoards[] = [];
   public modalRef: MDBModalRef | null = null;
@@ -20,11 +20,21 @@ export class BoardListComponent {
   constructor(private modalService: MDBModalService,
               private boardsService: BoardsService,
   ) {
+  }
+
+  ngOnInit() {
     this.getBoards();
   }
 
   getBoards(): void {
-    this.boards = this.boardsService.getBoards();
+    this.boardsService.getBoards().pipe(take(1)).subscribe({
+      next: (resp: IBoards[]) => {
+        this.boards = resp;
+      },
+      error: () => {
+
+      },
+    });
   }
 
   openAddBoard() {

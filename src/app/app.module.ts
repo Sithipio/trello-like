@@ -8,6 +8,8 @@ import {MDBBootstrapModule} from "angular-bootstrap-md";
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import { AuthContainerComponent } from '@core/components/auth-container/auth-container.component';
+import {HTTP_INTERCEPTORS, HttpClientModule} from "@angular/common/http";
+import {HttpTokenInterceptor} from "@core/auth/token.interceptor";
 
 @NgModule({
   declarations: [
@@ -19,12 +21,17 @@ import { AuthContainerComponent } from '@core/components/auth-container/auth-con
   imports: [
     BrowserModule,
     AppRoutingModule,
+    HttpClientModule,
     BrowserAnimationsModule,
     MDBBootstrapModule.forRoot(),
     FormsModule,
     ReactiveFormsModule,
   ],
-  providers: [],
+   providers: [{
+     provide: HTTP_INTERCEPTORS,
+     useClass: HttpTokenInterceptor,
+     multi: true
+   }],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

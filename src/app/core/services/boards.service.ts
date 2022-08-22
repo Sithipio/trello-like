@@ -4,6 +4,8 @@ import {v4 as getUniqueID} from 'uuid';
 import {IBoard} from "@shared/interfaces/board.interface";
 import {ITask} from "@shared/interfaces/task.interface";
 import {ITag} from "@shared/interfaces/tag.interface";
+import {HttpClient} from "@angular/common/http";
+import {Observable} from "rxjs";
 
 
 @Injectable({
@@ -364,8 +366,12 @@ export class BoardsService {
     },
   ];
 
-  public getBoards(): IBoards[] {
-    return this.boards;
+  constructor(private httpClient: HttpClient) {
+  }
+
+  public getBoards(): Observable<IBoards[]> {
+    return this.httpClient.get<IBoards[]>('/boards');
+    //  return this.boards;
   }
 
   public getBoardById(id): IBoards {
@@ -449,7 +455,7 @@ export class BoardsService {
   public addTag(form) {
     let randomId = getUniqueID();
     this.Tags.push({...form, tagId: randomId});
-   // console.log(this.Tags)
+    // console.log(this.Tags)
   }
 
   public editTag(form) {
