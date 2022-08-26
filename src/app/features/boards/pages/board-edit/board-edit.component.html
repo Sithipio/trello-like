@@ -1,30 +1,27 @@
 <!-- Modal window -->
-<div mdbModal class="modal-side modal-top-right" tabindex="-1" role="dialog" aria-labelledby="modalAddBoard"
-     aria-hidden="false">
+<div *ngIf="board" mdbModal class="modal-side modal-top-right">
   <div class="modal-dialog" role="document">
     <div class="modal-content rounded">
       <!-- Modal header -->
       <div class="modal-header form__header">
-        <button type="button" class="close pull-right" aria-label="Close" (click)="closeBoard()">
-          <span aria-hidden="true">×</span>
+        <button type="button" class="close pull-right" (click)="closeBoard()">
+          <span>×</span>
         </button>
-        <h4 class="modal-title" id="modalTitle">Edit board {{board.boardName}}</h4>
+        <h4 class="modal-title" id="modalTitle">Edit board {{board.name}}</h4>
       </div>
       <!-- Modal body -->
       <div class="modal-body d-flex flex-column justify-content-start">
         <img class="align-self-center p-2 mb-2" src="./assets/images/add-board-preview-img.svg"
-             alt="board preview image" [style.background-color]=this.editBoardForm.value.boardBackground>
+             alt="board preview image" [style.background-color]=editBoardForm.value.background>
         <!-- Add board form -->
-        <form class=" pb-0 mb-0 px-2 mx-2" [formGroup]="editBoardForm">
+        <form class="pb-0 mb-0 px-2 mx-2" [formGroup]="editBoardForm">
           <!-- Background color -->
-          <div class="text-left">
-            Select board background
-          </div>
+          <div class="text-left">Select board background</div>
           <ul class="row no-gutters m-0 text-center">
             <li class="radio-group col-3" *ngFor="let item of bgBoard; let i = index">
-              <input type="radio" formControlName="boardBackground" [value]="item.boardBackground" id="{{i}}"
-                     name="boardBackground" mdbInput>
-              <label for="{{i}}" [style.background-color]=item.boardBackground>
+              <input type="radio" formControlName="background" [value]="item" id="{{i}}"
+                     name="background" mdbInput>
+              <label for="{{i}}" [style.background-color]=item>
                 <mdb-icon fas icon="check" class="radio-group--icon"></mdb-icon>
                 <span class="radio-group--fade"></span>
               </label>
@@ -32,42 +29,39 @@
           </ul>
           <!-- Name -->
           <div class="md-form">
-            <input mdbInput mdbValidate formControlName="boardName" autocomplete="off"
-                   type="text" class="form-control" id="nameBoard">
-            <label for="nameBoard">Enter a board name*</label>
-            <mdb-error *ngIf="boardNameForm.invalid && (boardNameForm.dirty || boardNameForm.touched)">
-              <span *ngIf="boardNameForm.errors.required">Board name is required</span>
-              <span *ngIf="boardNameForm.errors.maxlength">Please enter at most 15 characters</span>
+            <input mdbInput mdbValidate formControlName="name" autocomplete="off"
+                   type="text" class="form-control" id="name">
+            <label for="name">Enter a board name*</label>
+            <mdb-error *ngIf="getNameValueForm.invalid && (getNameValueForm.dirty || getNameValueForm.touched)">
+              <span *ngIf="getNameValueForm.errors.required">Board name is required</span>
+              <span *ngIf="getNameValueForm.errors.maxlength">Please enter at most 15 characters</span>
             </mdb-error>
           </div>
         </form>
         <!-- Delete button -->
         <button type="button" mdbBtn color="outline-danger" class="waves-light relative rounded align-self-center mb-4"
-                aria-label="Delete"
                 (click)="basicModal.show()"
                 mdbWavesEffect>Delete board
         </button>
         <!-- Modal window for confirm delete -->
-        <div mdbModal #basicModal="mdbModal" class="modal modal-frame modal-bottom" tabindex="-1" role="dialog"
-             aria-labelledby="myBasicModalLabel" aria-hidden="true" [config]="{backdrop: false}">
+        <div mdbModal #basicModal="mdbModal" class="modal modal-frame modal-bottom" [config]="{backdrop: false}">
           <div class="modal-dialog modal-frame modal-bottom" role="document">
             <div class="modal-content modal-delete">
               <!-- Modal body -->
               <div class="modal-body d-flex flex-column align-items-center">
                 <button type="button" class="close pull-right" aria-label="Close" (click)="basicModal.hide()">
-                  <span aria-hidden="true">×</span>
+                  <span>×</span>
                 </button>
-                <p style="font-size: 1.2em; font-weight: bold" class="mb-0">Delete {{board.boardName}} board?</p>
+                <p style="font-size: 1.2em; font-weight: bold" class="mb-0">Delete {{board.name}} board?</p>
                 <!-- Confirm delete button-->
                 <button type="button" mdbBtn color="danger" class="waves-light relative rounded align-self-center"
-                        aria-label="Delete" (click)="deleteBoard(this.editBoardForm.value.boardId)" mdbWavesEffect>
+                        (click)="deleteBoard()" mdbWavesEffect>
                   Confirm delete
                 </button>
               </div>
             </div>
           </div>
         </div>
-
         <div class="modal-footer justify-content-center mx-0 px-0">
           <!-- Submit button -->
           <button type="submit" mdbBtn color="success" class="waves-light relative rounded"

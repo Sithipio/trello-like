@@ -1,15 +1,18 @@
-import { NgModule } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
-import { AppRoutingModule } from './app-routing.module';
-import { AppComponent } from './app.component';
-import { HeaderComponent } from '@core/components/header/header.component';
-import { MainContainerComponent } from '@core/components/main-container/main-container.component';
-import {MDBBootstrapModule} from "angular-bootstrap-md";
-import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
-import {FormsModule, ReactiveFormsModule} from "@angular/forms";
-import { AuthContainerComponent } from '@core/components/auth-container/auth-container.component';
-import {HTTP_INTERCEPTORS, HttpClientModule} from "@angular/common/http";
-import {HttpTokenInterceptor} from "@core/auth/token.interceptor";
+import {NgModule} from '@angular/core';
+import {BrowserModule} from '@angular/platform-browser';
+import {AppRoutingModule} from './app-routing.module';
+import {AppComponent} from './app.component';
+import {HeaderComponent} from '@core/components/header/header.component';
+import {MainContainerComponent} from '@core/components/main-container/main-container.component';
+import {MDBBootstrapModule} from 'angular-bootstrap-md';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import {AuthContainerComponent} from '@core/components/auth-container/auth-container.component';
+import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
+import {HttpTokenInterceptor} from '@core/auth/token.interceptor';
+import {AuthGuard} from '@core/guards/auth.guard';
+import { ToastrModule } from 'ngx-toastr';
+
 
 @NgModule({
   declarations: [
@@ -26,12 +29,18 @@ import {HttpTokenInterceptor} from "@core/auth/token.interceptor";
     MDBBootstrapModule.forRoot(),
     FormsModule,
     ReactiveFormsModule,
+    ToastrModule.forRoot({
+      preventDuplicates: true,
+      positionClass: 'toast-bottom-center',
+    })
   ],
-   providers: [{
-     provide: HTTP_INTERCEPTORS,
-     useClass: HttpTokenInterceptor,
-     multi: true
-   }],
-  bootstrap: [AppComponent]
+  providers: [{
+    provide: HTTP_INTERCEPTORS,
+    useClass: HttpTokenInterceptor,
+    multi: true,
+  },
+    AuthGuard],
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {
+}

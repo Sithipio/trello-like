@@ -1,70 +1,87 @@
 import {Component, OnInit} from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from "@angular/forms";
-import {BoardsService} from "@core/services/boards.service";
-import {IBoards} from "@shared/interfaces/boards.interface";
-import {MDBModalService} from "angular-bootstrap-md";
-import {Subject} from "rxjs";
-
+import {AbstractControl, FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {IBoards} from '@shared/interfaces/boards.interface';
+import {MDBModalService} from 'angular-bootstrap-md';
+import {Subject, take} from 'rxjs';
+import {BoardsService} from '../../services/boards.service';
+import {BOARD_BG_COLOR} from '@shared/constant/board-background.constant';
 
 @Component({
   selector: 'app-board-edit',
   templateUrl: './board-edit.component.html',
-  styleUrls: ['../../../../styles/boards.scss']
+  styleUrls: ['../../../../styles/boards.scss'],
 })
 
 export class BoardEditComponent implements OnInit {
 
-  public idBoard: number;
+  public idBoard: string;
   public editBoardForm: FormGroup;
-  public actionEdit = new Subject<any>();
-  public bgBoard = this.boardsService.bgColorBoard;
+  public actionEdit$ = new Subject<any>();
+  public bgBoard = BOARD_BG_COLOR;
   public board: IBoards;
 
   constructor(public fb: FormBuilder,
               private modalService: MDBModalService,
               private boardsService: BoardsService) {
-
   }
 
-  ngOnInit() {
-    this.editBoardForm = this.fb.group({
-      boardId: [''],
-      boardBackground: [Validators.required],
-      boardName: ['', [Validators.required, Validators.maxLength(15)]],
-      boardFavorite: [],
+  public ngOnInit(): void {
+    this.getBoard();
+    this.boardEditForm();
+  }
+
+  private getBoard(): void {
+    this.boardsService.getBoardById(this.idBoard).pipe(take(1)).subscribe({
+      next: (resp: IBoards) => {
+        this.board = resp;
+        this.editBoardForm.patchValue(this.board);
+      },
+      error: () => {
+        //todo pop window error
+      },
     });
-    this.getBoardById(this.idBoard);
   }
 
-  get boardNameForm() {
-    return this.editBoardForm.get('boardName');
+  public boardEditForm(): void {
+    this.editBoardForm = this.fb.group({
+      name: [null, [Validators.required, Validators.maxLength(15)]],
+      background: [Validators.required],
+    });
   }
 
-  getBoardById(id): void {
-    this.board = this.boardsService.getBoardById(id);
-    this.actionEdit.next(id);
-    this.editBoardForm.patchValue(this.board);
+  get getNameValueForm(): AbstractControl {
+    return this.editBoardForm.get('name');
   }
 
-  editBoard(form) {
+  public editBoard(form): void {
     if (this.editBoardForm.invalid) {
       this.editBoardForm.markAllAsTouched();
     } else if (this.editBoardForm.valid) {
-      this.boardsService.editBoard(form);
-      this.actionEdit.next(form.boardId);
-      this.modalService.hide(1);
+      this.boardsService.editBoard(this.idBoard, form).pipe(take(1)).subscribe({
+        next: () => {
+          this.actionEdit$.next(1);
+          this.modalService.hide(1);
+        },
+        error: () => {
+          //todo pop window error
+        },
+      });
     }
   }
 
-  deleteBoard(id) {
-    this.boardsService.deleteBoard(id);
-    this.modalService.hide(1);
-    this.actionEdit.next(id);
+  public deleteBoard(): void {
+    this.boardsService.deleteBoard(this.idBoard).pipe((take(1))).subscribe({
+      next: () => {
+        this.modalService.hide(1);
+        this.actionEdit$.next(1);
+      }, error: () => {
+        //todo pop window error
+      },
+    });
   }
 
-  closeBoard() {
+  public closeBoard(): void {
     this.modalService.hide(1);
   }
 
 }
-

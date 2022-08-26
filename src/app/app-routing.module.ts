@@ -1,42 +1,44 @@
 import {NgModule} from '@angular/core';
-import {RouterModule,Routes} from '@angular/router';
+import {RouterModule, Routes} from '@angular/router';
 import {MainContainerComponent} from "@core/components/main-container/main-container.component";
 import {AuthContainerComponent} from "@core/components/auth-container/auth-container.component";
+import {AuthGuard} from "@core/guards/auth.guard";
 
 
 const routes: Routes = [
-  {  path: '',
+  {
+    path: '',
     component: MainContainerComponent,
-    // canActivate: [LoggedInUserGuard], // @todo  look how make guard
+    canActivate: [AuthGuard],
     children: [
       {
         path: '',
         pathMatch: 'full',
-        loadChildren: () =>import('./features/boards/boards.module').then(m => m.BoardsModule)
+        loadChildren: () => import('./features/boards/boards.module').then(m => m.BoardsModule)
       },
       {
         path: "board/:boardId",
-        loadChildren: () =>import('./features/board/board.module').then(m => m.BoardModule)
+        loadChildren: () => import('./features/board/board.module').then(m => m.BoardModule)
       },
- /*     {
-        path: AppRoutes.PROFILE,
-        loadChildren: () =>import('./features/profile/profile.module').then(m => m.BoardsModule)
-      },*/
+      /*     {
+             path: AppRoutes.PROFILE,
+             loadChildren: () =>import('./features/profile/profile.module').then(m => m.BoardsModule)
+           },*/
     ],
   },
   {
     path: 'auth',
     component: AuthContainerComponent,
-    // canActivate: [logOutUserGuard], // @todo  look how make guard
+    canActivateChild: [AuthGuard],
     children: [
       {
         path: '',
-        loadChildren: () =>import('./features/auth/auth.module').then(m => m.AuthModule)
+        loadChildren: () => import('./features/auth/auth.module').then(m => m.AuthModule)
       },
     ],
   },
 
-  {path: '**',redirectTo: ''},
+  {path: '**', redirectTo: ''},
 ];
 
 @NgModule({

@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import {AuthService} from '@core/auth/auth.service';
 
 @Component({
   selector: 'app-header',
@@ -8,8 +9,9 @@ import { Component } from '@angular/core';
 export class HeaderComponent {
   public isCollapsed: boolean = true;
 
-  constructor() { }
+  constructor(private authService : AuthService) {}
 
-
-
+  signOut(): void {
+    this.authService.signOut();
+  }
 }

@@ -4,8 +4,7 @@ import {v4 as getUniqueID} from 'uuid';
 import {IBoard} from "@shared/interfaces/board.interface";
 import {ITask} from "@shared/interfaces/task.interface";
 import {ITag} from "@shared/interfaces/tag.interface";
-import {HttpClient} from "@angular/common/http";
-import {Observable} from "rxjs";
+import {BoardBackground} from '@shared/enums/board-background';
 
 
 @Injectable({
@@ -16,10 +15,10 @@ export class BoardsService {
 
   private boards: IBoards[] = [
     {
-      boardId: "1",
-      boardName: "Work",
-      boardBackground: "#D29034",
-      boardFavorite: false,
+      id: "1",
+      name: "Work",
+      background: BoardBackground.GREY,
+      isFavorite: false,
       boardColumn: [
         {
           columnId: "101",
@@ -49,10 +48,10 @@ export class BoardsService {
       ]
     },
     {
-      boardId: "2",
-      boardName: "Home",
-      boardBackground: "#519839",
-      boardFavorite: true,
+      id: "2",
+      name: "Home",
+      background: BoardBackground.GREY,
+      isFavorite: true,
       boardColumn: [
         {
           columnId: "104",
@@ -82,10 +81,10 @@ export class BoardsService {
       ],
     },
     {
-      boardId: "3",
-      boardName: "Family",
-      boardBackground: "#4BBF6B",
-      boardFavorite: false,
+      id: "3",
+      name: "Family",
+      background: BoardBackground.GREY,
+      isFavorite: false,
       boardColumn: [
         {
           columnId: "107",
@@ -269,17 +268,7 @@ export class BoardsService {
     },
   ];
 
-  public bgColorBoard = [
-    {boardBackground: "#838C91"},
-    {boardBackground: "#D29034"},
-    {boardBackground: "#519839"},
-    {boardBackground: "#B04632"},
-    {boardBackground: "#89609E"},
-    {boardBackground: "#4BBF6B"},
-    {boardBackground: "#00AECC"},
-    {boardBackground: "#0067A3"},
-  ];
-
+  //have enum already
   public bgColorTask = [
     {taskBackground: "#7BC86C"},
     {taskBackground: "#F5DD29"},
@@ -293,7 +282,7 @@ export class BoardsService {
     {taskBackground: "#172B4D"},
     {taskBackground: ""}
   ];
-
+//already have enum
   public bgColorTag = [
     {tagBackground: "#61BD4F"},
     {tagBackground: "#F2D600"},
@@ -366,64 +355,25 @@ export class BoardsService {
     },
   ];
 
-  constructor(private httpClient: HttpClient) {
-  }
-
-  public getBoards(): Observable<IBoards[]> {
-    return this.httpClient.get<IBoards[]>('/boards');
-    //  return this.boards;
-  }
-
-  public getBoardById(id): IBoards {
-    return this.boards.filter(item => item.boardId === id)[0];
-  }
-
-  public addBoard(board: any): void {
-    let randomId = getUniqueID();
-    this.boards.push({...board, boardId: randomId, boardBackground: board.boardBackground})
-  }
-
-  public editBoard(form): void {
-    this.boards = this.boards.map(item => {
-      if (item.boardId === form.boardId) {
-        return {...item, ...form};
-      }
-      return item;
-    });
-  }
-
-  public deleteBoard(id: string): void {
-    this.boards = this.boards.filter(item => item.boardId !== id)
-  }
-
-  public toggleFavorite(board): void {
-    this.boards = this.boards.map((item, index) => {
-      if (item.boardId === board.boardId) {
-        this.boards[index].boardFavorite = !board.boardFavorite;
-      }
-      return item;
-    });
-  }
-
   public addColumn(board: IBoard, id: string): void {
     let randomId = getUniqueID();
-    let filterBoard = this.boards.filter(item => item.boardId == id)
+    let filterBoard = this.boards.filter(item => item.id == id)
     filterBoard[0].boardColumn.push({...board, columnId: randomId, columnTask: []})
   }
 
   public editColumn(form, id): void {
-    this.boards.filter(item => item.boardId === id)[0].boardColumn
+    this.boards.filter(item => item.id === id)[0].boardColumn
       .find(item => item.columnId === form.columnId).columnName = form.columnName;
   }
 
   public deleteColumn(columnId, boardId) {
-    this.boards.filter(item => item.boardId === boardId)[0].boardColumn =
-      this.boards.filter(item => item.boardId === boardId)[0].boardColumn.filter(item => item.columnId !== columnId);
+    this.boards.filter(item => item.id === boardId)[0].boardColumn =
+      this.boards.filter(item => item.id === boardId)[0].boardColumn.filter(item => item.columnId !== columnId);
   }
 
   public addTask(task: ITask, idColumn: string, idBoard: string): void {
     let randomId = getUniqueID();
-    let filterBoard = this.boards.filter(column => column.boardId == idBoard)
+    let filterBoard = this.boards.filter(column => column.id == idBoard)
     let filterColumn = filterBoard[0].boardColumn.filter(task => task.columnId == idColumn)
     filterColumn[0].columnTask.push({
       ...task,
@@ -438,7 +388,7 @@ export class BoardsService {
   }
 
   public getTaskById(idBoard, idColumn, idTask): ITask {
-    return this.boards.filter(item => item.boardId === idBoard)[0].boardColumn
+    return this.boards.filter(item => item.id === idBoard)[0].boardColumn
       .filter(item => item.columnId === idColumn)[0].columnTask.find(item => item.taskId === idTask);
   }
 
@@ -447,7 +397,7 @@ export class BoardsService {
   }
 
   public getTagTask(idTask, idBoard, idColumn) {
-    return this.boards.filter(item => item.boardId === idBoard)[0].boardColumn
+    return this.boards.filter(item => item.id === idBoard)[0].boardColumn
       .filter(item => item.columnId === idColumn)[0].columnTask
       .filter(item => item.taskId === idTask)[0].taskTag;
   }
@@ -468,7 +418,7 @@ export class BoardsService {
   }
 
   public checkTagActive(itemId, idTask, idBoard, idColumn) {
-    return this.boards.filter(item => item.boardId === idBoard)[0].boardColumn
+    return this.boards.filter(item => item.id === idBoard)[0].boardColumn
       .filter(item => item.columnId === idColumn)[0].columnTask
       .filter(item => item.taskId === idTask)[0].taskTag
       .filter(item => item.tagId === itemId)[0];
