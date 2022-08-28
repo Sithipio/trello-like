@@ -1,7 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {AbstractControl, FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {IUser} from '@shared/interfaces/user.interface';
-import {UsersService} from '@core/services/users.service';
 import {Router} from '@angular/router';
 import {AuthService} from '@core/auth/auth.service';
 import {NotificationService} from '@shared/services/notification.service';
@@ -28,31 +27,23 @@ export class SignInComponent implements OnInit {
 
   constructor(public fb: FormBuilder,
               private router: Router,
-              private usersService: UsersService,
               private authService: AuthService,
-              private notificationService: NotificationService,
-  ) {
+              private notificationService: NotificationService) {
   }
 
   ngOnInit() {
     this.inSignForm = this.fb.group({
-      userEmail: [null, [Validators.required, Validators.email]],
-      userPassword: [null, Validators.required],
+      email: [null, [Validators.required, Validators.email]],
+      password: [null, Validators.required],
     });
   }
 
   get emailForm(): AbstractControl {
-    return this.inSignForm.get('userEmail');
+    return this.inSignForm.get('email');
   }
 
   get passwordForm(): AbstractControl {
-    return this.inSignForm.get('userPassword');
-  }
-
-  checkForm(form: IUser): void {
-    this.users = this.usersService.getUsers();
-    this.isAlarmEmail = !this.users.find(user => user.userEmail === form.userEmail);
-    this.isAlarmPass = !this.users.find(user => user.userPassword === form.userPassword);
+    return this.inSignForm.get('password');
   }
 
   signIn(): void {
@@ -64,8 +55,9 @@ export class SignInComponent implements OnInit {
         },
         error: (error) => {
           this.notificationService.sendMessage({
-            title: error.name,
-            message: error.message,
+            //todo how can do it better? (without e.e.e)
+            title: error.error.error,
+            message: error.error.message,
             type: NotificationType.ERROR,
           })
         },
@@ -75,4 +67,5 @@ export class SignInComponent implements OnInit {
       this.isAlarmForm = true;
     }
   }
+
 }

@@ -13,7 +13,6 @@ import {HttpTokenInterceptor} from '@core/auth/token.interceptor';
 import {AuthGuard} from '@core/guards/auth.guard';
 import { ToastrModule } from 'ngx-toastr';
 
-
 @NgModule({
   declarations: [
     AppComponent,

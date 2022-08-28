@@ -19,13 +19,13 @@ export class AuthGuard implements CanActivate, CanActivateChild {
     if (idToken) {
       return true;
     } else
-      this.router.navigateByUrl('/auth/sign-in').then(r => false);
+      this.router.navigate(['/auth/sign-in']);
   }
 
   canActivateChild(): boolean {
     const idToken = AuthService.getToken();
     if (idToken) {
-      this.router.navigateByUrl('').then(r => false);
+      this.router.navigate([]);
     } else
       return true;
   }

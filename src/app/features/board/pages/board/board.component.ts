@@ -54,7 +54,7 @@ export class BoardComponent implements OnInit {
       columnTask: [[]],
     });
     this.idBoard = this.route.snapshot.paramMap.get('boardId');
-    this.board = this.boardsService.getBoardById(this.idBoard);
+//    this.board = this.boardsService.getBoardById(this.idBoard);
   }
 
   drop(event: CdkDragDrop<any[]>) {

@@ -1,16 +1,18 @@
 import {Component, OnInit} from '@angular/core';
-import {IUser} from "@shared/interfaces/user.interface";
-import {AbstractControl, FormBuilder, FormGroup, Validators} from "@angular/forms";
-import {Router} from "@angular/router";
-import {UsersService} from "@core/services/users.service";
+import {IUser} from '@shared/interfaces/user.interface';
+import {AbstractControl, FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {Router} from '@angular/router';
+import {AuthService} from '@core/auth/auth.service';
+import {NotificationType} from '@shared/enums/notification';
+import {NotificationService} from '@shared/services/notification.service';
 
 @Component({
   selector: 'app-sign-up',
   templateUrl: './sign-up.component.html',
   styleUrls: [
     '../../../../styles/auth.scss',
-    './sign-up.component.scss'
-  ]
+    './sign-up.component.scss',
+  ],
 })
 
 export class SignUpComponent implements OnInit {
@@ -23,91 +25,96 @@ export class SignUpComponent implements OnInit {
   public isAlarmPass: boolean = false;
 
   constructor(public fb: FormBuilder,
-              private usersService: UsersService,
               private router: Router,
-              ) {
+              private authService: AuthService,
+              private notificationService: NotificationService) {
   }
 
   ngOnInit() {
     this.upSignForm = this.fb.group({
-      userId: [''],
-      userFirstName: [null, [Validators.required, Validators.pattern(/^[a-zA-Z]{2,20}$/), Validators.minLength(2), Validators.maxLength(20)]],
-      userLastName: [null, [Validators.required, Validators.pattern(/^[a-zA-Z]{2,20}$/), Validators.minLength(2), Validators.maxLength(20)]],
-      userEmail: [null, [Validators.required, Validators.email]],
-      passwordGroup: this.fb.group({
-        userPassword: [null, [Validators.required, control => this.validatePasswords(control, 'password1'), Validators.minLength(4)]],
-        userConfPassword: [null, [Validators.required, control => this.validatePasswords(control, 'password2')]]
-        }
-      )
+      firstName: [null, [Validators.required, Validators.pattern(/^[a-zA-Z]{2,20}$/), Validators.minLength(2), Validators.maxLength(20)]],
+      lastName: [null, [Validators.required, Validators.pattern(/^[a-zA-Z]{2,20}$/), Validators.minLength(2), Validators.maxLength(20)]],
+      email: [null, [Validators.required, Validators.email]],
+      password: [null, [Validators.required, control => this.validatePasswords(control, 'password1'), Validators.minLength(4)]],
+      confPassword: [null, [Validators.required, control => this.validatePasswords(control, 'password2')]],
+
     })
   }
 
   get firstNameForm(): AbstractControl {
-    return this.upSignForm.get('userFirstName');
+    return this.upSignForm.get('firstName');
   }
 
   get lastNameForm(): AbstractControl {
-    return this.upSignForm.get('userLastName');
+    return this.upSignForm.get('lastName');
   }
 
   get emailForm(): AbstractControl {
-    return this.upSignForm.get('userEmail');
+    return this.upSignForm.get('email');
   }
 
   get passwordForm(): AbstractControl {
-    return this.upSignForm.get('passwordGroup.userPassword');
+    return this.upSignForm.get('password');
   }
 
   get passwordConfForm(): AbstractControl {
-    return this.upSignForm.get('passwordGroup.userConfPassword');
-  }
-
-  get password(): AbstractControl {
-    return this.upSignForm.get('passwordGroup.userPassword');
-  }
-
-  get confirmPassword(): AbstractControl {
-    return this.upSignForm.get('passwordGroup.userConfPassword');
+    return this.upSignForm.get('confPassword');
   }
 
   validatePasswords(control: AbstractControl, name: string) {
     if (
       this.upSignForm === undefined ||
-      this.password.value === '' ||
-      this.confirmPassword.value === ''
+      this.passwordForm.value === '' ||
+      this.passwordConfForm.value === ''
     ) {
       return null;
-    } else if (this.password.value === this.confirmPassword.value) {
+    } else if (this.passwordForm.value === this.passwordConfForm.value) {
       if (
         name === 'userPassword' &&
-        this.confirmPassword.hasError('passwordMismatch')
+        this.passwordConfForm.hasError('passwordMismatch')
       ) {
-        this.password.setErrors(null);
-        this.confirmPassword.updateValueAndValidity();
+        this.passwordForm.setErrors(null);
+        this.passwordConfForm.updateValueAndValidity();
       } else if (
         name === 'userConfPassword' &&
-        this.password.hasError('passwordMismatch')
+        this.passwordForm.hasError('passwordMismatch')
       ) {
-        this.confirmPassword.setErrors(null);
-        this.password.updateValueAndValidity();
+        this.passwordConfForm.setErrors(null);
+        this.passwordForm.updateValueAndValidity();
       }
       this.isAlarmPass = false;
     } else
       this.isAlarmPass = true;
   }
 
-  signUp(form): void {
+  signUp(): void {
     if (this.isAlarmPass) {
-      this.confirmPassword.setErrors({'incorrect': true});
-      this.password.updateValueAndValidity();
+      this.passwordConfForm.setErrors({'incorrect': true});
+      this.passwordForm.updateValueAndValidity();
     }
     if (this.upSignForm.invalid) {
       this.upSignForm.markAllAsTouched();
       this.isAlarmForm = true;
     } else if (this.upSignForm.valid) {
       this.isAlarmForm = false;
-      this.usersService.addUser(form);
-      this.router.navigate(["/border"]);
+      this.authService.signUp(this.upSignForm.value).subscribe({
+        next: () => {
+          this.router.navigate(['/auth/sing-in']);
+        },
+        error: (error) => {
+          this.notificationService.sendMessage({
+            //todo how can do it better? (without e.e.e)
+            title: error.error.error,
+            message: error.error.message,
+            type: NotificationType.ERROR,
+          });
+
+          if (error.error.statusCode === 409) {
+            this.emailForm.setErrors({emailExist: true});
+          }
+        },
+      });
     }
   }
+
 }
