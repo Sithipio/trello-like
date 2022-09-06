@@ -1,4 +1,4 @@
-import {BoardBackground} from '@shared/enums/board-background';
+import { BoardBackground } from '@shared/enums/board-background';
 
 export const BOARD_BG_COLOR = [
   BoardBackground.GREY,

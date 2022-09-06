@@ -1,10 +1,12 @@
+@import "./src/app/styles/_variables.scss";
+
 .container {
-  font-family: Segoe UI, Roboto, sans-serif;
+  font-family: $font-family-main;
 }
 
 .boards__header {
   min-width: 100%;
-  font-weight: 500;
+  font-weight: $font-weight-medium;
 }
 
 ul {
@@ -20,7 +22,7 @@ ul {
     display: block;
     height: 90px;
     width: 160px;
-    border-radius: 3px;
+    border-radius: $border-radius-normal;
 
     &:hover {
       .board__btn {
@@ -36,18 +38,14 @@ ul {
   &__link {
     z-index: 0;
     position: absolute;
-    width: 100%;
-    height: 100%;
-    border-radius: 3px;
+    @include wh-100;
+    border-radius: $border-radius-normal;
   }
 
   &--fade {
     position: absolute;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    border-radius: 3px;
+    @include absolute-cover();
+    border-radius: $border-radius-normal;
 
     &:hover {
       background-color: rgba(0, 0, 0, 0.09);
@@ -61,7 +59,7 @@ ul {
 
   &__btn {
     padding: 4px 8px;
-    z-index: 20;
+    z-index: 2;
     display: none;
     border: none;
     background: transparent;
@@ -79,8 +77,8 @@ ul {
     top: 7px;
     left: 7px;
     color: white;
-    font-size: 16px;
-    font-weight: 600;
+    font-size: $font-size-medium + 2;
+    font-weight: $font-weight-medium;
   }
 
   &__btn-add {
@@ -89,8 +87,8 @@ ul {
     background-color: rgba(9, 31, 68, 0.08);
     color: #172b4d;
     cursor: pointer;
-    font-size: 14px;
-    font-weight: 500;
+    font-size: $font-size-medium;
+    font-weight: $font-weight-medium;
     padding: 10px 0 10px 28px;
 
     &:hover {

@@ -1,3 +1,8 @@
+@import "./src/app/styles/_variables.scss";
+
+$max-width-image: 40%;
+$width-image: 400px;
+
 body {
   background-color: rgb(247, 247, 247);
 }
@@ -8,9 +13,8 @@ body {
 
 .background-image {
   position: fixed;
+  @include wh-100;
   z-index: -1;
-  height: 100%;
-  width: 100%;
   top: 0;
   margin-left: -15px;
 
@@ -18,15 +22,15 @@ body {
     position: absolute;
     bottom: 2px;
     left: 0;
-    max-width: 40%;
-    width: 400px;
+    max-width: $max-width-image;
+    width: $width-image;
   }
 
   &--right {
     position: absolute;
     bottom: -2px;
     right: 0;
-    width: 400px;
-    max-width: 40%;
+    width: $width-image;
+    max-width: $max-width-image;
   }
 }

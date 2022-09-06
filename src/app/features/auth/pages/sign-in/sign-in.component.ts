@@ -1,29 +1,27 @@
-import {Component, OnInit} from '@angular/core';
-import {AbstractControl, FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {IUser} from '@shared/interfaces/user.interface';
-import {Router} from '@angular/router';
-import {AuthService} from '@core/auth/auth.service';
-import {NotificationService} from '@shared/services/notification.service';
-import {NotificationType} from '@shared/enums/notification';
+import { Component, OnInit } from '@angular/core';
+import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 
+import { AuthService } from '@core/auth/auth.service';
+import { NotificationType } from '@shared/enums';
+import { NotificationService } from '@shared/services';
+import {URL_MAIN, URL_SIGN_UP } from '@shared/constant';
 
 @Component({
   selector: 'app-sign-in',
   templateUrl: './sign-in.component.html',
   styleUrls: [
+    '../../../../styles/font-styles.scss',
     '../../../../styles/auth.scss',
     './sign-in.component.scss',
   ],
 })
-
 export class SignInComponent implements OnInit {
 
-  public users: IUser[] = [];
   public inSignForm: FormGroup;
   public isHidePass: boolean = true;
   public isAlarmForm: boolean = false;
-  public isAlarmEmail: boolean = false;
-  public isAlarmPass: boolean = false;
+  public urlToReg = URL_SIGN_UP;
 
   constructor(public fb: FormBuilder,
               private router: Router,
@@ -51,13 +49,12 @@ export class SignInComponent implements OnInit {
       this.isAlarmForm = false;
       this.authService.signIn(this.inSignForm.value).subscribe({
         next: () => {
-          this.router.navigate(['/border']);
+          this.router.navigate([URL_MAIN]);
         },
-        error: (error) => {
+        error: ({error}) => {
           this.notificationService.sendMessage({
-            //todo how can do it better? (without e.e.e)
-            title: error.error.error,
-            message: error.error.message,
+            title: error.error,
+            message: error.message,
             type: NotificationType.ERROR,
           })
         },

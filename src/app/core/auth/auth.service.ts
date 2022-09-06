@@ -1,13 +1,14 @@
-import {HttpClient} from '@angular/common/http';
-import {Observable, tap} from 'rxjs';
-import {Injectable} from '@angular/core';
-import {Router} from '@angular/router';
-import {IUser} from '@shared/interfaces/user.interface';
+import { HttpClient } from '@angular/common/http';
+import { Observable, tap } from 'rxjs';
+import { Injectable } from '@angular/core';
+import { Router } from '@angular/router';
+
+import { IUser } from '@shared/interfaces/user.interface';
+import { URL_SIGN_IN, URL_SIGN_UP } from '@shared/constant';
 
 @Injectable({
   providedIn: 'root',
 })
-
 export class AuthService {
   constructor(private httpClient: HttpClient,
               private router: Router) {
@@ -26,18 +27,18 @@ export class AuthService {
   }
 
   public signIn(userData): Observable<{ accessToken }> {
-    return this.httpClient.post<{ accessToken: string }>('/auth/sign-in', userData).pipe(tap(({accessToken}) => {
+    return this.httpClient.post<{ accessToken: string }>(URL_SIGN_IN, userData).pipe(tap(({accessToken}) => {
       this.setToken(accessToken);
     }))
   }
 
   public signUp(userData: IUser): Observable<IUser> {
-    return this.httpClient.post<IUser>('/auth/sign-up', userData);
+    return this.httpClient.post<IUser>(URL_SIGN_UP, userData);
   }
 
   public signOut(): void {
     AuthService.removeToken();
-    this.router.navigate(['/auth/sign-in']);
+    this.router.navigate([URL_SIGN_IN]);
   }
 
 }

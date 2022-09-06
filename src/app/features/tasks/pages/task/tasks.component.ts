@@ -13,12 +13,12 @@ import {ITask} from "@shared/interfaces/task.interface";
 
 @Component({
   selector: 'app-task',
-  templateUrl: './task.component.html',
-  styleUrls: ['./task.component.scss'],
+  templateUrl: './tasks.component.html',
+  styleUrls: ['./tasks.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 
-export class TaskComponent implements OnInit {
+export class TasksComponent implements OnInit {
 
   public idTask: string;
   public idBoard: string;
@@ -63,7 +63,7 @@ export class TaskComponent implements OnInit {
   }
 
   getBoardById(): void {
-    this.task = this.boardsService.getTaskById(this.idBoard, this.idColumn, this.idTask);
+//    this.task = this.boardsService.getTaskById(this.idBoard, this.idColumn, this.idTask);
     // this.actionEdit.next(id);
     this.editTaskForm.patchValue(this.task);
     console.log(this.task)
@@ -76,7 +76,7 @@ export class TaskComponent implements OnInit {
   getTagTask() {
     //this.editTaskForm.value.taskTag.patchValue(this.fb.group(this.boardsService.getTagTask(this.idTask, this.idBoard, this.idColumn)));
    // this.editTaskForm.value.taskTag.push(this.fb.group(this.boardsService.getTagTask(this.idTask, this.idBoard, this.idColumn)));
-    console.log(this.boardsService.getTagTask(this.idTask, this.idBoard, this.idColumn))
+  //  console.log(this.boardsService.getTagTask(this.idTask, this.idBoard, this.idColumn))
   }
 
   closeBoard() {
@@ -144,7 +144,7 @@ export class TaskComponent implements OnInit {
       this.toggleEditTag = null;
     } else {
       this.toggleEditTag = tagId;
-      this.editTagForm.patchValue(this.boardsService.getTag(tagId))
+    //  this.editTagForm.patchValue(this.boardsService.getTag(tagId))
     }
     if (tagLength) {
       this.toggleEditTag = tagLength;
@@ -156,22 +156,22 @@ export class TaskComponent implements OnInit {
 
 
   addTag(form) {
-    this.boardsService.addTag(form);
+   // this.boardsService.addTag(form);
     this.getTag();
   }
 
   editTag(form) {
-    this.boardsService.editTag(form);
+ //   this.boardsService.editTag(form);
     this.getTag();
   }
 
   deleteTag(id) {
-    this.boardsService.deleteTag(id);
+  //  this.boardsService.deleteTag(id);
     this.getTag();
   }
 
   checkTagActive(itemId, idTask){
-    return this.boardsService.checkTagActive(itemId, idTask, this.idBoard, this.idColumn);
+//    return this.boardsService.checkTagActive(itemId, idTask, this.idBoard, this.idColumn);
   }
 
 }

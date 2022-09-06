@@ -1,4 +1,4 @@
-import {Injectable} from '@angular/core';
+import { Injectable } from '@angular/core';
 import {
   HttpEvent,
   HttpInterceptor,
@@ -6,10 +6,12 @@ import {
   HttpRequest,
   HttpErrorResponse,
 } from '@angular/common/http';
-import {Observable, tap} from 'rxjs';
-import {environment as env} from '@env';
-import {AuthService} from './auth.service';
-import {Router} from '@angular/router';
+import { Observable, tap } from 'rxjs';
+import { environment as env } from '@env';
+
+import { AuthService } from './auth.service';
+import { Router } from '@angular/router';
+import { URL_SIGN_IN } from '@shared/constant';
 
 @Injectable()
 export class HttpTokenInterceptor implements HttpInterceptor {
@@ -40,7 +42,7 @@ export class HttpTokenInterceptor implements HttpInterceptor {
             if (err instanceof HttpErrorResponse) {
               if (err.status == 401) {
                 AuthService.removeToken();
-                this.router.navigate(['/auth/sign-in']);
+                this.router.navigate([URL_SIGN_IN]);
               }
             }
           },

@@ -1,14 +1,19 @@
 <!-- Form registration -->
 <form class="pt-5 px-5 pb-3 mt-5 form__box z-depth-1" [formGroup]="upSignForm">
   <!-- Form header -->
-  <div class="form__header">
-    Sign Up
-  </div>
+  <h3 class="form__header">Sign Up</h3>
   <!-- First Name -->
   <div class="md-form">
     <mdb-icon class="prefix form__icon" fas icon="user"></mdb-icon>
-    <input mdbInput mdbValidate formControlName="firstName" type="text" id="firstName"
-           class="form-control" autocomplete="off">
+    <input
+      mdbInput
+      mdbValidate
+      formControlName="firstName"
+      type="text"
+      id="firstName"
+      autocomplete="off"
+      class="form-control"
+    >
     <label for="firstName">Type your first name*</label>
     <mdb-error *ngIf="firstNameForm.invalid && (firstNameForm.dirty || firstNameForm.touched)">
       <span *ngIf="firstNameForm.errors.required">First name is required</span>
@@ -20,8 +25,15 @@
   <!-- Last Name -->
   <div class="md-form">
     <mdb-icon class="prefix form__icon" fas icon="user"></mdb-icon>
-    <input mdbInput mdbValidate formControlName="lastName" type="text" id="lastName"
-           class="form-control" autocomplete="off">
+    <input
+      mdbInput
+      mdbValidate
+      formControlName="lastName"
+      type="text"
+      id="lastName"
+      autocomplete="off"
+      class="form-control"
+    >
     <label for="lastName">Type your last name*</label>
     <mdb-error *ngIf="lastNameForm.invalid && (lastNameForm.dirty || lastNameForm.touched)">
       <span *ngIf="lastNameForm.errors.required">First name is required</span>
@@ -33,8 +45,15 @@
   <!-- Email -->
   <div class="md-form">
     <mdb-icon class="prefix form__icon" fas icon="envelope"></mdb-icon>
-    <input mdbInput mdbValidate formControlName="email" type="email"
-           class="form-control" id="email" autocomplete="off">
+    <input
+      mdbInput
+      mdbValidate
+      formControlName="email"
+      type="email"
+      id="email"
+      autocomplete="off"
+      class="form-control"
+    >
     <label for="email">Type your email*</label>
     <mdb-error *ngIf="emailForm.invalid && (emailForm.dirty || emailForm.touched)">
       <span *ngIf="emailForm.errors.required">Email is required</span>
@@ -44,10 +63,22 @@
   </div>
   <!-- Password -->
   <div class="md-form">
-    <mdb-icon class="prefix btn-lock form__icon" fas (click)="$event.stopPropagation(); isHidePass = !isHidePass"
-              [class.fa-lock]="isHidePass" [class.fa-unlock]="!isHidePass"></mdb-icon>
-    <input mdbInput mdbValidate formControlName="password" autocomplete="off"
-           [type]="isHidePass ? 'password' : 'text'" class="form-control" id="password">
+    <mdb-icon
+      class="prefix btn-lock form__icon"
+      [class.fa-lock]="isHidePass"
+      [class.fa-unlock]="!isHidePass"
+      fas
+      (click)="isHidePass = !isHidePass"
+    ></mdb-icon>
+    <input
+      mdbInput
+      mdbValidate
+      formControlName="password"
+      [type]="isHidePass ? 'password' : 'text'"
+      autocomplete="off"
+      id="password"
+      class="form-control"
+    >
     <label for="password">Type your password*</label>
     <mdb-error *ngIf="passwordForm.invalid && (passwordForm.dirty || passwordForm.touched)">
       <span *ngIf="passwordForm.errors.required">Password is required</span>
@@ -56,29 +87,58 @@
   </div>
   <!-- Confirm password -->
   <div class="md-form">
-    <mdb-icon class="prefix btn-lock form__icon" fas
-              (click)="isHidePassConf = !isHidePassConf"
-              [class.fa-lock]="isHidePassConf" [class.fa-unlock]="!isHidePassConf"></mdb-icon>
-    <input mdbInput mdbValidate formControlName="confPassword" autocomplete="off"
-           [type]="isHidePassConf ? 'password' : 'text'" class="form-control" id="confirmPassword">
+    <mdb-icon
+      class="prefix btn-lock form__icon"
+      [class.fa-lock]="isHidePassConf"
+      [class.fa-unlock]="!isHidePassConf"
+      fas
+      (click)="isHidePassConf = !isHidePassConf"
+    ></mdb-icon>
+    <input
+      mdbInput
+      mdbValidate
+      formControlName="confPassword"
+      [type]="isHidePassConf ? 'password' : 'text'"
+      id="confirmPassword"
+      autocomplete="off"
+      class="form-control"
+    >
     <label for="confirmPassword">Confirm your password*</label>
-    <mdb-error *ngIf="passwordConfForm.invalid && (passwordConfForm.dirty || passwordConfForm.touched)">
-      <span *ngIf="passwordConfForm.errors.required">Confirm password is required</span>
-      <span
-        *ngIf="passwordConfForm.errors.incorrect && !passwordConfForm.errors.required">The password does not match</span>
+    <mdb-error *ngIf="confPasswordForm.invalid && (confPasswordForm.dirty || confPasswordForm.touched)">
+      <span *ngIf="confPasswordForm.errors.required">Confirm password is required</span>
+      <span *ngIf="confPasswordForm.errors.passwordMismatch && !confPasswordForm.errors.required"
+      >
+        The password does not match
+      </span>
     </mdb-error>
   </div>
   <!-- Alarm -->
-  <div *ngIf="upSignForm.invalid && isAlarmForm" class="alert alert-danger text-center form-alert" role="alert">
+  <div *ngIf="!emailForm.errors?.emailExist && isAlarmForm" class="alert alert-danger text-center form-alert">
     Please correctly fill out all the fields
   </div>
+  <div *ngIf="emailForm.errors?.emailExist" class="alert alert-danger text-center form-alert">
+    A user with this email already exists, try
+    <a [routerLink]=urlToLog>
+      logging in?
+    </a>
+  </div>
   <!-- Submit button -->
-  <button mdbBtn color="outline-success" block="true" class="my-4 mx-auto rounded form__btn form__btn--animated"
-          type="submit"
-          (click)="signUp()">Sign Up
+  <button
+    mdbBtn
+    mdbWavesEffect
+    type="submit"
+    block="true"
+    color="outline-success"
+    class="my-4 mx-auto rounded form__btn form__btn--animated"
+    [disabled]="upSignForm.invalid && isAlarmForm"
+    (click)="signUp()"
+  >
+    Sign Up
   </button>
   <!-- Register -->
-  <p class="text-center">Already have an account?
-    <a routerLink="/auth/sign-in">Log in</a>
+  <p class="text-center form__footer-text">Already have an account?
+    <a [routerLink]=urlToLog>
+      Log in
+    </a>
   </p>
 </form>

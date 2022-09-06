@@ -1,24 +1,36 @@
 <div class="container">
   <!-- Favorite boards -->
   <!-- Boards header -->
-  <h3 *ngIf="boards | favoriteHeader" class="mt-4 boards__header">Favorites boards:</h3>
+  <h3
+    *ngIf="boards | favoriteHeader"
+    class="mt-4 boards__header"
+  >
+    Favorites boards:
+  </h3>
   <ul class="mt-4 d-flex flex-wrap align-items-center">
-    <li *ngFor="let item of boards | favoriteBoards" class="board__list m-2 z-depth-1"
-        [style.background]=item.background>
+    <li
+      *ngFor="let item of boards | favoriteBoards"
+      class="board__list m-2 z-depth-1"
+      [style.background]=item.background
+    >
       <div class="d-flex flex-column justify-content-between board__content board--fade">
         <!-- Board link -->
-        <a [routerLink]="['board', item.id]" class="board__link"></a>
+        <a [routerLink]="[item.id]" class="board__link"></a>
         <div class="d-flex justify-content-between">
           <!-- Board name -->
           <h4 class="board__name">{{item.name}}</h4>
           <!-- Board favorite button -->
           <button type="button" class="board__btn" (click)="toggleFavorite(item)">
-            <icon class="fa-star" [class.far]="!item.isFavorite" [class.fas]="item.isFavorite"
-                  [class.favorite]="item.isFavorite"></icon>
+            <icon
+              class="fa-star"
+              [class.far]="!item.isFavorite"
+              [class.fas]="item.isFavorite"
+              [class.favorite]="item.isFavorite"
+            ></icon>
           </button>
         </div>
         <!-- Board edit button -->
-        <button type="button" class="align-self-end board__btn" (click)="openEditBoard(item.id)">
+        <button type="button" class="align-self-end board__btn" (click)="openManageBoard(item.id)">
           <mdb-icon fas icon="pencil-alt"></mdb-icon>
         </button>
       </div>
@@ -29,29 +41,37 @@
   <h3 class="mt-4  boards__header">Boards gallery:</h3>
   <!-- Boards list -->
   <ul class="mt-4 d-flex flex-wrap align-items-center">
-    <li *ngFor="let item of boards" class="board__list m-2 z-depth-1" [style.background]=item.background>
+    <li
+      *ngFor="let item of boards"
+      class="board__list m-2 z-depth-1"
+      [style.background]=item.background
+    >
       <!-- Board content -->
       <div class="d-flex flex-column justify-content-between board__content board--fade">
         <!-- Board link -->
-        <a [routerLink]="['board', item.id]" class="board__link"></a>
+        <a [routerLink]="[item.id]" class="board__link"></a>
         <div class="d-flex justify-content-between">
           <!-- Board name -->
           <h4 class="board__name">{{item.name}}</h4>
           <!-- Board favorite button -->
           <button type="button" class="board__btn" (click)="toggleFavorite(item)">
-            <icon class="fa-star" [class.far]="!item.isFavorite" [class.fas]="item.isFavorite"
-                  [class.favorite]="item.isFavorite"></icon>
+            <icon
+              class="fa-star"
+              [class.far]="!item.isFavorite"
+              [class.fas]="item.isFavorite"
+              [class.favorite]="item.isFavorite"
+            ></icon>
           </button>
         </div>
         <!-- Board edit button -->
-        <button type="button" class="align-self-end board__btn" (click)="openEditBoard(item.id)">
+        <button type="button" class="align-self-end board__btn" (click)="openManageBoard(item.id)">
           <mdb-icon fas icon="pencil-alt"></mdb-icon>
         </button>
       </div>
     </li>
-    <!-- Add new board -->
+    <!-- Add new columns -->
     <div>
-      <button class="board__list m-2 board__btn-add" (click)="openAddBoard()">
+      <button class="board__list m-2 board__btn-add" (click)="openManageBoard()">
         Add new board
         <mdb-icon class="fa-lg board__btn-add-icon" fas icon="plus-circle"></mdb-icon>
       </button>

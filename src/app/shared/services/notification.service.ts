@@ -1,8 +1,9 @@
-import {Injectable} from '@angular/core';
-import {NotificationType} from '@shared/enums/notification';
-import {ToastrService} from 'ngx-toastr';
-import {NotificationMessage} from '@shared/interfaces/notification.interface.';
-import {Subject} from 'rxjs';
+import { Injectable } from '@angular/core';
+import { Subject } from 'rxjs';
+import { ToastrService } from 'ngx-toastr';
+
+import { NotificationMessage } from '@shared/interfaces/notification.interface';
+import { NotificationType } from '@shared/enums/notification';
 
 @Injectable({
   providedIn: 'root',
@@ -20,10 +21,13 @@ export class NotificationService {
       next: (message) => {
         switch (message.type) {
           case NotificationType.SUCCESS:
-            this.toastrService.success(message.message, message.title);
+            this.toastrService.success(message.message, message.title, {});
             break;
           case NotificationType.ERROR:
-            this.toastrService.error(message.message, message.title);
+            this.toastrService.error(message.message, message.title, {
+              closeButton: true,
+              positionClass: 'toast-bottom-center',
+            });
             break;
           case NotificationType.WARNING:
             this.toastrService.warning(message.message, message.title);

@@ -1,5 +1,5 @@
-import {IUser} from "@shared/interfaces/user.interface";
-import {ITag} from "@shared/interfaces/tag.interface";
+import { IUser } from '@shared/interfaces/user.interface';
+import { ITag } from '@shared/interfaces/tag.interface';
 
 export interface ITask {
   taskId: string;

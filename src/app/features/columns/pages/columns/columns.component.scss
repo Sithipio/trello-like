@@ -157,6 +157,9 @@ p {
     &:hover {
       background-color: rgba(226, 228, 234, 0.50);
     }
+    &--icon{
+      color: rgba(255, 255, 255, 0.8);
+    }
   }
 
   &__sub-btn {
@@ -285,6 +288,9 @@ p {
 
     &:hover {
       background-color: rgba(226, 228, 234);
+    }
+    &--icon {
+      color: #172b4d;
     }
   }
 

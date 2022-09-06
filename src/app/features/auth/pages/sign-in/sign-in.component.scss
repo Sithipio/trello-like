@@ -1,5 +1,7 @@
+@import "./src/app/styles/_variables.scss";
+
 .form-alert {
-  font-size: 14px;
+  font-size: $font-size-medium;
   max-width: 222.4px;
 }
 

@@ -2,27 +2,52 @@
 <mdb-navbar SideClass="navbar navbar-expand-lg navbar-dark light-blue darken-3">
   <!-- Navbar brand -->
   <mdb-navbar-brand>
-    <a class="navbar-brand" routerLink="/">
-      <img src="../../../../assets/images/header-right-logo.png" style="width:40px" alt="logo">
+    <a class="navbar-brand" [routerLink]=urlToBoard>
+      <img
+        src="./assets/images/header-right-logo.png"
+        class="logo"
+        alt="logo"
+      >
     </a>
   </mdb-navbar-brand>
   <!-- Collapsible content -->
-  <links>
+  <links class="d-flex">
     <!-- Links -->
     <ul class="navbar-nav col-8">
       <li class="nav-item active">
-        <a class="nav-link waves-light" mdbWavesEffect routerLink="/">Boards<span class="sr-only">(current)</span></a>
+        <a class="nav-link waves-light main-font" mdbWavesEffect [routerLink]=urlToBoard>Boards</a>
       </li>
     </ul>
     <ul class="navbar-nav ms-auto col-4 flex-row-reverse">
-      <!--Profile dropdown-->
-      <li class="nav-item dropdown" dropdown>
-        <a class="nav-link dropdown-toggle waves-light" dropdownToggle mdbWavesEffect type="button" >
+      <!-- Dropdown menu -->
+      <li class="nav-item dropdown main-font" dropdown>
+        <a
+          type="button"
+          dropdownToggle
+          mdbWavesEffect
+          class="nav-link dropdown-toggle waves-light m"
+        >
           <mdb-icon fas icon="user"></mdb-icon>
-          Profile<span class="caret"></span></a>
-        <div *dropdownMenu class="dropdown-menu dropdown-menu-right dropdown dropdown-primary" role="menu">
-          <a class="dropdown-item waves-light" mdbWavesEffect href="#">My account</a>
-          <a class="dropdown-item waves-light" mdbWavesEffect routerLink="/auth/sign-in" (click)="signOut()">Log out</a>
+          Profile
+          <span class="caret"></span></a>
+        <div *dropdownMenu class="dropdown-menu dropdown-menu-right dropdown dropdown-primary">
+          <!-- Profile button -->
+          <a
+            class="dropdown-item waves-light"
+            mdbWavesEffect
+            [routerLink]=urlToProfile
+          >
+            My account
+          </a>
+          <!-- Log out -->
+          <a
+            class="dropdown-item waves-light"
+            mdbWavesEffect
+            [routerLink]=urlToLog
+            (click)="signOut()"
+          >
+            Log out
+          </a>
         </div>
       </li>
     </ul>

@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
-import {AuthService} from '@core/auth/auth.service';
+import { AuthService } from '@core/auth/auth.service';
+import { URL_MAIN, URL_SIGN_IN } from '@shared/constant';
 
 @Component({
   selector: 'app-header',
@@ -8,8 +9,12 @@ import {AuthService} from '@core/auth/auth.service';
 })
 export class HeaderComponent {
   public isCollapsed: boolean = true;
+  public urlToLog = URL_SIGN_IN;
+  public urlToBoard = URL_MAIN;
+  public urlToProfile;
 
-  constructor(private authService : AuthService) {}
+  constructor(private authService: AuthService) {
+  }
 
   signOut(): void {
     this.authService.signOut();

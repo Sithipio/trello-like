@@ -1,7 +1,9 @@
+@import "./src/app/styles/_variables.scss";
+
 .form {
   &__box {
     margin-bottom: 80px;
-    min-width: 400px;
+    width: 400px;
   }
   &__btn {
     max-width: 50%;
@@ -14,7 +16,7 @@
 }
 
 .form-alert {
-  font-size: 14px;
+  font-size: $font-size-medium;
 }
 
 

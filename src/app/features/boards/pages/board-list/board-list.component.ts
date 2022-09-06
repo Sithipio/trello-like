@@ -1,24 +1,29 @@
-import {Component, OnInit} from '@angular/core';
-import {IBoards} from '@shared/interfaces/boards.interface';
-import {BoardAddComponent} from '../board-add/board-add.component';
-import {MDBModalRef, MDBModalService} from 'angular-bootstrap-md';
-import {take} from 'rxjs';
-import {BoardEditComponent} from '../board-edit/board-edit.component';
-import {BoardsService} from '../../services/boards.service';
+import { Component, OnInit } from '@angular/core';
+import { MDBModalRef, MDBModalService } from 'angular-bootstrap-md';
+import { take } from 'rxjs';
+
+import { IBoards } from '@shared/interfaces/boards.interface';
+import { BoardsService } from '../../services/boards.service';
+import { BoardManageComponent } from '../board-manage/board-manage.component';
+import { NotificationType } from '@shared/enums';
+import { NotificationService } from '@shared/services';
 
 @Component({
-  selector: 'app-board-list',
+  selector: 'app-columns-list',
   templateUrl: './board-list.component.html',
-  styleUrls: ['./board-list.component.scss'],
+  styleUrls: [
+    '../../../../styles/font-styles.scss',
+    './board-list.component.scss',
+  ],
 })
-
 export class BoardListComponent implements OnInit {
 
   public boards: IBoards[] = [];
   public modalRef: MDBModalRef | null = null;
 
   constructor(private modalService: MDBModalService,
-              private boardsService: BoardsService) {
+              private boardsService: BoardsService,
+              private notificationService: NotificationService) {
   }
 
   public ngOnInit(): void {
@@ -30,30 +35,18 @@ export class BoardListComponent implements OnInit {
       next: (resp: IBoards[]) => {
         this.boards = resp;
       },
-      error: () => {
-        //todo pop error
+      error: ({error}) => {
+        this.notificationService.sendMessage({
+          title: error.error,
+          message: error.message,
+          type: NotificationType.ERROR,
+        });
       },
     });
   }
 
-  public openAddBoard(): void {
-    this.modalRef = this.modalService.show(BoardAddComponent, {
-      backdrop: false,
-      keyboard: false,
-      focus: true,
-      show: false,
-      ignoreBackdropClick: false,
-      class: 'modal-side modal-sm modal-top-right mt-3 pt-3',
-      containerClass: 'right',
-      animated: true,
-    });
-    this.modalRef.content.actionAdd$.pipe(take(1)).subscribe(() => {
-      this.getBoards();
-    });
-  }
-
-  public openEditBoard(idBoard: string): void {
-    this.modalRef = this.modalService.show(BoardEditComponent, {
+  public openManageBoard(idBoard?: string): void {
+    this.modalRef = this.modalService.show(BoardManageComponent, {
       backdrop: false,
       keyboard: false,
       focus: true,
@@ -66,7 +59,7 @@ export class BoardListComponent implements OnInit {
         idBoard,
       },
     });
-    this.modalRef.content.actionEdit$.pipe(take(1)).subscribe(() => {
+    this.modalRef.content.actionManageBoard$.pipe(take(1)).subscribe(() => {
       this.getBoards();
     });
   }
@@ -76,8 +69,12 @@ export class BoardListComponent implements OnInit {
       next: () => {
         this.getBoards();
       },
-      error: () => {
-        //todo pop error
+      error: ({error}) => {
+        this.notificationService.sendMessage({
+          title: error.error,
+          message: error.message,
+          type: NotificationType.ERROR,
+        });
       },
     })
   }

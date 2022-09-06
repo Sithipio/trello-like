@@ -1,4 +1,4 @@
-import {TaskBackground} from '@shared/enums/task-background';
+import { TaskBackground } from '@shared/enums/task-background';
 
 export const TASK_TAG_COLOR = [
   TaskBackground.BLUE,

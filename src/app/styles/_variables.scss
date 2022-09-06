@@ -1,0 +1,18 @@
+$font-family-main: "BlinkMacSystemFont", "Segoe UI", "Roboto", sans-serif;
+$font-weight-light: 400;
+$font-weight-medium: 500;
+$font-size-medium: 14px;
+$border-radius-normal: 3px;
+$border-radius-big: 8px;
+
+@mixin wh-100() {
+  width: 100%;
+  height: 100%;
+}
+
+@mixin absolute-cover() {
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+}

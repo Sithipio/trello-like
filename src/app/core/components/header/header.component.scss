@@ -1,0 +1,14 @@
+@import "./src/app/styles/_variables.scss";
+
+.logo {
+  width: 40px;
+}
+
+.main-font {
+  font-family: $font-family-main;
+  font-weight: $font-weight-light;
+}
+
+.navbar .dropdown-menu a {
+  font-weight: $font-weight-light;
+}

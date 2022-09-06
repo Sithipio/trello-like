@@ -1,8 +1,9 @@
-import {Pipe, PipeTransform} from '@angular/core';
-import {IBoards} from "@shared/interfaces/boards.interface";
+import { Pipe, PipeTransform } from '@angular/core';
+
+import { IBoards } from '@shared/interfaces/boards.interface';
 
 @Pipe({
-  name: 'favoriteHeader'
+  name: 'favoriteHeader',
 })
 export class FavoriteHeaderPipe implements PipeTransform {
 

@@ -1,0 +1,143 @@
+<!-- Modal window -->
+<div *ngIf="isReady" mdbModal class="modal-side modal-top-right">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content rounded">
+      <!-- Modal header -->
+      <div class="modal-header form__header">
+        <button type="button" class="close pull-right pt-2 pr-2" (click)="closeBoard()">
+          <span>×</span>
+        </button>
+        <h5 class="modal-title" id="modalTitle">{{title}}</h5>
+      </div>
+      <!-- Modal body -->
+      <div class="modal-body d-flex flex-column justify-content-start pb-0">
+        <img
+          class="align-self-center p-2 mb-2"
+          src="./assets/images/add-board-preview-img.svg"
+          alt="board preview image"
+          [style.background-color]=manageBoardForm.value.background>
+        <!-- Add board form -->
+        <form class="pb-0 mb-0 px-2 mx-2" [formGroup]="manageBoardForm">
+          <!-- Background color -->
+          <div class="text-left form__background-text">Select board background</div>
+          <ul class="row no-gutters m-0 text-center">
+            <li class="radio-group col-3" *ngFor="let item of bgBoard; let i = index">
+              <input
+                mdbInput
+                formControlName="background"
+                type="radio"
+                id="{{i}}"
+                [value]="item"
+              >
+              <label for="{{i}}" [style.background-color]=item>
+                <mdb-icon fas icon="check" class="radio-group--icon"></mdb-icon>
+                <span class="radio-group--fade"></span>
+              </label>
+            </li>
+          </ul>
+          <!-- Name -->
+          <div
+            class="md-form"
+            [class.mb-3]=board
+            [class.mb-4]=!board
+          >
+            <input
+              mdbInput
+              mdbValidate
+              formControlName="name"
+              type="text"
+              autocomplete="off"
+              id="name"
+              class="form-control"
+            >
+            <label for="name">Enter a board name*</label>
+            <mdb-error *ngIf="getNameValueForm.invalid && (getNameValueForm.dirty || getNameValueForm.touched)">
+              <span *ngIf="getNameValueForm.errors.required">Board name is required</span>
+              <span *ngIf="getNameValueForm.errors.maxlength">Please enter at most 15 characters</span>
+            </mdb-error>
+          </div>
+        </form>
+        <div *ngIf="board" class="d-flex justify-content-center">
+          <!-- Delete button -->
+          <button
+            mdbBtn
+            mdbWavesEffect
+            type="button"
+            color="outline-danger"
+            class="waves-light relative rounded align-self-center mt-2 mb-3"
+            (click)="basicModal.show()"
+          >
+            Delete board
+          </button>
+          <!-- Modal window for confirm delete -->
+          <div
+            mdbModal
+            #basicModal="mdbModal"
+            class="modal modal-frame modal-bottom"
+            [config]="{backdrop: false}"
+          >
+            <div class="modal-dialog modal-frame modal-bottom" role="document">
+              <div class="modal-content modal-delete">
+                <!-- Modal body -->
+                <div class="modal-body d-flex flex-column align-items-center pt-0 px-0">
+                  <button type="button" class="close pull-right pt-1 pr-1" (click)="basicModal.hide()">
+                    <span>×</span>
+                  </button>
+                  <p class="mb-0 form__delete-btn mt-3">Delete {{board.name}} board?</p>
+                  <!-- Confirm delete button-->
+                  <button
+                    mdbBtn
+                    mdbWavesEffect
+                    type="button"
+                    color="danger"
+                    class="waves-light relative rounded align-self-center"
+                    (click)="deleteBoard(board.name)"
+                  >
+                    Confirm delete
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer justify-content-center mx-0 px-0">
+          <!-- Submit add button -->
+          <button
+            *ngIf="!board"
+            mdbBtn
+            mdbWavesEffect
+            type="submit"
+            color="success"
+            class="waves-light relative rounded"
+            (click)="addBoard()"
+          >
+            Create
+          </button>
+          <!-- Submit edit button -->
+          <button
+            *ngIf="board"
+            mdbBtn
+            mdbWavesEffect
+            type="submit"
+            color="success"
+            class="waves-light relative rounded"
+            (click)="updateBoard(this.manageBoardForm.value)"
+          >
+            Edit
+          </button>
+          <!-- Cancel button -->
+          <button
+            mdbBtn
+            mdbWavesEffect
+            type="button"
+            color="outline-danger"
+            class="waves-light relative rounded"
+            (click)="closeBoard()"
+          >
+            Cancel
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
