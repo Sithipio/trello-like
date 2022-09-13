@@ -9,9 +9,10 @@ import { IBoards } from '@shared/interfaces/boards.interface';
 import { TasksComponent } from '../../../tasks/pages/task/tasks.component';
 import { NotificationType } from '@shared/enums';
 import { ColumnsService } from '../../services/columns.service';
-import { IColumn } from '@shared/interfaces';
+import { IColumn, ITask } from '@shared/interfaces';
 import { NotificationService } from '@shared/services';
 import { BoardsService } from '../../../boards/services/boards.service';
+import { TasksService } from '../../../tasks/services/tasks.service';
 
 @Component({
   selector: 'app-columns',
@@ -23,29 +24,31 @@ export class ColumnsComponent implements OnInit {
 
   public board: IBoards;
   public columns: IColumn[];
-  public idBoard: string;
+  public tasks: { [key: string]: ITask[] } = {};
+  public column = [];
   public manageColumnItem: FormGroup;
   public addTaskItem: FormGroup;
   public toggleAddColumn: string = null;
   public toggleAddTask: string = null;
   public toggleEditColumn: string = null;
   public modalRef: MDBModalRef | null = null;
+  private readonly _boardId: string = this.route.snapshot.paramMap.get('id');
 
   constructor(private modalService: MDBModalService,
               private columnsService: ColumnsService,
               private boardsService: BoardsService,
+              private tasksService: TasksService,
               private route: ActivatedRoute,
-              public fb: FormBuilder,
               private notificationService: NotificationService,
+              public fb: FormBuilder,
   ) {
   }
 
   ngOnInit() {
     this.columnManageForm();
     this.taskAddForm();
-    this.idBoard = this.route.snapshot.paramMap.get('id');
     this.getBoard()
-    this.getColumnById();
+    this.getColumnsById();
   }
 
   public columnManageForm(): void {
@@ -56,18 +59,12 @@ export class ColumnsComponent implements OnInit {
 
   public taskAddForm(): void {
     this.addTaskItem = this.fb.group({
-      taskId: [''],
-      taskName: [null, Validators.required],
-      taskDesc: [''],
-      taskTag: [[]],
-      taskDate: [''],
-      taskBackground: [''],
-      taskUser: [[]],
+      name: [null, Validators.required],
     });
   }
 
   private getBoard(): void {
-    this.boardsService.getBoardById(this.idBoard).pipe(take(1)).subscribe({
+    this.boardsService.getBoardById(this._boardId).pipe(take(1)).subscribe({
       next: (resp: IBoards) => {
         this.board = resp;
       },
@@ -81,10 +78,12 @@ export class ColumnsComponent implements OnInit {
     });
   }
 
-  private getColumnById(): void {
-    this.columnsService.getColumnById(this.idBoard).pipe(take(1)).subscribe({
+  private getColumnsById(): void {
+    this.columnsService.getColumnById(this._boardId).pipe(take(1)).subscribe({
       next: (resp: IColumn[]) => {
         this.columns = resp;
+        resp.forEach((item, index) => this.column[index] = item.id)
+        this.getTasksById();
       },
       error: ({error}) => {
         this.notificationService.sendMessage({
@@ -98,11 +97,11 @@ export class ColumnsComponent implements OnInit {
 
   public createColumn(name: string): void {
     if (this.manageColumnItem.valid) {
-      this.columnsService.createColumn(this.idBoard, name).pipe(take(1)).subscribe({
+      this.columnsService.createColumn(this._boardId, name).pipe(take(1)).subscribe({
         next: (resp: IColumn) => {
           this.toggleAddColumn = null;
           this.manageColumnItem.reset();
-          this.getColumnById();
+          this.getColumnsById();
           this.notificationService.sendMessage({
             message: `Column with name "${resp.name}" created`,
             type: NotificationType.SUCCESS,
@@ -119,13 +118,13 @@ export class ColumnsComponent implements OnInit {
     }
   }
 
-  public updateColumn(name: string, idColumn: string, id = this.idBoard): void {
+  public updateColumn(name: string, columnId: string): void {
     if (this.manageColumnItem.valid) {
-      this.columnsService.updateColumn(name, idColumn, id).pipe(take(1)).subscribe({
+      this.columnsService.updateColumn(this._boardId, columnId, name).pipe(take(1)).subscribe({
         next: (resp: IColumn) => {
           this.toggleEditColumn = null;
           this.manageColumnItem.reset();
-          this.getColumnById();
+          this.getColumnsById();
           this.notificationService.sendMessage({
             message: `Column with name "${resp.name}" updated`,
             type: NotificationType.SUCCESS,
@@ -142,10 +141,10 @@ export class ColumnsComponent implements OnInit {
     }
   }
 
-  public deleteColumn(name: string, idColumn: string, id = this.idBoard): void {
-    this.columnsService.deleteColumn(idColumn, id).pipe(take(1)).subscribe({
+  public deleteColumn(name: string, columnId: string): void {
+    this.columnsService.deleteColumn(this._boardId, columnId).pipe(take(1)).subscribe({
       next: () => {
-        this.getColumnById();
+        this.getColumnsById();
         this.notificationService.sendMessage({
           message: `Column with name "${name}" deleted`,
           type: NotificationType.INFO,
@@ -161,8 +160,18 @@ export class ColumnsComponent implements OnInit {
     });
   }
 
-//todo need new methods for task drag and drop?
-  public dragAndDrop(event: CdkDragDrop<any[]>): void {
+  public dragAndDropColumn(event: CdkDragDrop<any[]>): void {
+    this.dragAndDrop(event);
+    this.updateColumnOrder(event.container.data);
+  }
+
+  public dragAndDropTask(columnId: string, event: CdkDragDrop<any[]>): void {
+    this.dragAndDrop(event);
+    event.container.data.forEach(item => item.columnId = columnId);
+    this.updateTaskOrder(columnId, event.container.data)
+  }
+
+  private dragAndDrop(event: CdkDragDrop<any[]>): void {
     if (event.container === event.previousContainer) {
       moveItemInArray(
         event.container.data,
@@ -175,11 +184,13 @@ export class ColumnsComponent implements OnInit {
         event.previousIndex,
         event.currentIndex);
     }
-    this.updateColumnOrder(event.container.data);
   }
 
-  public updateColumnOrder(dragColumns, id = this.idBoard): void {
-    this.columnsService.updateColumnOrder(dragColumns, id).pipe(take(1)).subscribe({
+  private updateColumnOrder(dragColumns): void {
+    this.columnsService.updateColumnOrder(this._boardId, dragColumns).pipe(take(1)).subscribe({
+      next: () => {
+        this.getColumnsById();
+      },
       error: ({error}) => {
         this.notificationService.sendMessage({
           title: error.error,
@@ -197,24 +208,24 @@ export class ColumnsComponent implements OnInit {
     this.manageColumnItem.reset();
   }
 
-  public editColumnView(column): void {
+  public editColumnView(column: IColumn): void {
     this.toggleAddColumn = null;
     this.toggleEditColumn = column.id;
     this.toggleAddTask = null;
     this.manageColumnItem.patchValue(column);
   }
 
-  public editTaskView(id: string): void {
+  public editTaskView(columnId: string): void {
     this.toggleAddColumn = null;
     this.toggleEditColumn = null;
-    this.toggleAddTask = id;
-    this.scrollTaskList(id);
+    this.toggleAddTask = columnId;
+    this.scrollTaskList(columnId);
   }
 
-  //todo think how to avoid setTimeout
-  scrollTaskList(id: string): void {
+  //todo think how to avoid setTimeout, read about setTimeout
+  private scrollTaskList(columnId?: string): void {
     setTimeout(() => {
-      let scrollElement: Element = document.getElementsByClassName(`task__container-${id}`)[0];
+      let scrollElement: Element = document.getElementsByClassName(`task__container-${columnId}`)[0];
       scrollElement.scrollTop = scrollElement.scrollHeight + 87;
     }, 0)
   }
@@ -227,15 +238,65 @@ export class ColumnsComponent implements OnInit {
     this.addTaskItem.reset();
   }
 
-  addTask(board, idColumn): void {
+  private getTasksById(columnId?: string): void {
+    this.tasksService.getTasks(this._boardId).pipe(take(1)).subscribe({
+      next: (resp: ITask[]) => {
+        this.column.forEach(columnId => {
+          this.tasks[columnId] = resp.filter(task => task.columnId === columnId)
+        })
+        if (columnId) {
+          this.scrollTaskList(columnId)
+        }
+      },
+      error: ({error}) => {
+        this.notificationService.sendMessage({
+          title: error.error,
+          message: error.message,
+          type: NotificationType.ERROR,
+        });
+      },
+    });
+  }
+
+  private updateTaskOrder(columnId: string, dragTasks): void {
+    this.tasksService.updateTaskOrder(this._boardId, columnId, dragTasks).pipe(take(1)).subscribe({
+      next: () => {
+        this.getTasksById();
+      },
+      error: ({error}) => {
+        this.notificationService.sendMessage({
+          title: error.error,
+          message: error.message,
+          type: NotificationType.ERROR,
+        });
+      },
+    });
+  }
+
+  public addTask(name: string, columnId: string): void {
     if (this.addTaskItem.valid) {
-      this.toggleAddTask = null;
-      // this.columnsService.addTask(board, idColumn, this.idBoard);
-      this.addTaskItem.reset();
+      this.tasksService.createTask(this._boardId, columnId, name).pipe(take(1)).subscribe({
+        next: (resp: ITask) => {
+          this.toggleAddTask = null;
+          this.addTaskItem.reset();
+          this.getTasksById(columnId);
+          this.notificationService.sendMessage({
+            message: `Task with name "${resp.name}" created`,
+            type: NotificationType.SUCCESS,
+          });
+        },
+        error: ({error}) => {
+          this.notificationService.sendMessage({
+            title: error.error,
+            message: error.message,
+            type: NotificationType.ERROR,
+          });
+        },
+      });
     }
   }
 
-  public openTask(idBoard: string, idColumn: string, idTask: string): void {
+  public openTask(idColumn: string, idTask: string, idBoard: string = this._boardId): void {
     this.modalRef = this.modalService.show(TasksComponent, {
       backdrop: true,
       keyboard: true,

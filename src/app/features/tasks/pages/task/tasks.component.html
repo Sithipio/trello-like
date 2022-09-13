@@ -4,52 +4,52 @@
   <!-- Modal body -->
   <div class="modal-body p-0">
     <!-- Close button -->
-    <button type="button" class="close pull-right mt-2 mx-1 modal-body__btn" aria-label="Close" (click)="closeBoard()">
+    <button type="button" class="close pull-right mt-2 mx-1 modal-body__btn" (click)="closeBoard()">
       <span aria-hidden="true"
-            [style.color]="editTaskForm.value.taskBackground === '#172B4D'? 'white' : ''"
+            [style.color]="editTaskForm.value.background === '#172B4D'? 'white' : ''"
       >×</span>
     </button>
     <div class="task__header-color"
-         *ngIf="editTaskForm.value.taskBackground"
-         [style.background-color]="editTaskForm.value.taskBackground"
+         *ngIf="editTaskForm.value.background"
+         [style.background-color]="editTaskForm.value.background"
     ></div>
     <!-- Task form -->
     <form class="p-0 m-0 form-row form" [formGroup]="editTaskForm">
       <div class="task__name p-0 m-0 col-12" (click)="$event.stopPropagation()">
         <!-- Form view - task name -->
-        <a class="task__name__link" (click)="toggleBtnTaskName(task.taskId)">
+        <a class="task__name__link" (click)="toggleBtnTaskName(task.id)">
           <div *ngIf="toggleEditTaskName === null"
                class="px-3 d-flex m-3 align-items-baseline justify-content-center"
           >
             <!-- Task name -->
             <i class="fa-lg fas fa-window-maximize m-2 task__name__icon"></i>
-            <p class="task__name__text">{{editTaskForm.value.taskName}}</p>
+            <p class="task__name__text">{{editTaskForm.value.name}}</p>
           </div>
         </a>
         <!-- Form view - edit task name -->
         <div *ngIf="toggleEditTaskName"
              class="task__name__link"
-             [style.right]="task.taskBackground ? '0px' : '20px'"
+             [style.right]="task.background ? '0px' : '20px'"
         >
           <div class="d-flex px-3 m-2 align-items-baseline">
             <i class="fa-lg fas fa-window-maximize m-2 task__name__icon"
                style="color: #0079bf"></i>
-            <input mdbInput formControlName="taskName" autocomplete="off"
+            <input mdbInput formControlName="name" autocomplete="off"
                    type="text" class="form-control" appAutoFocus (keyup.enter)="toggleFormView()"
             >
           </div>
         </div>
       </div>
       <!-- Task tag -->
-      <div *ngIf="task.taskTag.length" class="col-8 ml-5">
+      <div *ngIf="task.tag.length" class="col-8 ml-5">
       <p class="task__modal__text pl-2 mt-0">Tags</p>
       <div class="d-flex mb-2">
-        <div *ngFor="let tagTask of task.taskTag; let i = index" class="task__tag">
+        <div *ngFor="let tagTask of task.tag; let i = index" class="task__tag">
             <span class="task__tag__name py-1 px-2 m-1"
-                  [style.background-color]="tagTask.tagBackground"
+                  [style.background-color]="tagTask.background"
             >
               <a class="task__tag__link" (click)="toggleBtnEditTag(); tagsModal.show()">
-            </a>{{tagTask.tagName}}
+            </a>{{tagTask.name}}
           </span>
         </div>
         <button
@@ -66,23 +66,23 @@
         <div class="d-flex px-2 mx-2 mb-1 align-items-baseline">
           <i class="fas fa-align-justify task__desc__icon"></i>
           <p class="task__desc__text-header mb-2">Description</p>
-          <span *ngIf="!toggleEditTaskDesc && editTaskForm.value.taskDesc">
+          <span *ngIf="!toggleEditTaskDesc && editTaskForm.value.description">
           <button
             type="button"
             class="rounded task__desc__btn task__desc__btn--edit p-2"
-            (click)="toggleBtnTaskDesc(task.taskId)"
+            (click)="toggleBtnTaskDesc(task.id)"
           >Edit
           </button>
           </span>
         </div>
         <!-- Form view - description name -->
         <div>
-          <a (click)="toggleBtnTaskDesc(task.taskId)">
+          <a (click)="toggleBtnTaskDesc(task.id)">
             <!-- Description -->
-            <div *ngIf="toggleEditTaskDesc !== task.taskId">
+            <div *ngIf="toggleEditTaskDesc !== task.id">
             <pre *ngIf="editTaskForm.controls.taskDesc.value"
                  class="ml-5 task__desc__text"
-            >{{editTaskForm.value.taskDesc}}
+            >{{editTaskForm.value.description}}
               </pre>
               <pre *ngIf="!editTaskForm.controls.taskDesc.value"
                    class="ml-5 task__desc__text task__desc__text--empty"
@@ -91,13 +91,13 @@
             </div>
           </a>
           <!-- Form view - edit description -->
-          <div *ngIf="toggleEditTaskDesc === task.taskId"
+          <div *ngIf="toggleEditTaskDesc === task.id"
                class="d-flex flex-column ml-5"
           >
-              <textarea mdbInput formControlName="taskDesc" autocomplete="off"
+              <textarea mdbInput formControlName="description" autocomplete="off"
                         type="text" class="form-control task__desc__text--input"
                         appAutoFocus #textAreaDesc
-                        [value]="editTaskForm.value.taskDesc"
+                        [value]="editTaskForm.value.description"
                         [style.height]="heightTextAreaDescription(textAreaDesc)"
                         [style.overflow]="textAreaDesc.scrollHeight < 250 ? 'hidden' : 'auto'"
               >
@@ -136,11 +136,11 @@
               <p class="task__modal__text mt-0">Colors</p>
               <div class="d-flex flex-wrap task__modal__card mt-0">
                 <li class="radio-group" *ngFor="let item of bgTask; let i = index">
-                  <input type="radio" formControlName="taskBackground" [value]="item.taskBackground"
-                         id="taskBackground+{{i}}"
-                         name="taskBackground" mdbInput
+                  <input type="radio" formControlName="background" [value]="item.background"
+                         id="background+{{i}}"
+                         name="background" mdbInput
                   >
-                  <label for="taskBackground+{{i}}" [style.background-color]=item.taskBackground>
+                  <label for="background+{{i}}" [style.background-color]=item.background>
                     <mdb-icon fas icon="check" class="radio-group--icon"></mdb-icon>
                     <span class="radio-group--fade"></span>
                   </label>
@@ -173,29 +173,29 @@
               </button>
               <!-- Modal list of tags -->
               <div class="modal-body d-flex flex-column align-items-start pt-1 pb-0 modal-body--height"
-                   [style.max-height]="editTaskForm.value.taskBackground ? '390px' : '290px'"
+                   [style.max-height]="editTaskForm.value.background ? '390px' : '290px'"
               >
                 <p class="task__modal__text mt-0">Tags</p>
                 <div class="d-flex flex-column task__modal__card mt-0 mb-3">
                   <li class="checkbox-group d-flex align-items-center" *ngFor="let item of tags; let i = index">
                     <input type="checkbox"
-                           id="taskTag+{{i}}"
-                           name="taskTag" mdbInput
-                           [checked]="checkTagActive(item.tagId, task.taskId)"
+                           id="tag+{{i}}"
+                           name="tag" mdbInput
+                           [checked]="checkTagActive(item.id, task.id)"
                            (change)="toggleTags($event, i)"
                     >
-                    <label for="taskTag+{{i}}" [style.background-color]=item.tagBackground>
+                    <label for="tag+{{i}}" [style.background-color]=item.background>
                       <p class="p-0"
-                         [style.color]="item.tagBackground === '#344563'? 'white' : ''"
-                      >{{item.tagName}}</p>
+                         [style.color]="item.background === '#344563'? 'white' : ''"
+                      >{{item.name}}</p>
                       <mdb-icon fas icon="check" class="checkbox-group--icon"
-                                [class.checkbox-group--icon--reverse]="item.tagBackground === null || ''"
+                                [class.checkbox-group--icon--reverse]="item.background === null || ''"
                       ></mdb-icon>
                       <span class="checkbox-group--fade"></span>
                     </label>
                     <!-- Tag edit button -->
                     <button type="button" class="checkbox-group__btn-edit"
-                            (click)="toggleBtnEditTag(item.tagId)"
+                            (click)="toggleBtnEditTag(item.id)"
                     >
                       <mdb-icon fas icon="pencil-alt"></mdb-icon>
                     </button>
@@ -239,18 +239,17 @@
                 >
                   <div class="d-flex flex-column task__modal__card task__modal__card--edit mt-0 mb-3">
                     <p class="task__modal__text mt-0">Name</p>
-                    <input mdbInput formControlName="tagName" autocomplete="off"
-                           type="text" class="form-control my-2 task__modal__input" id="tagName"
-
+                    <input mdbInput formControlName="name" autocomplete="off"
+                           type="text" class="form-control my-2 task__modal__input" id="name"
                     >
                     <p class="task__modal__text mt-0">Select a color</p>
                     <div class="d-flex flex-wrap task__modal__card mt-0">
                       <li class="radio-group" *ngFor="let item of bgTag; let i = index">
-                        <input type="radio" formControlName="tagBackground" [value]="item.tagBackground"
-                               id="tagBackground+{{i}}"
-                               name="tagBackground" mdbInput
+                        <input type="radio" formControlName="tagBackground" [value]="item.background"
+                               id="background+{{i}}"
+                               name="background" mdbInput
                         >
-                        <label for="tagBackground+{{i}}" [style.background-color]=item.tagBackground>
+                        <label for="background+{{i}}" [style.background-color]=item.background>
                           <mdb-icon fas icon="check" class="radio-group--icon"></mdb-icon>
                           <span class="radio-group--fade"></span>
                         </label>
@@ -275,7 +274,7 @@
                       </button>
                       <button type="button" mdbBtn color="outline-danger" class="rounded px-3 py-2"
                               style="text-transform: none"
-                              (click)="toggleBtnEditTag(null); deleteTag(editTagForm.value.tagId)"
+                              (click)="toggleBtnEditTag(null); deleteTag(editTagForm.value.id)"
                       >
                         <mdb-icon fas icon="pencil-alt pr-1"></mdb-icon>
                         Delete

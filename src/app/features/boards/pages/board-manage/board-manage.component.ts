@@ -19,13 +19,12 @@ import { NotificationService } from '@shared/services';
 })
 export class BoardManageComponent implements OnInit {
 
-  public idBoard: string;
-  public isReady: boolean = false;
+  public board: IBoards;
+  public boardId: string;
+  public boardBackground = BOARD_BG_COLOR;
+  public title: string;
   public manageBoardForm: FormGroup;
   public actionManageBoard$ = new Subject<any>();
-  public bgBoard = BOARD_BG_COLOR;
-  public board: IBoards;
-  public title: string;
 
   constructor(public fb: FormBuilder,
               private modalService: MDBModalService,
@@ -36,17 +35,16 @@ export class BoardManageComponent implements OnInit {
   public ngOnInit(): void {
     this.boardManageForm();
 
-    if (this.idBoard) {
+    if (this.boardId) {
       this.getBoard();
     } else {
       this.title = 'Create a new columns';
-      this.isReady = true;
     }
   }
 
   public boardManageForm(): void {
     this.manageBoardForm = this.fb.group({
-      name: [null, [Validators.required, Validators.maxLength(15)]],
+      name: ['', [Validators.required, Validators.maxLength(15)]],
       background: [BoardBackground.GREY, Validators.required],
       isFavorite: [false],
     });
@@ -57,19 +55,18 @@ export class BoardManageComponent implements OnInit {
   }
 
   private getBoard(): void {
-    this.boardsService.getBoardById(this.idBoard).pipe(take(1)).subscribe({
+    this.boardsService.getBoardById(this.boardId).pipe(take(1)).subscribe({
       next: (resp: IBoards) => {
-          this.board = resp;
+        this.board = resp;
         this.manageBoardForm.patchValue(this.board);
         this.title = `Edit board ${this.board.name}`;
-        this.isReady = true;
       },
       error: ({error}) => {
-          this.notificationService.sendMessage({
-            title: error.error,
-            message: error.message,
-            type: NotificationType.ERROR,
-          });
+        this.notificationService.sendMessage({
+          title: error.error,
+          message: error.message,
+          type: NotificationType.ERROR,
+        });
       },
     });
   }
@@ -102,7 +99,7 @@ export class BoardManageComponent implements OnInit {
     if (this.manageBoardForm.invalid) {
       this.manageBoardForm.markAllAsTouched();
     } else if (this.manageBoardForm.valid) {
-      this.boardsService.updateBoard(this.idBoard, form).pipe(take(1)).subscribe({
+      this.boardsService.updateBoard(this.boardId, form).pipe(take(1)).subscribe({
         next: (resp) => {
           this.actionManageBoard$.next(1);
           this.modalService.hide(1);
@@ -123,7 +120,7 @@ export class BoardManageComponent implements OnInit {
   }
 
   public deleteBoard(name): void {
-    this.boardsService.deleteBoard(this.idBoard).pipe((take(1))).subscribe({
+    this.boardsService.deleteBoard(this.boardId).pipe((take(1))).subscribe({
       next: () => {
         this.modalService.hide(1);
         this.actionManageBoard$.next(1);

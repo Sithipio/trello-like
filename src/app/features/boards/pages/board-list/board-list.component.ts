@@ -45,7 +45,7 @@ export class BoardListComponent implements OnInit {
     });
   }
 
-  public openManageBoard(idBoard?: string): void {
+  public openManageBoard(boardId?: string): void {
     this.modalRef = this.modalService.show(BoardManageComponent, {
       backdrop: false,
       keyboard: false,
@@ -56,7 +56,7 @@ export class BoardListComponent implements OnInit {
       containerClass: 'right',
       animated: true,
       data: {
-        idBoard,
+        boardId,
       },
     });
     this.modalRef.content.actionManageBoard$.pipe(take(1)).subscribe(() => {

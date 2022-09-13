@@ -3,19 +3,21 @@ import {
   Component,
   ElementRef,
   OnInit,
-  ViewChild
+  ViewChild,
 } from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from "@angular/forms";
-import {MDBModalService} from "angular-bootstrap-md";
-import {BoardsService} from "@core/services/boards.service";
-import {Subject} from "rxjs";
-import {ITask} from "@shared/interfaces/task.interface";
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { MDBModalService } from 'angular-bootstrap-md';
+import { Subject } from 'rxjs';
+
+import { BoardsService } from '@core/services/boards.service';
+import { ITask } from '@shared/interfaces/task.interface';
+import { TASK_BG_COLOR, TASK_TAG_COLOR } from '@shared/constant';
 
 @Component({
   selector: 'app-task',
   templateUrl: './tasks.component.html',
   styleUrls: ['./tasks.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 
 export class TasksComponent implements OnInit {
@@ -26,8 +28,8 @@ export class TasksComponent implements OnInit {
   public editTaskForm: FormGroup;
   public editTagForm: FormGroup;
   public actionEdit = new Subject<any>();
-  public bgTask = this.boardsService.bgColorTask;
-  public bgTag = this.boardsService.bgColorTag;
+  public bgTask = TASK_BG_COLOR;
+  public bgTag = TASK_TAG_COLOR;
   public tags = this.boardsService.Tags;
   public task: ITask;
   public toggleEditTaskName: string = null;
@@ -44,19 +46,19 @@ export class TasksComponent implements OnInit {
 
   ngOnInit() {
     this.editTaskForm = this.fb.group({
-      taskId: [],
-      taskName: ["", Validators.required],
-      taskDesc: [""],
-      taskTag: this.fb.array([]),
-      taskDate: "sadasd",
-      taskBackground: "",
-      taskUser: [],
+      id: [],
+      name: ['', Validators.required],
+      description: [''],
+      tag: this.fb.array([]),
+      date: 'sadasd',
+      background: '',
+      user: [],
 
     });
     this.editTagForm = this.fb.group({
-      tagId: '',
-      tagName: '',
-      tagBackground: "",
+      id: '',
+      name: '',
+      background: '',
     })
     this.getBoardById();
     this.getTagTask();
@@ -75,8 +77,8 @@ export class TasksComponent implements OnInit {
 
   getTagTask() {
     //this.editTaskForm.value.taskTag.patchValue(this.fb.group(this.boardsService.getTagTask(this.idTask, this.idBoard, this.idColumn)));
-   // this.editTaskForm.value.taskTag.push(this.fb.group(this.boardsService.getTagTask(this.idTask, this.idBoard, this.idColumn)));
-  //  console.log(this.boardsService.getTagTask(this.idTask, this.idBoard, this.idColumn))
+    // this.editTaskForm.value.taskTag.push(this.fb.group(this.boardsService.getTagTask(this.idTask, this.idBoard, this.idColumn)));
+    //  console.log(this.boardsService.getTagTask(this.idTask, this.idBoard, this.idColumn))
   }
 
   closeBoard() {
@@ -131,7 +133,7 @@ export class TasksComponent implements OnInit {
   toggleTags(event, index) {
     if (event.target.checked) {
       this.editTaskForm.value.taskTag.push(this.tags[index]);
-      console.log(  this.editTaskForm.value)
+      console.log(this.editTaskForm.value)
       this.getTag();
     } else {
       this.editTaskForm.value.taskTag = this.editTaskForm.value.taskTag.filter(item => item.tagId != index)
@@ -144,33 +146,33 @@ export class TasksComponent implements OnInit {
       this.toggleEditTag = null;
     } else {
       this.toggleEditTag = tagId;
-    //  this.editTagForm.patchValue(this.boardsService.getTag(tagId))
+      //  this.editTagForm.patchValue(this.boardsService.getTag(tagId))
     }
     if (tagLength) {
       this.toggleEditTag = tagLength;
       this.toggleEditTag = tagLength.toString();
       this.editTagForm.reset();
     }
-   console.log("tagId",tagId, "newTag", tagLength, "this.toggleEditTag", this.toggleEditTag)
+    console.log('tagId', tagId, 'newTag', tagLength, 'this.toggleEditTag', this.toggleEditTag)
   }
 
 
   addTag(form) {
-   // this.boardsService.addTag(form);
+    // this.boardsService.addTag(form);
     this.getTag();
   }
 
   editTag(form) {
- //   this.boardsService.editTag(form);
+    //   this.boardsService.editTag(form);
     this.getTag();
   }
 
   deleteTag(id) {
-  //  this.boardsService.deleteTag(id);
+    //  this.boardsService.deleteTag(id);
     this.getTag();
   }
 
-  checkTagActive(itemId, idTask){
+  checkTagActive(itemId, idTask) {
 //    return this.boardsService.checkTagActive(itemId, idTask, this.idBoard, this.idColumn);
   }
 

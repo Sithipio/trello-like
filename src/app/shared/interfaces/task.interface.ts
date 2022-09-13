@@ -2,11 +2,14 @@ import { IUser } from '@shared/interfaces/user.interface';
 import { ITag } from '@shared/interfaces/tag.interface';
 
 export interface ITask {
-  taskId: string;
-  taskName: string;
-  taskDesc: string;
-  taskTag: ITag[];
-  taskDate: string;
-  taskBackground: string;
-  taskUser: IUser[];
+  id: string;
+  name: string;
+  description: string;
+  tag: ITag[];
+  date: string;
+  background: string;
+  order: number;
+  columnId: string;
+  boardId: string;
+  user: IUser[];
 }

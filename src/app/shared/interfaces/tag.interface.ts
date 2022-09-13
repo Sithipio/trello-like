@@ -1,5 +1,5 @@
 export interface ITag {
-  tagId: string;
-  tagName: string;
-  tagBackground: string;
+  id: string;
+  name: string;
+  background: string;
 }

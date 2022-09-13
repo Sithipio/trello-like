@@ -13,23 +13,23 @@ export class ColumnsService {
   }
 
   public getColumnById(id): Observable<IColumn[]> {
-    return this.httpClient.get<IColumn[]>(`${URL_COLUMN}/${id}`);
+    return this.httpClient.get<IColumn[]>(`/${id}${URL_COLUMN}`);
   }
 
-  public createColumn(id: string, name: string): Observable<IColumn> {
-    return this.httpClient.post<IColumn>(`${URL_COLUMN}/${id}`, name);
+  public createColumn(boardId: string, name: string): Observable<IColumn> {
+    return this.httpClient.post<IColumn>(`/${boardId}${URL_COLUMN}`, name);
   }
 
-  public updateColumn(name: string, idColumn: string, id: string): Observable<IColumn> {
-    return this.httpClient.patch<IColumn>(`${URL_COLUMN}/${id}/${idColumn}`, name);
+  public updateColumn(boardId: string, columnId: string, name: string): Observable<IColumn> {
+    return this.httpClient.patch<IColumn>(`/${boardId}${URL_COLUMN}/${columnId}`, name);
   }
 
-  public deleteColumn(idColumn: string, id: string): Observable<any> {
-    return this.httpClient.delete(`${URL_COLUMN}/${id}/${idColumn}`);
+  public deleteColumn(boardId: string, columnId: string): Observable<any> {
+    return this.httpClient.delete(`/${boardId}${URL_COLUMN}/${columnId}`);
   }
 
-  public updateColumnOrder(dragColumns, id: string): Observable<IColumn[]> {
-    return this.httpClient.put<IColumn[]>(`${URL_COLUMN}/${id}`, dragColumns)
+  public updateColumnOrder(boardId: string, dragColumns): Observable<IColumn[]> {
+    return this.httpClient.put<IColumn[]>(`/${boardId}${URL_COLUMN}`, dragColumns)
   }
 
 }

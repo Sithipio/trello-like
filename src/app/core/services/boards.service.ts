@@ -8,108 +8,64 @@ import {ITag} from "@shared/interfaces/tag.interface";
 
 export class BoardsService {
 
-  //have enum already
-  public bgColorTask = [
-    {taskBackground: "#7BC86C"},
-    {taskBackground: "#F5DD29"},
-    {taskBackground: "#FFAF3F"},
-    {taskBackground: "#EF7564"},
-    {taskBackground: "#CD8DE5"},
-    {taskBackground: "#5BA4CF"},
-    {taskBackground: "#29CCE5"},
-    {taskBackground: "#6DECA9"},
-    {taskBackground: "#FF8ED4"},
-    {taskBackground: "#172B4D"},
-    {taskBackground: ""}
-  ];
-//already have enum
-  public bgColorTag = [
-    {tagBackground: "#61BD4F"},
-    {tagBackground: "#F2D600"},
-    {tagBackground: "#FF9F1A"},
-    {tagBackground: "#EB5A46"},
-    {tagBackground: "#C377E0"},
-    {tagBackground: "#0079BF"},
-    {tagBackground: "#00C2E0"},
-    {tagBackground: "#51E898"},
-    {tagBackground: "#FF78CB"},
-    {tagBackground: "#344563"},
-    {tagBackground: ""}
-  ];
-
   public Tags: ITag[] = [
     {
-      tagId: "0",
-      tagName: "Cool",
-      tagBackground: "#61BD4F",
+      id: "0",
+      name: "Cool",
+      background: "#61BD4F",
     },
     {
-      tagId: "1",
-      tagName: "Warning",
-      tagBackground: "#F2D600",
+      id: "1",
+      name: "Warning",
+      background: "#F2D600",
     },
     {
-      tagId: "2",
-      tagName: "Need to do",
-      tagBackground: "#FF9F1A",
+      id: "2",
+      name: "Need to do",
+      background: "#FF9F1A",
     },
     {
-      tagId: "3",
-      tagName: "Important",
-      tagBackground: "#EB5A46",
+      id: "3",
+      name: "Important",
+      background: "#EB5A46",
     },
     {
-      tagId: "4",
-      tagName: "",
-      tagBackground: "#C377E0",
+      id: "4",
+      name: "",
+      background: "#C377E0",
     },
     {
-      tagId: "5",
-      tagName: "",
-      tagBackground: "#0079BF",
+      id: "5",
+      name: "",
+      background: "#0079BF",
     },
     {
-      tagId: "6",
-      tagName: "",
-      tagBackground: "#00C2E0",
+      id: "6",
+      name: "",
+      background: "#00C2E0",
     },
     {
-      tagId: "7",
-      tagName: "",
-      tagBackground: "#51E898",
+      id: "7",
+      name: "",
+      background: "#51E898",
     },
     {
-      tagId: "8",
-      tagName: "Pink",
-      tagBackground: "#FF78CB",
+      id: "8",
+      name: "Pink",
+      background: "#FF78CB",
     },
     {
-      tagId: "9",
-      tagName: "Black List",
-      tagBackground: "#344563",
+      id: "9",
+      name: "Black List",
+      background: "#344563",
     },
     {
-      tagId: "10",
-      tagName: "White",
-      tagBackground: "",
+      id: "10",
+      name: "White",
+      background: "",
     },
   ];
 /*
-  public addColumn(board: IColumn, id: string): void {
-    let randomId = getUniqueID();
-    let filterBoard = this.boards.filter(item => item.id == id)
-    filterBoard[0].boardColumn.push({...board, id: randomId, columnTask: []})
-  }
-
-  public editColumn(form, id): void {
-    this.boards.filter(item => item.id === id)[0].boardColumn
-      .find(item => item.id === form.columnId).name = form.columnName;
-  }
-
-  public deleteColumn(columnId, boardId) {
-    this.boards.filter(item => item.id === boardId)[0].boardColumn =
-      this.boards.filter(item => item.id === boardId)[0].boardColumn.filter(item => item.id !== columnId);
-  }
 
   public addTask(task: ITask, idColumn: string, idBoard: string): void {
     let randomId = getUniqueID();

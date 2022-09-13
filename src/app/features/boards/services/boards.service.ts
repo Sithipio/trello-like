@@ -16,24 +16,24 @@ export class BoardsService {
     return this.httpClient.get<IBoards[]>(URL_BOARD);
   }
 
-  public getBoardById(id): Observable<IBoards> {
-    return this.httpClient.get<IBoards>(`${URL_BOARD}/${id}`);
+  public getBoardById(boardId): Observable<IBoards> {
+    return this.httpClient.get<IBoards>(`${URL_BOARD}/${boardId}`);
   }
 
   public addBoard(board: IBoards): Observable<IBoards> {
     return this.httpClient.post<IBoards>(URL_BOARD, board);
   }
 
-  public deleteBoard(id: string): Observable<any> {
-    return this.httpClient.delete(`${URL_BOARD}/${id}`);
+  public deleteBoard(boardId: string): Observable<any> {
+    return this.httpClient.delete(`${URL_BOARD}/${boardId}`);
   }
 
-  public updateBoard(id: string, form: IBoards): Observable<IBoards> {
-    return this.httpClient.patch<IBoards>(`${URL_BOARD}/${id}`, form);
+  public updateBoard(boardId: string, form: IBoards): Observable<IBoards> {
+    return this.httpClient.patch<IBoards>(`${URL_BOARD}/${boardId}`, form);
   }
 
-  public toggleFavorite(id: string, isFavorite: boolean): Observable<IBoards> {
-    return this.httpClient.put<IBoards>(`${URL_BOARD}/${id}`, {id, isFavorite});
+  public toggleFavorite(boardId: string, isFavorite: boolean): Observable<IBoards> {
+    return this.httpClient.put<IBoards>(`${URL_BOARD}/${boardId}`, {boardId, isFavorite});
   }
 
 }

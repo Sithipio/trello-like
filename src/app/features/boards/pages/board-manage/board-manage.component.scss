@@ -26,6 +26,11 @@
     font-family: $font-family-main;
     font-weight: $font-weight-medium;
   }
+  &__create-btn {
+    position: relative;
+    left: -16px;
+    width: 270px;
+  }
 }
 
 ul {

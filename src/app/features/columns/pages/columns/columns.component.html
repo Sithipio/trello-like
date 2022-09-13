@@ -6,13 +6,13 @@
 >
   <!-- Column container -->
   <ul
-    class="mt-4 d-flex"
+    class="mt-4 d-flex column__scroll"
     cdkDropList
     cdkScrollable
     cdkDropListGroup
     [cdkDropListData]="columns"
     cdkDropListOrientation="horizontal"
-    (cdkDropListDropped)="dragAndDrop($event)"
+    (cdkDropListDropped)="dragAndDropColumn($event)"
   >
     <!-- Column list -->
     <div
@@ -24,23 +24,28 @@
       <li class="p-2 z-depth-1 column__item">
         <div class="column__header__wrapper"></div>
         <div class="m-0 d-flex align-items-center column__header__container">
-          <form [formGroup]="manageColumnItem" class="w-100">
+          <form
+            [formGroup]="manageColumnItem"
+            class="w-100"
+            (click)="$event.stopPropagation()"
+          >
             <!-- Button view - name of columns -->
             <!-- Edit button -->
             <a class="column__header__container"
-               (click)="editColumnView(column); $event.stopPropagation()">
-              <div *ngIf="toggleEditColumn !== column.id"
-                   class="d-flex justify-content-between column__header__content"
+               (click)="editColumnView(column)">
+              <div
+                *ngIf="toggleEditColumn !== column.id"
+                class="d-flex justify-content-between column__header__content"
               >
                 <!-- Column name -->
                 <p class="px-2 column__name" cdkDragHandle>{{column.name}}</p>
-                <p>{{column.order}}</p>
               </div>
             </a>
             <!-- Form view - edit columns -->
-            <div *ngIf="toggleEditColumn === column.id"
-                 class="p-0 mx-1 d-flex justify-content-between align-items-baseline
-                  column__header column__header__content">
+            <div
+              *ngIf="toggleEditColumn === column.id"
+              class="p-0 mx-1 d-flex justify-content-between align-items-baseline column__header column__header__content"
+            >
               <input
                 *ngIf="toggleEditColumn"
                 mdbInput
@@ -51,7 +56,7 @@
                 class="form-control m-0"
                 appAutoFocus
               >
-              <a
+              <button
                 mdbBtn
                 type="submit"
                 color="primary"
@@ -59,14 +64,14 @@
                 (click)="updateColumn(manageColumnItem.value, column.id)"
               >
                 <mdb-icon class="fa" fas icon="edit"></mdb-icon>
-              </a>
+              </button>
               <button
                 mdbBtn
-                type="submit"
                 class="my-0 ml-1 mr-0 p-2 rounded column__header__btn--del"
                 (click)="deleteColumn(column.name, column.id)"
+                [disabled]="tasks[column.id].length !== 0"
               >
-                <!-- in btn upper 2 rows - [disabled]="column.task.length"-->
+                <!-- in btn upper 2 rows - -->
                 <mdb-icon class="fa" fas icon="trash"></mdb-icon>
               </button>
               <a
@@ -81,25 +86,25 @@
         </div>
         <!-- Task container -->
         <ul cdkDropList
-            [cdkDropListData]="column.task"
-            (cdkDropListDropped)="dragAndDrop($event)"
+            [cdkDropListData]="tasks[column.id]"
+            (cdkDropListDropped)="dragAndDropTask(column.id, $event)"
             class="task__container task__container-{{column.id}}"
             [class.task__container--mb]="toggleAddTask !== column.id"
         >
           <!-- Task list -->
           <li
-            *ngFor="let taskColumn of column.task"
+            *ngFor="let task of tasks[column.id]; let i = index"
             cdkDrag
-            [style.background-color]="taskColumn.taskBackground"
-            [class.task__item--bg]="taskColumn.taskBackground"
-            [class.task__item--bg-w]="taskColumn.taskBackground === '#172B4D'"
+            [style.background-color]="task.background"
+            [class.task__item--bg]="task.background"
+            [class.task__item--bg-w]="task.background === '#172B4D'"
             class="m-2 p-2 task__item z-depth-1 task__content"
           >
             <!-- Task container -->
             <!-- Task link -->
-            <a class="task__link" (click)="openTask(idBoard, column.id, taskColumn.taskId)"> </a>
+            <a class="task__link" (click)="openTask(column.id, task.id)"> </a>
             <!-- Task name -->
-            <p class="task__name">{{taskColumn.taskName}}</p>
+            <p class="task__name">{{task.name}}</p>
             <!-- Task edit icon -->
             <span class="pt-1 pl-2 task__icon">
                 <mdb-icon fas icon="pencil"></mdb-icon>
@@ -137,7 +142,11 @@
                   (click)="addTask(addTaskItem.value, column.id)"
                 > Add a task
                 </button>
-                <button type="button" class="ml-2 close" (click)="toggleAddTask = null; this.addTaskItem.reset()">
+                <button
+                  type="button"
+                  class="ml-2 close"
+                  (click)="toggleAddTask = null; this.addTaskItem.reset()"
+                >
                   <mdb-icon class="task__form--icon" fas icon="times"></mdb-icon>
                 </button>
               </div>
@@ -164,7 +173,11 @@
         </button>
       </div>
       <!-- Form view - new columns -->
-      <div *ngIf="toggleAddColumn" class="p-2 m-2 column__form--switch" (click)="$event.stopPropagation()">
+      <div
+        *ngIf="toggleAddColumn"
+        class="p-2 m-2 column__form--switch"
+        (click)="$event.stopPropagation()"
+      >
         <input
           mdbInput
           formControlName="name"
@@ -181,9 +194,14 @@
             color="primary"
             class="m-1 p-2 waves-light relative rounded column__sub-btn"
             (click)="createColumn(manageColumnItem.value)"
-          >Add a column
+          >
+            Add a column
           </button>
-          <button type="button" class="ml-2 close" (click)="addColumnView()">
+          <button
+            type="button"
+            class="ml-2 close"
+            (click)="clearFormView()"
+          >
             <mdb-icon class="column__form--cross-icon" fas icon="times"></mdb-icon>
           </button>
         </div>
