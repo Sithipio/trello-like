@@ -9,7 +9,7 @@ import { NotificationType } from '@shared/enums';
 import { NotificationService } from '@shared/services';
 
 @Component({
-  selector: 'app-columns-list',
+  selector: 'app-board-list',
   templateUrl: './board-list.component.html',
   styleUrls: [
     '../../../../styles/font-styles.scss',

@@ -1,5 +1,6 @@
 import { IUser } from '@shared/interfaces/user.interface';
 import { ITag } from '@shared/interfaces/tag.interface';
+import { TaskBackground } from '@shared/enums';
 
 export interface ITask {
   id: string;
@@ -7,7 +8,7 @@ export interface ITask {
   description: string;
   tag: ITag[];
   date: string;
-  background: string;
+  background: TaskBackground;
   order: number;
   columnId: string;
   boardId: string;

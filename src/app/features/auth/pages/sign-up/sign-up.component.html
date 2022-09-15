@@ -1,7 +1,9 @@
 <!-- Form registration -->
 <form class="pt-5 px-5 pb-3 mt-5 form__box z-depth-1" [formGroup]="upSignForm">
   <!-- Form header -->
-  <h3 class="form__header">Sign Up</h3>
+  <h3 class="form__header">
+    Sign Up
+  </h3>
   <!-- First Name -->
   <div class="md-form">
     <mdb-icon class="prefix form__icon" fas icon="user"></mdb-icon>
@@ -14,7 +16,9 @@
       autocomplete="off"
       class="form-control"
     >
-    <label for="firstName">Type your first name*</label>
+    <label for="firstName">
+      Type your first name*
+    </label>
     <mdb-error *ngIf="firstNameForm.invalid && (firstNameForm.dirty || firstNameForm.touched)">
       <span *ngIf="firstNameForm.errors.required">First name is required</span>
       <span *ngIf="firstNameForm.errors.minlength">Please enter at least 2 characters</span>
@@ -34,7 +38,9 @@
       autocomplete="off"
       class="form-control"
     >
-    <label for="lastName">Type your last name*</label>
+    <label for="lastName">
+      Type your last name*
+    </label>
     <mdb-error *ngIf="lastNameForm.invalid && (lastNameForm.dirty || lastNameForm.touched)">
       <span *ngIf="lastNameForm.errors.required">First name is required</span>
       <span *ngIf="lastNameForm.errors.minlength">Please enter at least 2 characters</span>
@@ -54,7 +60,9 @@
       autocomplete="off"
       class="form-control"
     >
-    <label for="email">Type your email*</label>
+    <label for="email">
+      Type your email*
+    </label>
     <mdb-error *ngIf="emailForm.invalid && (emailForm.dirty || emailForm.touched)">
       <span *ngIf="emailForm.errors.required">Email is required</span>
       <span *ngIf="emailForm.errors.email">Enter valid email address</span>
@@ -69,7 +77,8 @@
       [class.fa-unlock]="!isHidePass"
       fas
       (click)="isHidePass = !isHidePass"
-    ></mdb-icon>
+    >
+    </mdb-icon>
     <input
       mdbInput
       mdbValidate
@@ -79,7 +88,9 @@
       id="password"
       class="form-control"
     >
-    <label for="password">Type your password*</label>
+    <label for="password">
+      Type your password*
+    </label>
     <mdb-error *ngIf="passwordForm.invalid && (passwordForm.dirty || passwordForm.touched)">
       <span *ngIf="passwordForm.errors.required">Password is required</span>
       <span *ngIf="passwordForm.errors.minlength">Please enter at least 4 characters</span>
@@ -103,7 +114,9 @@
       autocomplete="off"
       class="form-control"
     >
-    <label for="confirmPassword">Confirm your password*</label>
+    <label for="confirmPassword">
+      Confirm your password*
+    </label>
     <mdb-error *ngIf="confPasswordForm.invalid && (confPasswordForm.dirty || confPasswordForm.touched)">
       <span *ngIf="confPasswordForm.errors.required">Confirm password is required</span>
       <span *ngIf="confPasswordForm.errors.passwordMismatch && !confPasswordForm.errors.required"
@@ -136,7 +149,8 @@
     Sign Up
   </button>
   <!-- Register -->
-  <p class="text-center form__footer-text">Already have an account?
+  <p class="text-center form__footer-text">
+    Already have an account?
     <a [routerLink]=urlToLog>
       Log in
     </a>

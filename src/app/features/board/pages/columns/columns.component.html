@@ -25,11 +25,11 @@
         <div class="column__header__wrapper"></div>
         <div class="m-0 d-flex align-items-center column__header__container">
           <form
-            [formGroup]="manageColumnItem"
+            [formGroup]="columnItemForm"
             class="w-100"
             (click)="$event.stopPropagation()"
           >
-            <!-- Button view - name of columns -->
+            <!-- Button view - name of board -->
             <!-- Edit button -->
             <a class="column__header__container"
                (click)="editColumnView(column)">
@@ -38,10 +38,12 @@
                 class="d-flex justify-content-between column__header__content"
               >
                 <!-- Column name -->
-                <p class="px-2 column__name" cdkDragHandle>{{column.name}}</p>
+                <p class="px-2 column__name" cdkDragHandle>
+                  {{column.name}}
+                </p>
               </div>
             </a>
-            <!-- Form view - edit columns -->
+            <!-- Form view - edit board -->
             <div
               *ngIf="toggleEditColumn === column.id"
               class="p-0 mx-1 d-flex justify-content-between align-items-baseline column__header column__header__content"
@@ -61,7 +63,7 @@
                 type="submit"
                 color="primary"
                 class="my-0 ml-2 mr-0 p-2 rounded column__header__btn"
-                (click)="updateColumn(manageColumnItem.value, column.id)"
+                (click)="updateColumn(columnItemForm.value, column.id)"
               >
                 <mdb-icon class="fa" fas icon="edit"></mdb-icon>
               </button>
@@ -71,7 +73,6 @@
                 (click)="deleteColumn(column.name, column.id)"
                 [disabled]="tasks[column.id].length !== 0"
               >
-                <!-- in btn upper 2 rows - -->
                 <mdb-icon class="fa" fas icon="trash"></mdb-icon>
               </button>
               <a
@@ -102,17 +103,17 @@
           >
             <!-- Task container -->
             <!-- Task link -->
-            <a class="task__link" (click)="openTask(column.id, task.id)"> </a>
+            <a class="task__link" (click)="openModalTask(task.id)"> </a>
             <!-- Task name -->
             <p class="task__name">{{task.name}}</p>
             <!-- Task edit icon -->
             <span class="pt-1 pl-2 task__icon">
                 <mdb-icon fas icon="pencil"></mdb-icon>
-                  </span>
+            </span>
           </li>
           <!-- Task addition form -->
-          <form [formGroup]="addTaskItem" class="task__form" (click)="$event.stopPropagation()">
-            <!-- Button view - new task -->
+          <form [formGroup]="addTaskItemForm" class="task__form" (click)="$event.stopPropagation()">
+            <!-- Button view - new tasks -->
             <div *ngIf="toggleAddTask !== column.id">
               <button
                 class="task__item task__add-btn"
@@ -122,7 +123,7 @@
                 Add a new task
               </button>
             </div>
-            <!-- Form view - new task -->
+            <!-- Form view - new tasks -->
             <div *ngIf="toggleAddTask === column.id" class="pb-0 mb-0 px-1 mx-1 mt-2">
               <input
                 mdbInput
@@ -139,13 +140,14 @@
                   type="submit"
                   color="primary"
                   class="m-1 p-2 waves-light relative rounded task__sub-btn"
-                  (click)="addTask(addTaskItem.value, column.id)"
-                > Add a task
+                  (click)="addTask(addTaskItemForm.value, column.id)"
+                >
+                  Add a task
                 </button>
                 <button
                   type="button"
                   class="ml-2 close"
-                  (click)="toggleAddTask = null; this.addTaskItem.reset()"
+                  (click)="toggleAddTask = null; this.addTaskItemForm.reset()"
                 >
                   <mdb-icon class="task__form--icon" fas icon="times"></mdb-icon>
                 </button>
@@ -156,8 +158,8 @@
       </li>
     </div>
     <!-- Column addition form -->
-    <form [formGroup]="manageColumnItem" class="column__form">
-      <!-- Button view - new columns -->
+    <form [formGroup]="columnItemForm" class="column__form">
+      <!-- Button view - new board -->
       <div *ngIf="toggleAddColumn === null">
         <button
           class="m-2 column__item column__add-btn"
@@ -172,7 +174,7 @@
           Add а new column
         </button>
       </div>
-      <!-- Form view - new columns -->
+      <!-- Form view - new board -->
       <div
         *ngIf="toggleAddColumn"
         class="p-2 m-2 column__form--switch"
@@ -193,7 +195,7 @@
             type="submit"
             color="primary"
             class="m-1 p-2 waves-light relative rounded column__sub-btn"
-            (click)="createColumn(manageColumnItem.value)"
+            (click)="createColumn(columnItemForm.value)"
           >
             Add a column
           </button>
@@ -209,5 +211,3 @@
     </form>
   </ul>
 </div>
-
-

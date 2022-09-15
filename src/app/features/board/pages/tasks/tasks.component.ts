@@ -1,35 +1,37 @@
 import {
-  ChangeDetectionStrategy,
   Component,
-  ElementRef,
+  ElementRef, OnDestroy,
   OnInit,
   ViewChild,
 } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MDBModalService } from 'angular-bootstrap-md';
-import { Subject } from 'rxjs';
+import { Subject, take } from 'rxjs';
 
 import { BoardsService } from '@core/services/boards.service';
 import { ITask } from '@shared/interfaces/task.interface';
-import { TASK_BG_COLOR, TASK_TAG_COLOR } from '@shared/constant';
+import { TASK_BG_COLOR, TAG_BG_COLOR } from '@shared/constant';
+import { ActivatedRoute, Router } from '@angular/router';
+import { NotificationType } from '@shared/enums';
+import { TasksService } from '../../services/tasks.service';
+import { NotificationService } from '@shared/services';
 
 @Component({
-  selector: 'app-task',
+  selector: 'app-tasks',
   templateUrl: './tasks.component.html',
   styleUrls: ['./tasks.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 
-export class TasksComponent implements OnInit {
+export class TasksComponent implements OnInit, OnDestroy {
 
-  public idTask: string;
-  public idBoard: string;
+  private boardId: string;
+  public taskId: string;
   public idColumn: string;
-  public editTaskForm: FormGroup;
+  public taskForm: FormGroup;
   public editTagForm: FormGroup;
   public actionEdit = new Subject<any>();
   public bgTask = TASK_BG_COLOR;
-  public bgTag = TASK_TAG_COLOR;
+  public bgTag = TAG_BG_COLOR;
   public tags = this.boardsService.Tags;
   public task: ITask;
   public toggleEditTaskName: string = null;
@@ -41,34 +43,55 @@ export class TasksComponent implements OnInit {
   constructor(public fb: FormBuilder,
               private modalService: MDBModalService,
               private boardsService: BoardsService,
+              private tasksService: TasksService,
+              private route: ActivatedRoute,
+              private notificationService: NotificationService,
+              private router: Router
   ) {
   }
 
   ngOnInit() {
-    this.editTaskForm = this.fb.group({
-      id: [],
-      name: ['', Validators.required],
-      description: [''],
-      tag: this.fb.array([]),
-      date: 'sadasd',
-      background: '',
-      user: [],
-
-    });
+    console.log(this.route)
+    this.createTaskForm();
+    this.getTaskById();
     this.editTagForm = this.fb.group({
       id: '',
       name: '',
       background: '',
     })
-    this.getBoardById();
-    this.getTagTask();
+  }
+
+  private createTaskForm(): void {
+    this.taskForm = this.fb.group({
+      name: ['', Validators.required],
+      description: [''],
+      tag: this.fb.array([]),
+      date: '',
+      background: '',
+      user: [],
+    });
+  }
+
+  private getTaskById(): void {
+    this.tasksService.getTask(this.boardId, this.taskId).pipe(take(1)).subscribe({
+      next: (resp: ITask) => {
+        this.task = resp;
+        console.log(this.task);
+      },
+      error: ({error}) => {
+        this.notificationService.sendMessage({
+          title: error.error,
+          message: error.message,
+          type: NotificationType.ERROR,
+        });
+      },
+    });
   }
 
   getBoardById(): void {
-//    this.task = this.boardsService.getTaskById(this.idBoard, this.idColumn, this.idTask);
+//    this.tasks = this.boardsService.getTaskById(this.idBoard, this.idColumn, this.idTask);
     // this.actionEdit.next(id);
-    this.editTaskForm.patchValue(this.task);
-    console.log(this.task)
+   // this.editTaskForm.patchValue(this.tasks);
   }
 
   getTag() {
@@ -86,10 +109,10 @@ export class TasksComponent implements OnInit {
   }
 
   editTask(form) {
-    console.log(this.editTaskForm.value)
-    if (this.editTaskForm.invalid) {
+    console.log(this.taskForm.value)
+    if (this.taskForm.invalid) {
 
-    } else if (this.editTaskForm.valid) {
+    } else if (this.taskForm.valid) {
       /* this.boards = this.boardsService.getBoards();*/
       this.actionEdit.next(form);
       this.modalService.hide(1);
@@ -108,7 +131,7 @@ export class TasksComponent implements OnInit {
 
   toggleBtnTaskDesc(id: string) {
     this.toggleEditTaskDesc = id;
-    this.tempTaskDesc = this.editTaskForm.value.taskDesc;
+    this.tempTaskDesc = this.taskForm.value.taskDesc;
     this.toggleEditTaskName = null;
   }
 
@@ -121,22 +144,22 @@ export class TasksComponent implements OnInit {
   }
 
   cancelChangeTextArea() {
-    this.editTaskForm.patchValue({taskDesc: this.tempTaskDesc})
-    this.editTaskForm.updateValueAndValidity();
+    this.taskForm.patchValue({taskDesc: this.tempTaskDesc})
+    this.taskForm.updateValueAndValidity();
     this.toggleEditTaskDesc = null;
   }
 
   fff() {
-    console.log(this.editTaskForm.value)
+    console.log(this.taskForm.value)
   }
 
   toggleTags(event, index) {
     if (event.target.checked) {
-      this.editTaskForm.value.taskTag.push(this.tags[index]);
-      console.log(this.editTaskForm.value)
+      this.taskForm.value.taskTag.push(this.tags[index]);
+      console.log(this.taskForm.value)
       this.getTag();
     } else {
-      this.editTaskForm.value.taskTag = this.editTaskForm.value.taskTag.filter(item => item.tagId != index)
+      this.taskForm.value.taskTag = this.taskForm.value.taskTag.filter(item => item.tagId != index)
     }
   }
 
@@ -173,7 +196,12 @@ export class TasksComponent implements OnInit {
   }
 
   checkTagActive(itemId, idTask) {
+    return true;
 //    return this.boardsService.checkTagActive(itemId, idTask, this.idBoard, this.idColumn);
+  }
+
+  ngOnDestroy(): void {
+    this.router.navigate([{ outlets: { task: null }}]);
   }
 
 }

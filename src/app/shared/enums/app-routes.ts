@@ -18,6 +18,7 @@ export enum AppRoutes {
 
 export enum AppRoutesParam {
 
-  BOARD_ID = ':id',
+  BOARD_ID = ':boardId',
+  TASK_ID = `:taskId`,
 }
 

@@ -1,5 +1,6 @@
-import {Injectable} from '@angular/core';
-import {ITag} from "@shared/interfaces/tag.interface";
+import { Injectable } from '@angular/core';
+import { ITag } from '@shared/interfaces/tag.interface';
+import { TagBackground } from '@shared/enums';
 
 
 @Injectable({
@@ -12,69 +13,69 @@ export class BoardsService {
     {
       id: "0",
       name: "Cool",
-      background: "#61BD4F",
+      background: TagBackground.BLUE,
     },
     {
       id: "1",
       name: "Warning",
-      background: "#F2D600",
+      background: TagBackground.BLUE,
     },
     {
       id: "2",
       name: "Need to do",
-      background: "#FF9F1A",
+      background: TagBackground.BLUE,
     },
     {
       id: "3",
       name: "Important",
-      background: "#EB5A46",
+      background: TagBackground.BLUE,
     },
     {
       id: "4",
       name: "",
-      background: "#C377E0",
+      background: TagBackground.BLUE,
     },
     {
       id: "5",
       name: "",
-      background: "#0079BF",
+      background: TagBackground.BLUE,
     },
     {
       id: "6",
       name: "",
-      background: "#00C2E0",
+      background: TagBackground.BLUE,
     },
     {
       id: "7",
       name: "",
-      background: "#51E898",
+      background: TagBackground.BLUE,
     },
     {
       id: "8",
       name: "Pink",
-      background: "#FF78CB",
+      background: TagBackground.BLUE,
     },
     {
       id: "9",
       name: "Black List",
-      background: "#344563",
+      background: TagBackground.BLUE,
     },
     {
       id: "10",
       name: "White",
-      background: "",
+      background: TagBackground.BLUE,
     },
   ];
 /*
 
-  public addTask(task: ITask, idColumn: string, idBoard: string): void {
+  public addTask(tasks: ITask, idColumn: string, idBoard: string): void {
     let randomId = getUniqueID();
     let filterBoard = this.boards.filter(column => column.id == idBoard)
-    let filterColumn = filterBoard[0].boardColumn.filter(task => task.id == idColumn)
+    let filterColumn = filterBoard[0].boardColumn.filter(tasks => tasks.id == idColumn)
     filterColumn[0].columnTask.push({
-      ...task,
+      ...tasks,
       taskId: randomId,
-      taskName: task.taskName,
+      taskName: tasks.taskName,
       taskDesc: '',
       taskTag: [],
       taskDate: '',

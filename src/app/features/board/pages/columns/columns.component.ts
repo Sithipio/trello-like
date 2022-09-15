@@ -1,21 +1,21 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { MDBModalRef, MDBModalService } from 'angular-bootstrap-md';
 import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { take } from 'rxjs';
 
 import { IBoards } from '@shared/interfaces/boards.interface';
-import { TasksComponent } from '../../../tasks/pages/task/tasks.component';
+import { TasksComponent } from '../tasks/tasks.component';
 import { NotificationType } from '@shared/enums';
 import { ColumnsService } from '../../services/columns.service';
 import { IColumn, ITask } from '@shared/interfaces';
 import { NotificationService } from '@shared/services';
 import { BoardsService } from '../../../boards/services/boards.service';
-import { TasksService } from '../../../tasks/services/tasks.service';
+import { TasksService } from '../../services/tasks.service';
 
 @Component({
-  selector: 'app-columns',
+  selector: 'app-board',
   templateUrl: './columns.component.html',
   styleUrls: ['./columns.component.scss'],
 })
@@ -26,13 +26,13 @@ export class ColumnsComponent implements OnInit {
   public columns: IColumn[];
   public tasks: { [key: string]: ITask[] } = {};
   public column = [];
-  public manageColumnItem: FormGroup;
-  public addTaskItem: FormGroup;
+  public columnItemForm: FormGroup;
+  public addTaskItemForm: FormGroup;
   public toggleAddColumn: string = null;
   public toggleAddTask: string = null;
   public toggleEditColumn: string = null;
   public modalRef: MDBModalRef | null = null;
-  private readonly _boardId: string = this.route.snapshot.paramMap.get('id');
+  private readonly _boardId: string = this.route.snapshot.paramMap.get('boardId');
 
   constructor(private modalService: MDBModalService,
               private columnsService: ColumnsService,
@@ -41,24 +41,26 @@ export class ColumnsComponent implements OnInit {
               private route: ActivatedRoute,
               private notificationService: NotificationService,
               public fb: FormBuilder,
+              private router: Router,
   ) {
   }
 
   ngOnInit() {
-    this.columnManageForm();
-    this.taskAddForm();
+    this.createColumnForm();
+    this.createAddTaskForm();
     this.getBoard()
     this.getColumnsById();
+    this.openModalTask()
   }
 
-  public columnManageForm(): void {
-    this.manageColumnItem = this.fb.group({
+  private createColumnForm(): void {
+    this.columnItemForm = this.fb.group({
       name: [null, Validators.required],
     });
   }
 
-  public taskAddForm(): void {
-    this.addTaskItem = this.fb.group({
+  private createAddTaskForm(): void {
+    this.addTaskItemForm = this.fb.group({
       name: [null, Validators.required],
     });
   }
@@ -96,11 +98,11 @@ export class ColumnsComponent implements OnInit {
   }
 
   public createColumn(name: string): void {
-    if (this.manageColumnItem.valid) {
+    if (this.columnItemForm.valid) {
       this.columnsService.createColumn(this._boardId, name).pipe(take(1)).subscribe({
         next: (resp: IColumn) => {
           this.toggleAddColumn = null;
-          this.manageColumnItem.reset();
+          this.columnItemForm.reset();
           this.getColumnsById();
           this.notificationService.sendMessage({
             message: `Column with name "${resp.name}" created`,
@@ -119,11 +121,11 @@ export class ColumnsComponent implements OnInit {
   }
 
   public updateColumn(name: string, columnId: string): void {
-    if (this.manageColumnItem.valid) {
+    if (this.columnItemForm.valid) {
       this.columnsService.updateColumn(this._boardId, columnId, name).pipe(take(1)).subscribe({
         next: (resp: IColumn) => {
           this.toggleEditColumn = null;
-          this.manageColumnItem.reset();
+          this.columnItemForm.reset();
           this.getColumnsById();
           this.notificationService.sendMessage({
             message: `Column with name "${resp.name}" updated`,
@@ -205,14 +207,14 @@ export class ColumnsComponent implements OnInit {
     this.toggleAddColumn = 'true';
     this.toggleEditColumn = null;
     this.toggleAddTask = null;
-    this.manageColumnItem.reset();
+    this.columnItemForm.reset();
   }
 
   public editColumnView(column: IColumn): void {
     this.toggleAddColumn = null;
     this.toggleEditColumn = column.id;
     this.toggleAddTask = null;
-    this.manageColumnItem.patchValue(column);
+    this.columnItemForm.patchValue(column);
   }
 
   public editTaskView(columnId: string): void {
@@ -234,8 +236,8 @@ export class ColumnsComponent implements OnInit {
     this.toggleEditColumn = null;
     this.toggleAddColumn = null;
     this.toggleAddTask = null;
-    this.manageColumnItem.reset();
-    this.addTaskItem.reset();
+    this.columnItemForm.reset();
+    this.addTaskItemForm.reset();
   }
 
   private getTasksById(columnId?: string): void {
@@ -274,11 +276,11 @@ export class ColumnsComponent implements OnInit {
   }
 
   public addTask(name: string, columnId: string): void {
-    if (this.addTaskItem.valid) {
+    if (this.addTaskItemForm.valid) {
       this.tasksService.createTask(this._boardId, columnId, name).pipe(take(1)).subscribe({
         next: (resp: ITask) => {
           this.toggleAddTask = null;
-          this.addTaskItem.reset();
+          this.addTaskItemForm.reset();
           this.getTasksById(columnId);
           this.notificationService.sendMessage({
             message: `Task with name "${resp.name}" created`,
@@ -296,7 +298,20 @@ export class ColumnsComponent implements OnInit {
     }
   }
 
-  public openTask(idColumn: string, idTask: string, idBoard: string = this._boardId): void {
+  public openModalTask(taskId?: string): void {
+    const urlWithoutAuxiliaryRoute = this.router
+      .createUrlTree(['.'], {relativeTo: this.route})
+      .root.children['task']?.toString();
+
+    if (taskId) {
+      this.router.navigate([{outlets: {task: taskId}, relativeTo: this.router}])
+      this.openTask(taskId);
+    } else if (urlWithoutAuxiliaryRoute) {
+      this.openTask(urlWithoutAuxiliaryRoute);
+    }
+  }
+
+  private openTask(taskId: string): void {
     this.modalRef = this.modalService.show(TasksComponent, {
       backdrop: true,
       keyboard: true,
@@ -306,13 +321,12 @@ export class ColumnsComponent implements OnInit {
       class: 'modal-dialog-centered modal-lg',
       animated: true,
       data: {
-        idTask,
-        idColumn,
-        idBoard,
+        taskId,
+        boardId: this._boardId,
       },
     });
-    this.modalRef.content.actionAdd.pipe(take(1)).subscribe((columns: IBoards) => {
-      //   this.boardsService.addBoard(columns);
-    });
+    /*  this.modalRef.content.actionAdd.pipe(take(1)).subscribe((board: IBoards) => {
+           this.boardsService.addBoard(board);
+      });*/
   }
 }

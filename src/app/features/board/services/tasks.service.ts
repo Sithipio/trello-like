@@ -16,6 +16,10 @@ export class TasksService {
     return this.httpClient.get<ITask[]>(`/${boardId}${URL_TASK}`);
   }
 
+  public getTask(boardId: string, taskId: string): Observable<ITask> {
+    return this.httpClient.get<ITask>(`/${boardId}${URL_TASK}/${taskId}`);
+  }
+
   public createTask(boardId: string, columnId: string, name: string): Observable<ITask> {
     return this.httpClient.post<ITask>(`/${boardId}${URL_TASK}/${columnId}`, name);
   }
