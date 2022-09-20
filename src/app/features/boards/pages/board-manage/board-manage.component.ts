@@ -8,6 +8,7 @@ import { IBoards } from '@shared/interfaces';
 import { BoardsService } from '../../services/boards.service';
 import { BoardBackground, NotificationType } from '@shared/enums';
 import { NotificationService } from '@shared/services';
+import { TagsService } from '../../../board/services';
 
 @Component({
   selector: 'app-board-manage',
@@ -29,7 +30,9 @@ export class BoardManageComponent implements OnInit {
   constructor(public fb: FormBuilder,
               private modalService: MDBModalService,
               private boardsService: BoardsService,
-              private notificationService: NotificationService) {
+              private notificationService: NotificationService,
+              private tagsService: TagsService,
+              ) {
   }
 
   public ngOnInit(): void {
@@ -77,8 +80,7 @@ export class BoardManageComponent implements OnInit {
     } else if (this.boardForm.valid) {
       this.boardsService.addBoard(this.boardForm.value).pipe(take(1)).subscribe({
         next: (resp) => {
-          this.actionManageBoard$.next(1);
-          this.modalService.hide(1);
+          this.createDefaultTags(resp.id);
           this.notificationService.sendMessage({
             message: `Board with name "${resp.name}" created`,
             type: NotificationType.SUCCESS,
@@ -94,6 +96,23 @@ export class BoardManageComponent implements OnInit {
       })
     }
   }
+
+  private createDefaultTags(boardId): void {
+    this.tagsService.createDefaultTags(boardId).pipe(take(1)).subscribe({
+      next: () => {
+        this.actionManageBoard$.next(1);
+        this.modalService.hide(1);
+      },
+      error: ({error}) => {
+        this.notificationService.sendMessage({
+          title: error.error,
+          message: error.message,
+          type: NotificationType.ERROR,
+        });
+      },
+    })
+  }
+
 
   public updateBoard(form): void {
     if (this.boardForm.invalid) {

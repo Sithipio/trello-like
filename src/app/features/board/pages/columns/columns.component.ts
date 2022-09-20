@@ -1,18 +1,17 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MDBModalRef, MDBModalService } from 'angular-bootstrap-md';
 import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { take } from 'rxjs';
+import { Subscription, take } from 'rxjs';
 
 import { IBoards } from '@shared/interfaces/boards.interface';
 import { TasksComponent } from '../tasks/tasks.component';
 import { NotificationType } from '@shared/enums';
-import { ColumnsService } from '../../services/columns.service';
 import { IColumn, ITask } from '@shared/interfaces';
 import { NotificationService } from '@shared/services';
 import { BoardsService } from '../../../boards/services/boards.service';
-import { TasksService } from '../../services/tasks.service';
+import { ColumnsService, DataUpdateService, TasksService } from '../../services';
 
 @Component({
   selector: 'app-board',
@@ -20,24 +19,26 @@ import { TasksService } from '../../services/tasks.service';
   styleUrls: ['./columns.component.scss'],
 })
 
-export class ColumnsComponent implements OnInit {
+export class ColumnsComponent implements OnInit, OnDestroy {
 
   public board: IBoards;
   public columns: IColumn[];
   public tasks: { [key: string]: ITask[] } = {};
   public column = [];
   public columnItemForm: FormGroup;
-  public addTaskItemForm: FormGroup;
+  public taskItemForm: FormGroup;
   public toggleAddColumn: string = null;
   public toggleAddTask: string = null;
   public toggleEditColumn: string = null;
   public modalRef: MDBModalRef | null = null;
   private readonly _boardId: string = this.route.snapshot.paramMap.get('boardId');
+  private watcher = new Subscription;
 
   constructor(private modalService: MDBModalService,
               private columnsService: ColumnsService,
               private boardsService: BoardsService,
               private tasksService: TasksService,
+              private dataUpdateService: DataUpdateService,
               private route: ActivatedRoute,
               private notificationService: NotificationService,
               public fb: FormBuilder,
@@ -47,10 +48,20 @@ export class ColumnsComponent implements OnInit {
 
   ngOnInit() {
     this.createColumnForm();
-    this.createAddTaskForm();
+    this.createTaskForm();
     this.getBoard()
     this.getColumnsById();
-    this.openModalTask()
+    this.subscribeOnUpdateTask();
+    this.openModalTask();
+  }
+
+  private subscribeOnUpdateTask(): void {
+    this.watcher = this.dataUpdateService.getUpdateTaskId().subscribe({
+        next: (taskId) => {
+          this.getTaskById(taskId);
+        },
+      },
+    );
   }
 
   private createColumnForm(): void {
@@ -59,8 +70,8 @@ export class ColumnsComponent implements OnInit {
     });
   }
 
-  private createAddTaskForm(): void {
-    this.addTaskItemForm = this.fb.group({
+  private createTaskForm(): void {
+    this.taskItemForm = this.fb.group({
       name: [null, Validators.required],
     });
   }
@@ -237,18 +248,38 @@ export class ColumnsComponent implements OnInit {
     this.toggleAddColumn = null;
     this.toggleAddTask = null;
     this.columnItemForm.reset();
-    this.addTaskItemForm.reset();
+    this.taskItemForm.reset();
   }
 
   private getTasksById(columnId?: string): void {
     this.tasksService.getTasks(this._boardId).pipe(take(1)).subscribe({
       next: (resp: ITask[]) => {
         this.column.forEach(columnId => {
-          this.tasks[columnId] = resp.filter(task => task.columnId === columnId)
+          this.tasks[columnId] = resp.filter(task => task.column === columnId)
         })
         if (columnId) {
           this.scrollTaskList(columnId)
         }
+      },
+      error: ({error}) => {
+        this.notificationService.sendMessage({
+          title: error.error,
+          message: error.message,
+          type: NotificationType.ERROR,
+        });
+      },
+    });
+  }
+
+  private getTaskById(taskId: string): void {
+    this.tasksService.getTask(this._boardId, taskId ).pipe(take(1)).subscribe({
+      next: (resp: ITask) => {
+        this.tasks[resp.column].forEach(item => {
+          if(item.id === taskId) {
+            item.name = resp.name;
+            item.background = resp.background;
+          }
+        })
       },
       error: ({error}) => {
         this.notificationService.sendMessage({
@@ -276,11 +307,11 @@ export class ColumnsComponent implements OnInit {
   }
 
   public addTask(name: string, columnId: string): void {
-    if (this.addTaskItemForm.valid) {
+    if (this.taskItemForm.valid) {
       this.tasksService.createTask(this._boardId, columnId, name).pipe(take(1)).subscribe({
         next: (resp: ITask) => {
           this.toggleAddTask = null;
-          this.addTaskItemForm.reset();
+          this.taskItemForm.reset();
           this.getTasksById(columnId);
           this.notificationService.sendMessage({
             message: `Task with name "${resp.name}" created`,
@@ -316,7 +347,7 @@ export class ColumnsComponent implements OnInit {
       backdrop: true,
       keyboard: true,
       focus: true,
-      show: false,
+      show: true,
       ignoreBackdropClick: false,
       class: 'modal-dialog-centered modal-lg',
       animated: true,
@@ -329,4 +360,9 @@ export class ColumnsComponent implements OnInit {
            this.boardsService.addBoard(board);
       });*/
   }
+
+  public ngOnDestroy(): void {
+    this.watcher.unsubscribe();
+  }
+
 }

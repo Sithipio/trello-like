@@ -1,0 +1,51 @@
+<!-- Modal window for cover-->
+<div
+  mdbModal
+  #coverModal="mdbModal"
+  class="modal__container"
+>
+  <div class="modal-side modal-sm">
+    <div class="modal-content">
+      <!-- Modal body -->
+      <p class="modal__header my-1">
+        Cover
+      </p>
+      <button
+        type="button"
+        class="close pull-right mt-1 modal__close-btn"
+        (click)="coverModal.hide(); closeModal(); "
+      >
+        <span>×</span>
+      </button>
+      <!-- Modal list of cover -->
+      <div class="modal-body d-flex flex-column align-items-start pt-1 pb-0" [formGroup]="editBackgroundForm">
+        <p class="modal__text mt-0">
+          Colors
+        </p>
+        <div class="d-flex flex-wrap modal__card mt-0">
+          <li class="radio-group" *ngFor="let item of bgTask; let i = index">
+            <input
+              mdbInput
+              type="radio"
+              formControlName="background"
+              [value]="item"
+              id="background+{{i}}"
+              (click)="updateTaskBackground(item)"
+            >
+            <label for="background+{{i}}" [style.background-color]=item>
+              <mdb-icon fas icon="check" class="radio-group--icon"></mdb-icon>
+              <span class="radio-group--fade"></span>
+            </label>
+          </li>
+          <!-- No covers -->
+          <p class="modal__text m-0 px-2 pb-3 ">
+                  <span class="modal__text--span">
+                    No cover.
+                  </span>
+            This won't show up on the header of cards.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

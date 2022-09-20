@@ -13,6 +13,7 @@ export enum AppRoutes {
 
   //TASK pages
   TASK = 'task',
+  TAG = 'tag',
 }
 
 

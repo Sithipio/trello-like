@@ -1,6 +1,4 @@
 import { Injectable } from '@angular/core';
-import { ITag } from '@shared/interfaces/tag.interface';
-import { TagBackground } from '@shared/enums';
 
 
 @Injectable({
@@ -9,63 +7,6 @@ import { TagBackground } from '@shared/enums';
 
 export class BoardsService {
 
-  public Tags: ITag[] = [
-    {
-      id: "0",
-      name: "Cool",
-      background: TagBackground.BLUE,
-    },
-    {
-      id: "1",
-      name: "Warning",
-      background: TagBackground.BLUE,
-    },
-    {
-      id: "2",
-      name: "Need to do",
-      background: TagBackground.BLUE,
-    },
-    {
-      id: "3",
-      name: "Important",
-      background: TagBackground.BLUE,
-    },
-    {
-      id: "4",
-      name: "",
-      background: TagBackground.BLUE,
-    },
-    {
-      id: "5",
-      name: "",
-      background: TagBackground.BLUE,
-    },
-    {
-      id: "6",
-      name: "",
-      background: TagBackground.BLUE,
-    },
-    {
-      id: "7",
-      name: "",
-      background: TagBackground.BLUE,
-    },
-    {
-      id: "8",
-      name: "Pink",
-      background: TagBackground.BLUE,
-    },
-    {
-      id: "9",
-      name: "Black List",
-      background: TagBackground.BLUE,
-    },
-    {
-      id: "10",
-      name: "White",
-      background: TagBackground.BLUE,
-    },
-  ];
 /*
 
   public addTask(tasks: ITask, idColumn: string, idBoard: string): void {

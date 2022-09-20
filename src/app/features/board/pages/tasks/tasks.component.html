@@ -1,15 +1,15 @@
 <!-- Modal window -->
-<div class="modal-content" (click)="toggleFormView()">
+<div *ngIf="task && tagsByBoard" class="modal-content" (click)="clearFormView()">
   <!-- Modal body -->
   <div class="modal-body p-0">
     <!-- Close button -->
-    <button type="button" class="close pull-right mt-2 mx-1 modal-body__btn" (click)="closeBoard()">
-      <span [style.color]="taskForm.value.background === '#172B4D'? 'white' : ''">×</span>
+    <button type="button" class="close pull-right mt-2 mx-1 modal-body__btn" (click)="closeTask()">
+      <span [class.modal-body__btn--bg]="taskForm.value.background === '#344563'">×</span>
     </button>
     <div
-      class="task__header-color"
-      *ngIf="taskForm.value.background"
+      *ngIf="taskForm.value.background !== ''"
       [style.background-color]="taskForm.value.background"
+      class="task__header-color"
     >
     </div>
     <!-- Task form -->
@@ -19,21 +19,21 @@
         <a class="task__name__link" (click)="toggleBtnTaskName(task.id)">
           <div
             *ngIf="toggleEditTaskName === null"
-            class="px-3 d-flex m-3 align-items-baseline justify-content-center"
+            class="px-3 d-flex flex-column m-3 align-items-baseline justify-content-center"
           >
             <!-- Task name -->
             <i class="fa-lg fas fa-window-maximize m-2 task__name__icon"></i>
-            <p class="task__name__text">{{taskForm.value.name}}</p>
+            <p class="task__name__text">{{this.taskForm.value.name}}</p>
           </div>
         </a>
         <!-- Form view - edit tasks name -->
         <div
           *ngIf="toggleEditTaskName"
           class="task__name__link"
-          [style.right]="task.background ? '0px' : '20px'"
+          [class.task__name__link--bg]="taskForm.value.background"
         >
           <div class="d-flex px-3 m-2 align-items-baseline">
-            <i class="fa-lg fas fa-window-maximize m-2 task__name__icon" style="color: #0079bf"></i>
+            <i class="fa-lg fas fa-window-maximize m-2 task__name__icon task__name__icon--active"></i>
             <input
               mdbInput
               formControlName="name"
@@ -41,13 +41,13 @@
               autocomplete="off"
               class="form-control"
               appAutoFocus
-              (keyup.enter)="toggleFormView()"
+              (keydown.enter)="updateTaskName($event.target.value)"
             >
           </div>
         </div>
       </div>
       <!-- Task tag -->
-      <div *ngIf="task.tag.length" class="col-8 ml-5">
+      <div *ngIf="tagsByBoard.length !== 0" class="col-8 ml-5">
         <p class="task__modal__text pl-2 mt-0">
           Tags
         </p>
@@ -64,14 +64,14 @@
           <button
             type="button"
             class="rounded task__tag__btn m-1"
-            (click)="tagsModal.show(); toggleBtnEditTag(null,tags.length)"
+            (click)="tagsModal.show(); toggleBtnEditTag(null,tagsByBoard.length)"
           >
             <mdb-icon class="fa" fas icon="plus" style="color: #172b4d"></mdb-icon>
           </button>
         </div>
       </div>
       <!-- Task description -->
-      <div class="col-9" (click)="$event.stopPropagation()">
+      <div class="col-9 task__desc__container" (click)="$event.stopPropagation()">
         <div class="d-flex px-2 mx-2 mb-1 align-items-baseline">
           <i class="fas fa-align-justify task__desc__icon"></i>
           <p class="task__desc__text-header mb-2">
@@ -93,13 +93,13 @@
             <!-- Description -->
             <div *ngIf="toggleEditTaskDesc !== task.id">
             <pre
-              *ngIf="taskForm.controls.taskDesc.value"
+              *ngIf="taskForm.controls.description.value"
               class="ml-5 task__desc__text"
             >
               {{taskForm.value.description}}
               </pre>
               <pre
-                *ngIf="!taskForm.controls.taskDesc.value"
+                *ngIf="!taskForm.controls.description.value"
                 class="ml-5 task__desc__text task__desc__text--empty"
               >
                 Add a more detailed description...
@@ -107,7 +107,7 @@
             </div>
           </a>
           <!-- Form view - edit description -->
-          <div *ngIf="toggleEditTaskDesc === task.id" class="d-flex flex-column ml-5">
+          <div *ngIf="toggleEditTaskDesc === task.id" class="d-flex flex-column ml-5" style="position: relative; left: -10px">
               <textarea
                 mdbInput
                 #textAreaDesc
@@ -117,8 +117,7 @@
                 class="form-control task__desc__text--input"
                 appAutoFocus
                 [value]="taskForm.value.description"
-                [style.height]="heightTextAreaDescription(textAreaDesc)"
-                [style.overflow]="textAreaDesc.scrollHeight < 250 ? 'hidden' : 'auto'"
+                appAutoScrollHeight
               >
               </textarea>
             <div>
@@ -128,7 +127,7 @@
                 type="submit"
                 color="primary"
                 class="rounded task__desc__btn p-2"
-                (click)="toggleFormView()"
+                (click)="clearFormView()"
               >
                 Save
               </button>
@@ -141,63 +140,6 @@
               >
                 Cancel
               </button>
-            </div>
-          </div>
-        </div>
-      </div>
-      <!-- Modal window for cover-->
-      <div
-        mdbModal
-        #coverModal="mdbModal"
-        tabindex="-1"
-        role="dialog"
-        aria-labelledby="myBasicModalLabel"
-        aria-hidden="true"
-        class="modal modal-sm modal-frame modal-bottom"
-        [config]="{backdrop: false}"
-      >
-        <div class="modal-side modal-sm" role="document">
-          <div class="modal-content">
-            <!-- Modal body -->
-            <p class="task__modal__header my-1">
-              Cover
-            </p>
-            <button
-              type="button"
-              class="close pull-right mt-1 task__m-close-btn"
-              (click)="coverModal.hide()"
-            >
-              <span aria-hidden="true">×</span>
-            </button>
-            <!-- Modal list of cover -->
-            <div class="modal-body d-flex flex-column align-items-start pt-1 pb-0">
-              <p class="task__modal__text mt-0">
-                Colors
-              </p>
-              <div class="d-flex flex-wrap task__modal__card mt-0">
-                <li class="radio-group" *ngFor="let item of bgTask; let i = index">
-                  <input
-                    mdbInput
-                    type="radio"
-                    formControlName="background"
-                    [value]="item"
-                    id="background+{{i}}"
-                    name="background"
-                  >
-                  <label for="background+{{i}}" [style.background-color]=item>
-                    <mdb-icon fas icon="check" class="radio-group--icon"></mdb-icon>
-                    <span class="radio-group--fade"></span>
-                  </label>
-                </li>
-                <!-- No covers -->
-                <p class="task__modal__text m-0 px-2 pb-3 ">
-                  <span [style.color]="'#172b4d'">
-                    No cover.
-                  </span>
-                  <br/>
-                  This won't show up on the header of cards.
-                </p>
-              </div>
             </div>
           </div>
         </div>
@@ -234,7 +176,7 @@
               >
                 <p class="task__modal__text mt-0">Tags</p>
                 <div class="d-flex flex-column task__modal__card mt-0 mb-3">
-                  <li class="checkbox-group d-flex align-items-center" *ngFor="let item of tags; let i = index">
+                  <li class="checkbox-group d-flex align-items-center" *ngFor="let item of tagsByBoard; let i = index">
                     <input
                       mdbInput
                       type="checkbox"
@@ -269,7 +211,7 @@
                   <div>
                     <button
                       class="rounded task__desc__btn task__desc__btn--edit task__modal__add-btn mt-1"
-                      (click)="toggleBtnEditTag(null,tags.length)"
+                      (click)="toggleBtnEditTag(null,tagsByBoard.length)"
                     >
                       <mdb-icon fas icon="plus" style="color: #172b4d" class="fa"></mdb-icon>
                       Add a new tag
@@ -279,12 +221,12 @@
               </div>
             </div>
           </div>
-          <!-- Toggle content tasks - change-->
+          <!-- Toggle content tag - change-->
           <ng-template #changeTagView>
             <div class="modal-content modal-dialog-scrollable">
               <!-- Modal body -->
               <p
-                *ngIf="toggleEditTag !== tags.length.toString() else AddTagHeaderView"
+                *ngIf="toggleEditTag !== tagsByBoard.length.toString() else AddTagHeaderView"
                 class="task__modal__header my-1"
               >
                 Change tag
@@ -333,7 +275,7 @@
                       <li class="radio-group" *ngFor="let item of bgTag; let i = index">
                         <input
                           mdbInput
-                          formControlName="tagBackground"
+                          formControlName="background"
                           type="radio"
                           id="background+{{i}}"
                           name="background"
@@ -355,7 +297,7 @@
                     </div>
                     <!-- Edit tag - bottom button -->
                     <div
-                      *ngIf="toggleEditTag !== tags.length.toString() else AddTagBtnView"
+                      *ngIf="toggleEditTag !== tagsByBoard.length.toString() else AddTagBtnView"
                       class="d-flex justify-content-between"
                     >
                       <button
@@ -390,7 +332,7 @@
                           color="primary"
                           class="rounded px-3 py-2"
                           style="text-transform: none"
-                          (click)="toggleBtnEditTag(null); addTag(editTagForm.value)"
+                          (click)="toggleBtnEditTag(null); createTagByBoardId(editTagForm.value)"
                         >
                           <mdb-icon fas icon="pencil-alt pr-1"></mdb-icon>
                           Add
@@ -414,9 +356,9 @@
           mdbWavesEffect
           type="button"
           class="task__sidebar__btn justify-content-center m-1"
-          (click)="coverModal.show()"
+          (click)="openCover()"
         >
-          <i class="fas fa-sm fa-book-open p-2"></i>
+          <i class="fas fa-sm fa-book-open p-2 task__sidebar__icon"></i>
           Cover
         </button>
         <!-- Tags button -->
@@ -426,7 +368,7 @@
           class="task__sidebar__btn justify-content-center m-1"
           (click)="toggleBtnEditTag(); tagsModal.show()"
         >
-          <i class="fas fa-sm fa-tags p-2"></i>
+          <i class="fas fa-sm fa-tags p-2 task__sidebar__icon"></i>
           Tags
         </button>
         <button
@@ -435,7 +377,7 @@
           class="task__sidebar__btn justify-content-center m-1"
           (click)="tagsModal.show()"
         >
-          <i class="fas fa-sm fa-calendar-alt p-2"></i>
+          <i class="fas fa-sm fa-calendar-alt p-2 task__sidebar__icon"></i>
           Dates
         </button>
         <button
@@ -444,8 +386,8 @@
           class="task__sidebar__btn justify-content-center m-1"
           (click)="tagsModal.show()"
         >
-          <i class="fas fa-sm fa-user-friends p-2"></i>
-          Members
+          <i class="fas fa-sm fa-user-friends p-2 task__sidebar__icon"></i>
+          Users
         </button>
       </div>
       <div class="mr-3 m-2 p-2 d-flex align-items-end justify-content-end w-100">
@@ -453,10 +395,9 @@
         <button
           mdbBtn
           mdbWavesEffect
-          type="submit"
-          color="outline-success"
+          type="button"
+          color="success"
           class="rounded task__bottom-btn p-0"
-          (click)="fff()"
         >
           Edit
         </button>
@@ -464,10 +405,10 @@
         <button
           mdbBtn
           mdbWavesEffect
-          type="button"
+          type="reset"
           color="outline-danger"
           class="rounded task__bottom-btn p-0"
-          (click)="closeBoard()"
+          (click)="closeTask()"
         >
           Cancel
         </button>

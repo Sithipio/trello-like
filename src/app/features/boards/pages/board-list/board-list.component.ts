@@ -23,7 +23,8 @@ export class BoardListComponent implements OnInit {
 
   constructor(private modalService: MDBModalService,
               private boardsService: BoardsService,
-              private notificationService: NotificationService) {
+              private notificationService: NotificationService,
+              ) {
   }
 
   public ngOnInit(): void {

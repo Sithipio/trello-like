@@ -10,7 +10,7 @@ export interface ITask {
   date: string;
   background: TaskBackground;
   order: number;
-  columnId: string;
+  column : string;
   boardId: string;
   user: IUser[];
 }

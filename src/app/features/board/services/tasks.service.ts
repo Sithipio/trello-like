@@ -6,11 +6,12 @@ import { ITask } from '@shared/interfaces';
 import { URL_TASK } from '@shared/constant';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class TasksService {
 
-  constructor(private httpClient: HttpClient) { }
+  constructor(private httpClient: HttpClient) {
+  }
 
   public getTasks(boardId: string): Observable<ITask[]> {
     return this.httpClient.get<ITask[]>(`/${boardId}${URL_TASK}`);
@@ -24,7 +25,15 @@ export class TasksService {
     return this.httpClient.post<ITask>(`/${boardId}${URL_TASK}/${columnId}`, name);
   }
 
-  public updateTaskOrder(boardId: string, columnId:string, dragColumns): Observable<ITask[]> {
+  public updateTaskName(boardId: string, taskId: string, name: string): Observable<ITask> {
+    return this.httpClient.patch<ITask>(`/${boardId}${URL_TASK}/${taskId}/name`, {name})
+  }
+
+  public updateTaskBackground(boardId: string, taskId: string, background: string): Observable<ITask> {
+    return this.httpClient.patch<ITask>(`/${boardId}${URL_TASK}/${taskId}/background`, {background})
+  }
+
+  public updateTaskOrder(boardId: string, columnId: string, dragColumns): Observable<ITask[]> {
     return this.httpClient.put<ITask[]>(`/${boardId}${URL_TASK}`, dragColumns)
   }
 

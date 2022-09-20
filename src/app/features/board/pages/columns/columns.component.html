@@ -97,8 +97,10 @@
             *ngFor="let task of tasks[column.id]; let i = index"
             cdkDrag
             [style.background-color]="task.background"
-            [class.task__item--bg]="task.background"
-            [class.task__item--bg-w]="task.background === '#172B4D'"
+            [ngClass]="{
+            'task__item--bg': task.background,
+            'task__item--bg-w': task.background === '#344563'
+            }"
             class="m-2 p-2 task__item z-depth-1 task__content"
           >
             <!-- Task container -->
@@ -112,7 +114,7 @@
             </span>
           </li>
           <!-- Task addition form -->
-          <form [formGroup]="addTaskItemForm" class="task__form" (click)="$event.stopPropagation()">
+          <form [formGroup]="taskItemForm" class="task__form" (click)="$event.stopPropagation()">
             <!-- Button view - new tasks -->
             <div *ngIf="toggleAddTask !== column.id">
               <button
@@ -140,14 +142,14 @@
                   type="submit"
                   color="primary"
                   class="m-1 p-2 waves-light relative rounded task__sub-btn"
-                  (click)="addTask(addTaskItemForm.value, column.id)"
+                  (click)="addTask(taskItemForm.value, column.id)"
                 >
                   Add a task
                 </button>
                 <button
                   type="button"
                   class="ml-2 close"
-                  (click)="toggleAddTask = null; this.addTaskItemForm.reset()"
+                  (click)="toggleAddTask = null; this.taskItemForm.reset()"
                 >
                   <mdb-icon class="task__form--icon" fas icon="times"></mdb-icon>
                 </button>

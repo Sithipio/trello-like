@@ -12,8 +12,8 @@ export class ColumnsService {
   constructor(private httpClient: HttpClient) {
   }
 
-  public getColumnById(id): Observable<IColumn[]> {
-    return this.httpClient.get<IColumn[]>(`/${id}${URL_COLUMN}`);
+  public getColumnById(boardId: string): Observable<IColumn[]> {
+    return this.httpClient.get<IColumn[]>(`/${boardId}${URL_COLUMN}`);
   }
 
   public createColumn(boardId: string, name: string): Observable<IColumn> {

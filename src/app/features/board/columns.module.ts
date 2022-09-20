@@ -8,21 +8,25 @@ import { ColumnsComponent } from './pages/columns/columns.component';
 import { ColumnsRoutingModule } from './columns-routing.module';
 import { AutoFocusModule } from '@shared/directives';
 import { TasksComponent } from './pages/tasks/tasks.component';
+import { AutoScrollHeightModule } from '@shared/directives/auto-scroll-height/auto-scroll-height.module';
+import { TaskCoverComponent } from './pages/task-cover/task-cover.component';
 
 
 @NgModule({
   declarations: [
     ColumnsComponent,
-    TasksComponent
+    TasksComponent,
+    TaskCoverComponent
   ],
-  imports: [
-    CommonModule,
-    ColumnsRoutingModule,
-    DragDropModule,
-    MDBBootstrapModule,
-    ReactiveFormsModule,
-    AutoFocusModule,
-  ],
+    imports: [
+        CommonModule,
+        ColumnsRoutingModule,
+        DragDropModule,
+        MDBBootstrapModule,
+        ReactiveFormsModule,
+        AutoFocusModule,
+        AutoScrollHeightModule,
+    ],
 })
 export class ColumnsModule {
 }

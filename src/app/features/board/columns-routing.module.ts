@@ -8,7 +8,6 @@ const routes: Routes = [
     path: '',
     component: ColumnsComponent,
  },
-
 ];
 
 @NgModule({
@@ -17,19 +16,3 @@ const routes: Routes = [
 })
 export class ColumnsRoutingModule {
 }
-
-/*
-const routes: Routes = [
-  {
-    path: '',
-    component: ColumnsComponent,
-    pathMatch: 'full',
-    children: [
-      {
-        path: '',
-        loadChildren: () => import('./../tasks/tasks.module').then(m => m.TasksModule),
-      },
-    ],
-  },
-
-];*/

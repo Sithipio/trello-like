@@ -1,0 +1,183 @@
+.modal {
+  &__container {
+    position: relative;
+    top: 25vh;
+    right: 1vw;
+  }
+
+  &__header {
+    height: 32px;
+    border-bottom: 1px solid #091e4221;
+    box-sizing: border-box;
+    margin: 0 12px;
+    text-align: center;
+    color: #5e6c84;
+    font-family: "BlinkMacSystemFont", "Segoe UI", "Roboto", sans-serif;
+  }
+
+  &__text {
+    color: #5e6c84;
+    width: 200px;
+    font-size: 12px;
+    font-weight: 600;
+    line-height: 16px;
+    margin-top: 16px;
+    margin-bottom: 4px;
+    font-family: "BlinkMacSystemFont", "Segoe UI", "Roboto", sans-serif;
+
+    &--span {
+      display: block;
+      color: #172b4d;
+    }
+  }
+
+  &__card {
+    width: 270px;
+  }
+  &__close-btn {
+    font-weight: 400;
+    transform: scale(0.9);
+  }
+}
+
+li {
+  list-style-type: none;
+}
+
+.radio-group {
+  position: relative;
+
+  input[type="radio"] {
+    opacity: 0;
+    width: 0;
+
+    &:checked ~ label {
+      display: inline-block;
+      color: white;
+
+      .radio-group--icon {
+        display: inline-block;
+        position: absolute;
+        top: 30%;
+        right: 35%;
+      }
+    }
+  }
+
+  label {
+    position: relative;
+    width: 50px;
+    height: 32px;
+    background-color: #ddd;
+    padding: 5px 10px;
+    margin: 1px 2px;
+    border-radius: 3px;
+  }
+
+  &--fade {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    border-radius: 3px;
+
+    &:hover {
+      background-color: rgba(0, 0, 0, 0.09);
+    }
+  }
+
+  &--icon {
+    display: none;
+  }
+}
+
+.checkbox-group {
+  height: 40px;
+
+  input[type="checkbox"] {
+    opacity: 0;
+    width: 0;
+
+    &:checked ~ label {
+      display: inline-block;
+
+      p {
+        color: #172B4D;
+      }
+
+      .checkbox-group--icon {
+        display: inline-block;
+        position: absolute;
+        top: 14%;
+        right: 3%;
+        transform: scale(0.7);
+        padding: 4px;
+        background-color: white;
+        border-radius: 50%;
+        font-weight: 600;
+
+        &--reverse {
+          color: white;
+          background-color: black;
+        }
+      }
+    }
+  }
+
+  label {
+    position: relative;
+    width: 230px;
+    height: 32px;
+    font-size: 14px;
+    font-weight: 500;
+    padding: 5px 10px;
+    margin: 1px 2px;
+    border-radius: 3px;
+    font-family: "BlinkMacSystemFont", "Segoe UI", "Roboto", sans-serif;
+
+    &:hover {
+      padding-left: 14px;
+    }
+  }
+
+  &--fade {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    border-radius: 3px;
+
+    &:hover:before {
+      position: absolute;
+      content: "";
+      top: 0;
+      bottom: 0;
+      left: 0;
+      right: 222px;
+      background-color: rgba(0, 0, 0, 0.20);
+      border-radius: 3px 0 0 3px;
+    }
+  }
+
+
+  &--icon {
+    display: none;
+  }
+
+  &__btn-edit {
+    border: none;
+    color: #42526e;
+    transform: scale(0.85);
+    background-color: #F4F5F7;
+    padding: 7px 10px;
+    margin: 0;
+    border-radius: 5px;
+
+    &:hover {
+      background-color: rgba(0, 0, 0, 0.09);
+    }
+  }
+
+}

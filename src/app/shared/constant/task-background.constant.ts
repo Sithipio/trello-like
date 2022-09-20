@@ -9,7 +9,7 @@ export const TASK_BG_COLOR = [
   TaskBackground.ORANGE,
   TaskBackground.VIOLET,
   TaskBackground.LIGHT_GREEN,
-  TaskBackground.EMPTY,
   TaskBackground.DARK_BLUE,
   TaskBackground.YELLOW,
+  TaskBackground.EMPTY,
 ]
