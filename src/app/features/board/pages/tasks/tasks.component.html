@@ -71,43 +71,45 @@
         </div>
       </div>
       <!-- Task description -->
-      <div class="col-9 task__desc__container" (click)="$event.stopPropagation()">
-        <div class="d-flex px-2 mx-2 mb-1 align-items-baseline">
+      <div class="col-9 task__desc__container mb-3">
+        <div class="d-flex px-2 mx-2 mb-1 align-items-baseline" >
           <i class="fas fa-align-justify task__desc__icon"></i>
           <p class="task__desc__text-header mb-2">
             Description
           </p>
-          <span *ngIf="!toggleEditTaskDesc && taskForm.value.description">
+          <div (click)="$event.stopPropagation()">
           <button
+            *ngIf="!toggleEditTaskDesc && taskForm.value.description"
             type="button"
             class="rounded task__desc__btn task__desc__btn--edit p-2"
             (click)="toggleBtnTaskDesc(task.id)"
           >
             Edit
           </button>
-          </span>
+          </div>
         </div>
-        <!-- Form view - description name -->
-        <div>
+        <!-- Form view - description -->
+        <div class="mb-5 ml-5" (click)="$event.stopPropagation()">
           <a (click)="toggleBtnTaskDesc(task.id)">
             <!-- Description -->
-            <div *ngIf="toggleEditTaskDesc !== task.id">
+            <div *ngIf="!toggleEditTaskDesc">
             <pre
-              *ngIf="taskForm.controls.description.value"
-              class="ml-5 task__desc__text"
+              *ngIf="task.description"
+              class="task__desc__text mb-3"
+              [class.task__desc__text--empty]="!task.description"
             >
-              {{taskForm.value.description}}
+          {{task.description}}
               </pre>
               <pre
-                *ngIf="!taskForm.controls.description.value"
-                class="ml-5 task__desc__text task__desc__text--empty"
+                *ngIf="!task.description"
+                class="task__desc__text task__desc__text--empty"
               >
                 Add a more detailed description...
               </pre>
             </div>
           </a>
           <!-- Form view - edit description -->
-          <div *ngIf="toggleEditTaskDesc === task.id" class="d-flex flex-column ml-5" style="position: relative; left: -10px">
+          <div *ngIf="toggleEditTaskDesc" class="task__desc__area d-flex flex-column mb-1">
               <textarea
                 mdbInput
                 #textAreaDesc
@@ -116,18 +118,18 @@
                 autocomplete="off"
                 class="form-control task__desc__text--input"
                 appAutoFocus
-                [value]="taskForm.value.description"
+                [value]="task.description"
                 appAutoScrollHeight
               >
               </textarea>
-            <div>
+            <div class="mb-1" (click)="clearFormView()">
               <!-- Submit button -->
               <button
                 mdbBtn
                 type="submit"
                 color="primary"
                 class="rounded task__desc__btn p-2"
-                (click)="clearFormView()"
+                (click)="updateTaskDescription(taskForm.value.description)"
               >
                 Save
               </button>
@@ -136,7 +138,7 @@
                 mdbBtn
                 type="button"
                 class="rounded task__desc__btn task__desc__btn--close p-2"
-                (click)="cancelChangeTextArea()"
+                (click)="clearFormView()"
               >
                 Cancel
               </button>

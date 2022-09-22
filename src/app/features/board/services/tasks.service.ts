@@ -33,6 +33,10 @@ export class TasksService {
     return this.httpClient.patch<ITask>(`/${boardId}${URL_TASK}/${taskId}/background`, {background})
   }
 
+  public updateTaskDescription(boardId: string, taskId: string, description: string): Observable<ITask> {
+    return this.httpClient.patch<ITask>(`/${boardId}${URL_TASK}/${taskId}/description`, {description})
+  }
+
   public updateTaskOrder(boardId: string, columnId: string, dragColumns): Observable<ITask[]> {
     return this.httpClient.put<ITask[]>(`/${boardId}${URL_TASK}`, dragColumns)
   }

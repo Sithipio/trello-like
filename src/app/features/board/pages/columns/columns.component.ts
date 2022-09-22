@@ -356,9 +356,6 @@ export class ColumnsComponent implements OnInit, OnDestroy {
         boardId: this._boardId,
       },
     });
-    /*  this.modalRef.content.actionAdd.pipe(take(1)).subscribe((board: IBoards) => {
-           this.boardsService.addBoard(board);
-      });*/
   }
 
   public ngOnDestroy(): void {

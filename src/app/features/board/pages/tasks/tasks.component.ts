@@ -6,7 +6,7 @@ import {
 } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MDBModalRef, MDBModalService } from 'angular-bootstrap-md';
-import { Subject, Subscription, take } from 'rxjs'
+import { Subscription, take } from 'rxjs'
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { BoardsService } from '@core/services/boards.service';
@@ -29,14 +29,11 @@ export class TasksComponent implements OnInit, OnDestroy {
   public taskId: string;
   public taskForm: FormGroup;
   public editTagForm: FormGroup;
-  public actionEdit = new Subject<any>();
   public task: ITask;
   public tagsByBoard: ITag[];
-  public tagsByTask: ITag[];
   public bgTag = TAG_BG_COLOR;
   public toggleEditTaskName: string = null;
   public toggleEditTaskDesc: string = null;
-  public tempTaskDesc: string = null;
   public toggleEditTag: string = null;
   private watcher = new Subscription;
   public modalRef: MDBModalRef | null = null;
@@ -58,18 +55,14 @@ export class TasksComponent implements OnInit, OnDestroy {
     this.createTaskForm();
     this.getTagsByBoardId();
     this.getTaskById();
-  //  this.getTagsByTaskId();
+    //  this.getTagsByTaskId();
     this.subscribeOnUpdateTaskData()
-    this.editTagForm = this.fb.group({
-      name: '',
-      background: '',
-    })
   }
 
   private subscribeOnUpdateTaskData(): void {
     this.watcher = this.dataUpdateService.getUpdateTaskData().subscribe({
         next: (background) => {
-       this.taskForm.patchValue({background})
+          this.taskForm.patchValue({background})
         },
       },
     );
@@ -118,8 +111,6 @@ export class TasksComponent implements OnInit, OnDestroy {
     });
   }
 
-
-
   public createTagByBoardId(dataTag: ITag): void {
     this.tagService.createTagByBoardId(this.boardId, dataTag).pipe(take(1)).subscribe({
       next: () => {
@@ -150,59 +141,55 @@ export class TasksComponent implements OnInit, OnDestroy {
       },
     });
   }
-  getTag() {
-    //return this.tags = this.boardsService.Tags;
+
+  public updateTaskDescription(description: string): void {
+    this.tasksService.updateTaskDescription(this.boardId, this.taskId, description).pipe(take(1)).subscribe({
+      next: () => {
+        this.dataUpdateService.sendUpdateTaskId(this.taskId);
+        this.task.description = description;
+        this.taskForm.patchValue({description: description});
+        this.backTaskDescription();
+      },
+      error: ({error}) => {
+        this.notificationService.sendMessage({
+          title: error.error,
+          message: error.message,
+          type: NotificationType.ERROR,
+        });
+      },
+    });
   }
 
-  getTagTask() {
-    //this.editTaskForm.value.taskTag.patchValue(this.fb.group(this.boardsService.getTagTask(this.idTask, this.idBoard, this.idColumn)));
-    // this.editTaskForm.value.taskTag.push(this.fb.group(this.boardsService.getTagTask(this.idTask, this.idBoard, this.idColumn)));
-    //  console.log(this.boardsService.getTagTask(this.idTask, this.idBoard, this.idColumn))
+  public backTaskDescription(): void {
+    this.toggleEditTaskName = null;
+    this.toggleEditTaskDesc = null;
   }
 
-  editTask(form) {
-    console.log(this.taskForm.value)
-    if (this.taskForm.invalid) {
-
-    } else if (this.taskForm.valid) {
-      /* this.boards = this.boardsService.getBoards();*/
-      this.actionEdit.next(form);
-      this.modalService.hide(1);
+  public clearFormView(): void {
+    if (this.toggleEditTaskName) {
+      this.updateTaskName(this.taskForm.value.name);
     }
-  }
-
-  clearFormView() {
     this.toggleEditTaskName = null;
     this.toggleEditTaskDesc = null;
   }
 
-  toggleBtnTaskName(id: string) {
-    this.toggleEditTaskName = id;
+  public toggleBtnTaskName(taskId: string): void {
+    this.toggleEditTaskName = taskId;
     this.toggleEditTaskDesc = null;
   }
 
-  toggleBtnTaskDesc(id: string) {
-    this.toggleEditTaskDesc = id;
-    this.tempTaskDesc = this.taskForm.value.taskDesc;
+  public toggleBtnTaskDesc(taskId: string): void {
+    this.taskForm.patchValue({description: this.task.description});
+    this.toggleEditTaskDesc = taskId;
     this.toggleEditTaskName = null;
-  }
-
-  cancelChangeTextArea() {
-    this.taskForm.patchValue({taskDesc: this.tempTaskDesc})
-    this.taskForm.updateValueAndValidity();
-    this.toggleEditTaskDesc = null;
-  }
-
-  fff() {
-    console.log(this.taskForm.value)
   }
 
   toggleTags(event, index) {
     if (event.target.checked) {
       this.taskForm.value.taskTag.push(this.tagsByBoard[index]);
-      this.getTag();
+      //   this.getTag();
     } else {
-      this.taskForm.value.taskTag = this.taskForm.value.taskTag.filter(item => item.tagId != index)
+      this.taskForm.value.taskTag = this.taskForm.value.taskTag.filter(item => item.tagId != index);
     }
   }
 
@@ -223,27 +210,23 @@ export class TasksComponent implements OnInit, OnDestroy {
 
   addTag(form) {
     // this.boardsService.addTag(form);
-    this.getTag();
+    // this.getTag();
   }
 
 
   editTag(form) {
     //   this.boardsService.editTag(form);
-    this.getTag();
+    //   this.getTag();
   }
 
   deleteTag(id) {
     //  this.boardsService.deleteTag(id);
-    this.getTag();
+    // this.getTag();
   }
 
   checkTagActive(itemId, idTask) {
     return true;
 //    return this.boardsService.checkTagActive(itemId, idTask, this.idBoard, this.idColumn);
-  }
-
-  closeTask() {
-    this.modalService.hide(1);
   }
 
   public openCover(): void {
@@ -263,6 +246,9 @@ export class TasksComponent implements OnInit, OnDestroy {
     });
   }
 
+  public closeTask(): void {
+    this.modalService.hide(1);
+  }
 
   public ngOnDestroy(): void {
     this.router.navigate([{outlets: {task: null}}]);

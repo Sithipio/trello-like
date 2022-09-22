@@ -165,7 +165,7 @@ pre {
 
   &__desc {
     &__container {
-    height: 40vh;
+      height: 370px;
     }
 
     &__icon {
@@ -178,8 +178,20 @@ pre {
       font-size: 16px;
       color: #172B4D;
       font-family: "BlinkMacSystemFont", "Segoe UI", "Roboto", sans-serif;
+      min-height: 170px;
       max-height: 300px;
       font-weight: 400;
+      padding: 0.375rem 0.75rem;
+      border: 1px transparent;
+
+      &--empty {
+        min-height: 58px;
+        font-weight: 500;
+      }
+
+      &:hover {
+        background-color: rgb(234 236 240 / 40%);
+      }
 
       &::-webkit-scrollbar {
         width: 8px;
@@ -258,6 +270,10 @@ pre {
         }
       }
 
+      &__area {
+        position: relative;
+        left: -10px;
+      }
     }
 
     &__text--input {
@@ -347,7 +363,7 @@ pre {
       margin-bottom: 4px;
       font-family: "BlinkMacSystemFont", "Segoe UI", "Roboto", sans-serif;
 
-      &--span{
+      &--span {
         color: #172b4d;
       }
     }
