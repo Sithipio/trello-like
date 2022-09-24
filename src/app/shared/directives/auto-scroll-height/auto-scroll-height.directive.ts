@@ -1,12 +1,15 @@
-import { Directive, ElementRef, HostListener, Renderer2 } from '@angular/core';
+import { Directive, ElementRef, HostBinding, HostListener } from '@angular/core';
 
 @Directive({
   selector: '[appAutoScrollHeight]',
 })
 export class AutoScrollHeightDirective {
 
-  constructor(private el: ElementRef, private renderer: Renderer2) {
+  constructor(private el: ElementRef) {
   }
+
+  @HostBinding('style.height') elHeight: string;
+  @HostBinding('style.overflow') elOverflow: string;
 
   @HostListener('focus') onFocus() {
     this.onKeyUp();
@@ -14,13 +17,13 @@ export class AutoScrollHeightDirective {
 
   @HostListener('keyup') onKeyUp() {
     const scrollHeight = this.el.nativeElement.scrollHeight;
-    const elem = this.el.nativeElement;
+
     if (scrollHeight <= 250) {
-      this.renderer.setStyle(elem, 'height', scrollHeight + 2 + 'px');
-      this.renderer.setStyle(elem, 'overflow', 'hidden');
+      this.elHeight = scrollHeight + 2 + 'px';
+      this.elOverflow = 'hidden';
     } else if (scrollHeight > 250) {
-      this.renderer.setStyle(elem, 'height', 250 + 'px');
-      this.renderer.setStyle(elem, 'overflow', 'auto');
+      this.elHeight = 250 + 'px';
+      this.elOverflow = 'auto';
     }
   }
 
