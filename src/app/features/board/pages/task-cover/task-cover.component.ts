@@ -10,7 +10,10 @@ import { MDBModalService } from 'angular-bootstrap-md';
 @Component({
   selector: 'app-task-cover',
   templateUrl: './task-cover.component.html',
-  styleUrls: ['./task-cover.component.scss'],
+  styleUrls: [
+    '../../../../styles/modal.scss',
+    './task-cover.component.scss',
+  ],
 })
 export class TaskCoverComponent implements OnInit {
   public boardId: string;
@@ -56,7 +59,7 @@ export class TaskCoverComponent implements OnInit {
   }
 
   public closeModal(): void {
-     this.modalService._hideModal(2);
+    this.modalService._hideModal(2);
   }
 
 }

@@ -1,6 +1,4 @@
-li {
-  list-style-type: none;
-}
+@import "./src/app/styles/_variables.scss";
 
 pre {
   white-space: pre-line;
@@ -9,44 +7,6 @@ pre {
   word-wrap: break-word;
 }
 
-.modal-content {
-  background-color: #F4F5F7;
-}
-
-.modal-body {
-  &__btn {
-    position: relative;
-    z-index: 20;
-    transform: scale(1.2);
-
-    &--bg {
-      color: white;
-    }
-  }
-
-  &--height {
-    overflow-x: hidden;
-
-    &::-webkit-scrollbar {
-      width: 9px;
-    }
-
-    &::-webkit-scrollbar-track {
-      background: rgba(185, 189, 197, 0.4);
-      border-radius: 8px;
-    }
-
-    &::-webkit-scrollbar-thumb {
-      border-radius: 8px;
-      background: rgba(185, 189, 197, 0.8);
-    }
-
-    &::-webkit-scrollbar-thumb:hover {
-      background: rgba(185, 189, 197, 1);
-    }
-  }
-
-}
 
 .form {
   min-height: 370px;
@@ -97,7 +57,7 @@ pre {
 
     &__text {
       font-size: 20px;
-      font-family: "BlinkMacSystemFont", "Segoe UI", "Roboto", sans-serif;
+      font-family: $font-family-main;
       font-weight: 500;
       line-height: 24px;
       margin-left: 25px !important;
@@ -121,14 +81,22 @@ pre {
     position: relative;
     display: inline-block;
 
+    &__text {
+      color: $color-text-main;
+      width: 200px;
+      font-size: $font-size-small;
+      font-weight: $font-weight-bold;
+      line-height: 16px;
+      margin-top: 16px;
+      margin-bottom: 4px;
+      font-family: $font-family-main;
+    }
+
     &__link {
       z-index: 0;
       position: absolute;
-      top: 0;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      border-radius: 3px;
+      @include absolute-cover();
+      border-radius: $border-radius-normal;
 
       &:hover {
         background-color: rgba(0, 0, 0, 0.09);
@@ -138,7 +106,7 @@ pre {
     &__name {
       position: relative;
       display: inline-block;
-      border-radius: 3px;
+      border-radius: $font-family-main;
       min-height: 30px;
       min-width: 40px;
       font-family: "BlinkMacSystemFont", "Segoe UI", "Roboto", sans-serif;
@@ -178,7 +146,7 @@ pre {
       font-size: 16px;
       color: #172B4D;
       font-family: "BlinkMacSystemFont", "Segoe UI", "Roboto", sans-serif;
-      min-height: 170px;
+      min-height: 58px;
       max-height: 300px;
       font-weight: 400;
       padding: 0.375rem 0.75rem;
@@ -186,7 +154,6 @@ pre {
 
       &--empty {
         min-height: 58px;
-        font-weight: 500;
       }
 
       &:hover {
@@ -199,11 +166,11 @@ pre {
 
       &::-webkit-scrollbar-track {
         background: rgba(185, 189, 197, 0.4);
-        border-radius: 8px;
+        border-radius: $border-radius-big;
       }
 
       &::-webkit-scrollbar-thumb {
-        border-radius: 8px;
+        border-radius: $border-radius-big;
         background: rgba(185, 189, 197, 0.8);
       }
 
@@ -216,7 +183,7 @@ pre {
         opacity: 0.8;
         background-color: #091e420a;
         border: none;
-        border-radius: 3px;
+        border-radius: $border-radius-normal;
         box-shadow: none;
         padding: 8px 12px;
         white-space: pre;
@@ -255,12 +222,13 @@ pre {
         align-items: center;
         background-color: #091e420a;
         border: none;
-        border-radius: 3px;
+        border-radius: $border-radius-normal;
         box-shadow: none;
         color: #172b4d;
         font-size: 14px;
         font-weight: 400;
         padding: 6px 12px;
+        font-family: "BlinkMacSystemFont", "Segoe UI", "Roboto", sans-serif;
         margin-left: 10px;
 
         &:hover {
@@ -292,17 +260,17 @@ pre {
       }
 
       &::-webkit-scrollbar-track {
-        background: rgba(185, 189, 197, 0.4);
-        border-radius: 8px;
+        @include scroll-rgba(0.4);
+        border-radius: $border-radius-big;
       }
 
       &::-webkit-scrollbar-thumb {
-        border-radius: 8px;
-        background: rgba(185, 189, 197, 0.8);
+        border-radius: $border-radius-big;
+        @include scroll-rgba(0.8);
       }
 
       &::-webkit-scrollbar-thumb:hover {
-        background: rgba(185, 189, 197, 1);
+        @include scroll-rgba(1);
       }
     }
   }
@@ -321,7 +289,7 @@ pre {
       background-color: #EAECF0;
       font-family: "BlinkMacSystemFont", "Segoe UI", "Roboto", sans-serif;
       border: none;
-      border-radius: 3px;
+      border-radius: $border-radius-normal;
       box-shadow: none;
       color: #172b4d;
       font-size: 14px;
@@ -342,227 +310,5 @@ pre {
     }
   }
 
-  &__modal {
-    &__header {
-      height: 32px;
-      border-bottom: 1px solid #091e4221;
-      box-sizing: border-box;
-      margin: 0 12px;
-      text-align: center;
-      color: #5e6c84;
-      font-family: "BlinkMacSystemFont", "Segoe UI", "Roboto", sans-serif;
-    }
-
-    &__text {
-      color: #5e6c84;
-      width: 200px;
-      font-size: 12px;
-      font-weight: 600;
-      line-height: 16px;
-      margin-top: 16px;
-      margin-bottom: 4px;
-      font-family: "BlinkMacSystemFont", "Segoe UI", "Roboto", sans-serif;
-
-      &--span {
-        color: #172b4d;
-      }
-    }
-
-    &__input {
-      box-shadow: inset 0 0 0 2px #0079bf;
-      font-family: "BlinkMacSystemFont", "Segoe UI", "Roboto", sans-serif;
-    }
-
-    &__card {
-      width: 270px;
-
-      &--edit {
-        height: 270px;
-      }
-    }
-
-    &__btn {
-      text-transform: none;
-      min-width: 65px;
-      font-weight: 500;
-      color: #172B4D;
-
-      &:hover {
-        background-color: #091e4214;
-      }
-
-    }
-
-    &__change-btn {
-      position: absolute;
-      top: 0;
-      left: 5px;
-      border: none;
-      background: none;
-      transform: scale(0.8);
-      font-weight: 400;
-      opacity: 0.5;
-
-      &:hover {
-        opacity: 0.75;
-      }
-    }
-
-    &__add-btn {
-      width: 265px;
-      margin-left: 2px;
-    }
-  }
-
-  &__bottom-btn {
-    min-width: 70px;
-    min-height: 40px;
-    border: 2px solid #00c851;
-    text-transform: none;
-  }
-
-  &__m-close-btn {
-    font-weight: 400;
-    transform: scale(0.9);
-  }
 
 }
-
-.radio-group {
-  position: relative;
-
-  input[type="radio"] {
-    opacity: 0;
-    width: 0;
-
-    &:checked ~ label {
-      display: inline-block;
-      color: white;
-
-      .radio-group--icon {
-        display: inline-block;
-        position: absolute;
-        top: 30%;
-        right: 35%;
-      }
-    }
-  }
-
-  label {
-    position: relative;
-    width: 50px;
-    height: 32px;
-    background-color: #ddd;
-    padding: 5px 10px;
-    margin: 1px 2px;
-    border-radius: 3px;
-  }
-
-  &--fade {
-    position: absolute;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    border-radius: 3px;
-
-    &:hover {
-      background-color: rgba(0, 0, 0, 0.09);
-    }
-  }
-
-  &--icon {
-    display: none;
-  }
-}
-
-.checkbox-group {
-  height: 40px;
-
-  input[type="checkbox"] {
-    opacity: 0;
-    width: 0;
-
-    &:checked ~ label {
-      display: inline-block;
-
-      p {
-        color: #172B4D;
-      }
-
-      .checkbox-group--icon {
-        display: inline-block;
-        position: absolute;
-        top: 14%;
-        right: 3%;
-        transform: scale(0.7);
-        padding: 4px;
-        background-color: white;
-        border-radius: 50%;
-        font-weight: 600;
-
-        &--reverse {
-          color: white;
-          background-color: black;
-        }
-      }
-    }
-  }
-
-  label {
-    position: relative;
-    width: 230px;
-    height: 32px;
-    font-size: 14px;
-    font-weight: 500;
-    padding: 5px 10px;
-    margin: 1px 2px;
-    border-radius: 3px;
-    font-family: "BlinkMacSystemFont", "Segoe UI", "Roboto", sans-serif;
-
-    &:hover {
-      padding-left: 14px;
-    }
-  }
-
-  &--fade {
-    position: absolute;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    border-radius: 3px;
-
-    &:hover:before {
-      position: absolute;
-      content: "";
-      top: 0;
-      bottom: 0;
-      left: 0;
-      right: 222px;
-      background-color: rgba(0, 0, 0, 0.20);
-      border-radius: 3px 0 0 3px;
-    }
-  }
-
-
-  &--icon {
-    display: none;
-  }
-
-  &__btn-edit {
-    border: none;
-    color: #42526e;
-    transform: scale(0.85);
-    background-color: #F4F5F7;
-    padding: 7px 10px;
-    margin: 0;
-    border-radius: 5px;
-
-    &:hover {
-      background-color: rgba(0, 0, 0, 0.09);
-    }
-  }
-
-}
-

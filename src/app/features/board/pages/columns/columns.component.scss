@@ -2,10 +2,6 @@
 
 $local-width-container: 272px;
 
-@mixin scroll-rgba($alpha) {
-  background: rgba(185, 189, 197, $alpha);
-}
-
 li {
   list-style-type: none;
 }

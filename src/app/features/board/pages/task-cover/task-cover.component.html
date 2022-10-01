@@ -1,7 +1,6 @@
 <!-- Modal window for cover-->
 <div
   mdbModal
-  #coverModal="mdbModal"
   class="modal__container"
 >
   <div class="modal-side modal-sm">
@@ -13,7 +12,7 @@
       <button
         type="button"
         class="close pull-right mt-1 modal__close-btn"
-        (click)="coverModal.hide(); closeModal(); "
+        (click)="closeModal()"
       >
         <span>×</span>
       </button>

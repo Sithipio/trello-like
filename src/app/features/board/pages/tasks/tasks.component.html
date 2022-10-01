@@ -48,7 +48,7 @@
       </div>
       <!-- Task tag -->
       <div *ngIf="tagsByBoard.length !== 0" class="col-8 ml-5">
-        <p class="task__modal__text pl-2 mt-0">
+        <p class="task__tag__text pl-2 mt-0">
           Tags
         </p>
         <div class="d-flex mb-2">
@@ -57,35 +57,35 @@
               class="task__tag__name py-1 px-2 m-1"
               [style.background-color]="tagTask.background"
             >
-              <a class="task__tag__link" (click)="toggleBtnEditTag(); tagsModal.show()"></a>
+              <a class="task__tag__link" (click)="toggleBtnEditTag(); openTags()"></a>
               {{tagTask.name}}
           </span>
           </div>
           <button
             type="button"
             class="rounded task__tag__btn m-1"
-            (click)="tagsModal.show(); toggleBtnEditTag(null,tagsByBoard.length)"
+            (click)="toggleBtnEditTag(null,tagsByBoard.length); openTags()"
           >
             <mdb-icon class="fa" fas icon="plus" style="color: #172b4d"></mdb-icon>
           </button>
         </div>
       </div>
       <!-- Task description -->
-      <div class="col-9 task__desc__container mb-3">
+      <div class="col-9 task__desc__container">
         <div class="d-flex px-2 mx-2 mb-1 align-items-baseline" >
           <i class="fas fa-align-justify task__desc__icon"></i>
           <p class="task__desc__text-header mb-2">
             Description
           </p>
           <div (click)="$event.stopPropagation()">
-          <button
-            *ngIf="!toggleEditTaskDesc && taskForm.value.description"
-            type="button"
-            class="rounded task__desc__btn task__desc__btn--edit p-2"
-            (click)="toggleBtnTaskDesc(task.id)"
-          >
-            Edit
-          </button>
+            <button
+              *ngIf="!toggleEditTaskDesc && taskForm.value.description"
+              type="button"
+              class="rounded task__desc__btn task__desc__btn--edit p-2"
+              (click)="toggleBtnTaskDesc(task.id)"
+            >
+              Edit
+            </button>
           </div>
         </div>
         <!-- Form view - description -->
@@ -146,208 +146,6 @@
           </div>
         </div>
       </div>
-      <!-- Modal window for tags-->
-      <div
-        mdbModal
-        #tagsModal="mdbModal"
-        tabindex="1"
-        role="dialog"
-        aria-labelledby="myBasicModalLabel"
-        aria-hidden="true"
-        class="modal modal-sm modal-frame modal-bottom"
-        [config]="{backdrop: false}"
-      >
-        <div class="modal-side modal-sm" role="document"
-        >
-          <!-- Toggle content tasks - list-->
-          <div *ngIf="!toggleEditTag else changeTagView">
-            <div class="modal-content modal-dialog-scrollable">
-              <!-- Modal body -->
-              <p class="task__modal__header my-1">Tags</p>
-              <button
-                type="button"
-                class="close pull-right mt-1 task__m-close-btn"
-                aria-label="Close"
-                (click)="tagsModal.hide()"
-              >
-                <span aria-hidden="true">×</span>
-              </button>
-              <!-- Modal list of tags -->
-              <div class="modal-body d-flex flex-column align-items-start pt-1 pb-0 modal-body--height"
-                   [style.max-height]="taskForm.value.background ? '390px' : '290px'"
-              >
-                <p class="task__modal__text mt-0">Tags</p>
-                <div class="d-flex flex-column task__modal__card mt-0 mb-3">
-                  <li class="checkbox-group d-flex align-items-center" *ngFor="let item of tagsByBoard; let i = index">
-                    <input
-                      mdbInput
-                      type="checkbox"
-                      id="tag+{{i}}"
-                      name="tag"
-                      [checked]="checkTagActive(item.id, task.id)"
-                      (change)="toggleTags($event, i)"
-                    >
-                    <label for="tag+{{i}}" [style.background-color]=item.background>
-                      <p class="p-0"
-                         [style.color]="item.background === '#344563'? 'white' : ''"
-                      >{{item.name}}</p>
-                      <mdb-icon
-                        fas
-                        icon="check"
-                        class="checkbox-group--icon"
-                        [class.checkbox-group--icon--reverse]="item.background === null || ''"
-                      >
-                      </mdb-icon>
-                      <span class="checkbox-group--fade"></span>
-                    </label>
-                    <!-- Tag edit button -->
-                    <button
-                      type="button"
-                      class="checkbox-group__btn-edit"
-                      (click)="toggleBtnEditTag(item.id)"
-                    >
-                      <mdb-icon fas icon="pencil-alt"></mdb-icon>
-                    </button>
-                    <!-- Button view - new tasks -->
-                  </li>
-                  <div>
-                    <button
-                      class="rounded task__desc__btn task__desc__btn--edit task__modal__add-btn mt-1"
-                      (click)="toggleBtnEditTag(null,tagsByBoard.length)"
-                    >
-                      <mdb-icon fas icon="plus" style="color: #172b4d" class="fa"></mdb-icon>
-                      Add a new tag
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <!-- Toggle content tag - change-->
-          <ng-template #changeTagView>
-            <div class="modal-content modal-dialog-scrollable">
-              <!-- Modal body -->
-              <p
-                *ngIf="toggleEditTag !== tagsByBoard.length.toString() else AddTagHeaderView"
-                class="task__modal__header my-1"
-              >
-                Change tag
-              </p>
-              <ng-template #AddTagHeaderView>
-                <p class="task__modal__header my-1">
-                  Create a tag
-                </p>
-              </ng-template>
-              <button
-                type="button"
-                class="pull-right mt-1 task__modal__change-btn"
-                (click)="toggleBtnEditTag(null)"
-              >
-                <i class="fas fa-chevron-left"></i>
-              </button>
-              <button
-                type="button"
-                class="close pull-right mt-1 task__m-close-btn"
-                (click)="tagsModal.hide()"
-              >
-                <span>×</span>
-              </button>
-              <!-- Modal list of tags background -->
-              <form [formGroup]="editTagForm">
-                <div
-                  class="modal-body d-flex flex-column align-items-start pt-1 pb-0 modal-body--height"
-                  style="max-height:290px"
-                >
-                  <div class="d-flex flex-column task__modal__card task__modal__card--edit mt-0 mb-3">
-                    <p class="task__modal__text mt-0">
-                      Name
-                    </p>
-                    <input
-                      mdbInput
-                      formControlName="name"
-                      type="text"
-                      autocomplete="off"
-                      id="name"
-                      class="form-control my-2 task__modal__input"
-                    >
-                    <p class="task__modal__text mt-0">
-                      Select a color
-                    </p>
-                    <div class="d-flex flex-wrap task__modal__card mt-0">
-                      <li class="radio-group" *ngFor="let item of bgTag; let i = index">
-                        <input
-                          mdbInput
-                          formControlName="background"
-                          type="radio"
-                          id="background+{{i}}"
-                          name="background"
-                          [value]="item"
-                        >
-                        <label for="background+{{i}}" [style.background-color]=item>
-                          <mdb-icon fas icon="check" class="radio-group--icon"></mdb-icon>
-                          <span class="radio-group--fade"></span>
-                        </label>
-                      </li>
-                      <!-- No background of tag -->
-                      <p class="task__modal__text m-0 px-2 pb-1">
-                        <span [style.color]="'#172b4d'">
-                          No background.
-                        </span>
-                        <br/>
-                        This won't show up on the background of tag.
-                      </p>
-                    </div>
-                    <!-- Edit tag - bottom button -->
-                    <div
-                      *ngIf="toggleEditTag !== tagsByBoard.length.toString() else AddTagBtnView"
-                      class="d-flex justify-content-between"
-                    >
-                      <button
-                        mdbBtn
-                        type="button"
-                        color="primary"
-                        class="rounded px-3 py-2"
-                        style="text-transform: none; width: 95px"
-                        (click)="toggleBtnEditTag(null); editTag(editTagForm.value)"
-                      >
-                        <mdb-icon fas icon="pencil-alt pr-1"></mdb-icon>
-                        Edit
-                      </button>
-                      <button
-                        mdbBtn
-                        type="button"
-                        color="outline-danger"
-                        class="rounded px-3 py-2"
-                        style="text-transform: none"
-                        (click)="toggleBtnEditTag(null); deleteTag(editTagForm.value.id)"
-                      >
-                        <mdb-icon fas icon="pencil-alt pr-1"></mdb-icon>
-                        Delete
-                      </button>
-                    </div>
-                    <!-- Add tag - bottom button -->
-                    <ng-template #AddTagBtnView>
-                      <div class="d-flex justify-content-between">
-                        <button
-                          mdbBtn
-                          type="button"
-                          color="primary"
-                          class="rounded px-3 py-2"
-                          style="text-transform: none"
-                          (click)="toggleBtnEditTag(null); createTagByBoardId(editTagForm.value)"
-                        >
-                          <mdb-icon fas icon="pencil-alt pr-1"></mdb-icon>
-                          Add
-                        </button>
-                      </div>
-                    </ng-template>
-                  </div>
-                </div>
-              </form>
-            </div>
-          </ng-template>
-        </div>
-      </div>
       <!-- Task manager -->
       <div class="col-3 d-flex flex-column">
         <p class="task__sidebar__header mx-1 my-0 pb-2">
@@ -368,7 +166,7 @@
           mdbWavesEffect
           type="button"
           class="task__sidebar__btn justify-content-center m-1"
-          (click)="toggleBtnEditTag(); tagsModal.show()"
+          (click)="openTags()"
         >
           <i class="fas fa-sm fa-tags p-2 task__sidebar__icon"></i>
           Tags
@@ -377,7 +175,7 @@
           mdbWavesEffect
           type="button"
           class="task__sidebar__btn justify-content-center m-1"
-          (click)="tagsModal.show()"
+          (click)="closeTask()"
         >
           <i class="fas fa-sm fa-calendar-alt p-2 task__sidebar__icon"></i>
           Dates
@@ -386,33 +184,10 @@
           mdbWavesEffect
           type="button"
           class="task__sidebar__btn justify-content-center m-1"
-          (click)="tagsModal.show()"
+          (click)="closeTask()"
         >
           <i class="fas fa-sm fa-user-friends p-2 task__sidebar__icon"></i>
           Users
-        </button>
-      </div>
-      <div class="mr-3 m-2 p-2 d-flex align-items-end justify-content-end w-100">
-        <!-- Submit button -->
-        <button
-          mdbBtn
-          mdbWavesEffect
-          type="button"
-          color="success"
-          class="rounded task__bottom-btn p-0"
-        >
-          Edit
-        </button>
-        <!-- Cancel button -->
-        <button
-          mdbBtn
-          mdbWavesEffect
-          type="reset"
-          color="outline-danger"
-          class="rounded task__bottom-btn p-0"
-          (click)="closeTask()"
-        >
-          Cancel
         </button>
       </div>
     </form>

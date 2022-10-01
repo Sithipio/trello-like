@@ -1,0 +1,49 @@
+@import "./src/app/styles/_variables.scss";
+
+.modal-content {
+  background-color: #F4F5F7;
+}
+
+li {
+  list-style-type: none;
+}
+
+.modal {
+  &__container {
+    position: relative;
+  }
+
+  &__header {
+    height: 32px;
+    border-bottom: 1px solid #091e4221;
+    box-sizing: border-box;
+    margin: 0 12px;
+    text-align: center;
+    color: $color-text-main;
+    font-family: $font-family-main;
+  }
+
+  &__text {
+    color: $color-text-main;
+    width: 200px;
+    font-size: $font-size-small;
+    font-weight: $font-weight-bold;
+    line-height: 16px;
+    margin-top: 16px;
+    margin-bottom: 4px;
+    font-family: $font-family-main;
+
+    &--span {
+      display: block;
+      color: #172b4d;
+    }
+  }
+
+  &__card {
+    width: 270px;
+  }
+  &__close-btn {
+    font-weight: $font-weight-light;
+    transform: scale(0.9);
+  }
+}
