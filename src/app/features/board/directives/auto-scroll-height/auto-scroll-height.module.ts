@@ -8,7 +8,7 @@ import { AutoScrollHeightDirective } from './auto-scroll-height.directive';
     AutoScrollHeightDirective,
   ],
   exports: [
-    AutoScrollHeightDirective
+    AutoScrollHeightDirective,
   ],
   imports: [
     CommonModule,

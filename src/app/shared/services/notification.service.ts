@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
 
-import { NotificationMessage } from '@shared/interfaces/notification.interface';
+import { NotificationMessage } from '@shared/models/notification.model';
 import { NotificationType } from '@shared/enums/notification';
 
 @Injectable({
@@ -12,7 +12,7 @@ export class NotificationService {
 
   private notificationSubject: Subject<NotificationMessage> = new Subject<NotificationMessage>();
 
-  sendMessage(message: NotificationMessage) {
+  public sendMessage(message: NotificationMessage) {
     this.notificationSubject.next(message);
   }
 

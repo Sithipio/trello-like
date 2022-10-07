@@ -1,8 +1,9 @@
-import {Injectable} from '@angular/core';
-import {HttpClient} from '@angular/common/http';
-import {Observable} from 'rxjs';
-import {IBoards} from '@shared/interfaces/boards.interface';
-import {URL_BOARD} from '@shared/constant';
+import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
+
+import { IBoards } from '@shared/models/boards.model';
+import { URL_BOARD } from '@shared/constant';
 
 @Injectable({
   providedIn: 'root',
@@ -33,7 +34,7 @@ export class BoardsService {
   }
 
   public toggleFavorite(boardId: string, isFavorite: boolean): Observable<IBoards> {
-    return this.httpClient.put<IBoards>(`${URL_BOARD}/${boardId}`, {boardId, isFavorite});
+    return this.httpClient.put<IBoards>(`${URL_BOARD}/${boardId}`, { boardId, isFavorite });
   }
 
 }

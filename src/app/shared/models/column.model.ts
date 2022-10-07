@@ -1,4 +1,4 @@
-import { ITask } from '@shared/interfaces/task.interface';
+import { ITask } from '@shared/models/task.model';
 
 export interface IColumn {
   id: string;

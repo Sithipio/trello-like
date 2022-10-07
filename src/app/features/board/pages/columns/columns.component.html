@@ -2,7 +2,7 @@
   *ngIf="board"
   [style.background-color]="board.background"
   class="column"
-  (click)="clearFormView()"
+  (click)="onClearFormView()"
 >
   <!-- Column container -->
   <ul
@@ -12,7 +12,7 @@
     cdkDropListGroup
     [cdkDropListData]="columns"
     cdkDropListOrientation="horizontal"
-    (cdkDropListDropped)="dragAndDropColumn($event)"
+    (cdkDropListDropped)="onDragAndDropColumn($event)"
   >
     <!-- Column list -->
     <div
@@ -32,7 +32,7 @@
             <!-- Button view - name of board -->
             <!-- Edit button -->
             <a class="column__header__container"
-               (click)="editColumnView(column)">
+               (click)="onEditColumnView(column)">
               <div
                 *ngIf="toggleEditColumn !== column.id"
                 class="d-flex justify-content-between column__header__content"
@@ -63,14 +63,14 @@
                 type="submit"
                 color="primary"
                 class="my-0 ml-2 mr-0 p-2 rounded column__header__btn"
-                (click)="updateColumn(columnItemForm.value, column.id)"
+                (click)="onUpdateColumn(columnItemForm.value, column.id)"
               >
                 <mdb-icon class="fa" fas icon="edit"></mdb-icon>
               </button>
               <button
                 mdbBtn
                 class="my-0 ml-1 mr-0 p-2 rounded column__header__btn--del"
-                (click)="deleteColumn(column.name, column.id)"
+                (click)="onDeleteColumn(column.name, column.id)"
                 [disabled]="tasks[column.id].length !== 0"
               >
                 <mdb-icon class="fa" fas icon="trash"></mdb-icon>
@@ -88,7 +88,7 @@
         <!-- Task container -->
         <ul cdkDropList
             [cdkDropListData]="tasks[column.id]"
-            (cdkDropListDropped)="dragAndDropTask(column.id, $event)"
+            (cdkDropListDropped)="onDragAndDropTask(column.id, $event)"
             class="task__container task__container-{{column.id}}"
             [class.task__container--mb]="toggleAddTask !== column.id"
         >
@@ -105,7 +105,7 @@
           >
             <!-- Task container -->
             <!-- Task link -->
-            <a class="task__link" (click)="openModalTask(task.id)"> </a>
+            <a class="task__link" (click)="onOpenModalTask(task.id)"> </a>
             <!-- Task name -->
             <p class="task__name">{{task.name}}</p>
             <!-- Task edit icon -->
@@ -119,7 +119,7 @@
             <div *ngIf="toggleAddTask !== column.id">
               <button
                 class="task__item task__add-btn"
-                (click)="editTaskView(column.id)"
+                (click)="onEditTaskView(column.id)"
               >
                 <mdb-icon fas icon="plus" class="fa task__add-btn--icon"></mdb-icon>
                 Add a new task
@@ -142,7 +142,7 @@
                   type="submit"
                   color="primary"
                   class="m-1 p-2 waves-light relative rounded task__sub-btn"
-                  (click)="addTask(taskItemForm.value, column.id)"
+                  (click)="onAddTask(taskItemForm.value, column.id)"
                 >
                   Add a task
                 </button>
@@ -165,7 +165,7 @@
       <div *ngIf="toggleAddColumn === null">
         <button
           class="m-2 column__item column__add-btn"
-          (click)="addColumnView(); $event.stopPropagation()"
+          (click)="onAddColumnView(); $event.stopPropagation()"
         >
           <mdb-icon
             class="fa column__add-btn--icon"
@@ -197,14 +197,14 @@
             type="submit"
             color="primary"
             class="m-1 p-2 waves-light relative rounded column__sub-btn"
-            (click)="createColumn(columnItemForm.value)"
+            (click)="onCreateColumn(columnItemForm.value)"
           >
             Add a column
           </button>
           <button
             type="button"
             class="ml-2 close"
-            (click)="clearFormView()"
+            (click)="onClearFormView()"
           >
             <mdb-icon class="column__form--cross-icon" fas icon="times"></mdb-icon>
           </button>

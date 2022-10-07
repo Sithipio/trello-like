@@ -14,7 +14,7 @@ export class AutoFocusDirective implements AfterContentInit {
     setTimeout(() => {
       this.el.nativeElement.focus();
       this.cdr.detectChanges();
-    }, 0)
+    }, 0);
   }
 }
 

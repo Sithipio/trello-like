@@ -1,4 +1,4 @@
-import { IColumn } from '@shared/interfaces/column.interface';
+import { IColumn } from '@shared/models/column.model';
 import { BoardBackground } from '@shared/enums/board-background';
 
 export interface IBoards {

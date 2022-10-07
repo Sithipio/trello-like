@@ -4,7 +4,7 @@
     <div class="modal-content rounded">
       <!-- Modal header -->
       <div class="modal-header form__header">
-        <button type="button" class="close pull-right pt-2 pr-2" (click)="closeBoard()">
+        <button type="button" class="close pull-right pt-2 pr-2" (click)="onCloseBoard()">
           <span>×</span>
         </button>
         <h5 class="modal-title" id="modalTitle">
@@ -99,7 +99,7 @@
                     type="button"
                     color="danger"
                     class="waves-light relative rounded align-self-center"
-                    (click)="deleteBoard(board.name)"
+                    (click)="onDeleteBoard(board.name)"
                   >
                     Confirm delete
                   </button>
@@ -117,7 +117,7 @@
             type="submit"
             color="success"
             class="waves-light relative rounded"
-            (click)="addBoard()"
+            (click)="onAddBoard()"
           >
             Create
           </button>
@@ -129,7 +129,7 @@
             type="submit"
             color="success"
             class="waves-light relative rounded"
-            (click)="updateBoard(this.boardForm.value)"
+            (click)="onUpdateBoard(this.boardForm.value)"
           >
             Edit
           </button>
@@ -140,7 +140,7 @@
             type="button"
             color="outline-danger"
             class="waves-light relative rounded"
-            (click)="closeBoard()"
+            (click)="onCloseBoard()"
           >
             Cancel
           </button>

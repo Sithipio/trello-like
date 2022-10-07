@@ -20,17 +20,18 @@
           <!-- Board name -->
           <h4 class="board__name">{{item.name}}</h4>
           <!-- Board favorite button -->
-          <button type="button" class="board__btn" (click)="toggleFavorite(item)">
+          <button type="button" class="board__btn" (click)="onToggleFavorite(item)">
             <icon
               class="fa-star"
               [class.far]="!item.isFavorite"
               [class.fas]="item.isFavorite"
               [class.favorite]="item.isFavorite"
-            ></icon>
+            >
+            </icon>
           </button>
         </div>
         <!-- Board edit button -->
-        <button type="button" class="align-self-end board__btn" (click)="openManageBoard(item.id)">
+        <button type="button" class="align-self-end board__btn" (click)="onOpenManageBoard(item.id)">
           <mdb-icon fas icon="pencil-alt"></mdb-icon>
         </button>
       </div>
@@ -56,24 +57,25 @@
           <!-- Board name -->
           <h4 class="board__name">{{item.name}}</h4>
           <!-- Board favorite button -->
-          <button type="button" class="board__btn" (click)="toggleFavorite(item)">
+          <button type="button" class="board__btn" (click)="onToggleFavorite(item)">
             <icon
               class="fa-star"
               [class.far]="!item.isFavorite"
               [class.fas]="item.isFavorite"
               [class.favorite]="item.isFavorite"
-            ></icon>
+            >
+            </icon>
           </button>
         </div>
         <!-- Board edit button -->
-        <button type="button" class="align-self-end board__btn" (click)="openManageBoard(item.id)">
+        <button type="button" class="align-self-end board__btn" (click)="onOpenManageBoard(item.id)">
           <mdb-icon fas icon="pencil-alt"></mdb-icon>
         </button>
       </div>
     </li>
     <!-- Add new board -->
     <div>
-      <button class="board__list m-2 board__btn-add" type="submit" (click)="openManageBoard()">
+      <button class="board__list m-2 board__btn-add" type="submit" (click)="onOpenManageBoard()">
         Add new board
         <mdb-icon class="fa-lg board__btn-add-icon" fas icon="plus-circle"></mdb-icon>
       </button>

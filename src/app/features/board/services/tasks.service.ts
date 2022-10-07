@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
-
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { ITask } from '@shared/interfaces';
+
+import { ITask } from '@shared/models';
 import { URL_TASK } from '@shared/constant';
 
 @Injectable({
@@ -26,19 +26,19 @@ export class TasksService {
   }
 
   public updateTaskName(boardId: string, taskId: string, name: string): Observable<ITask> {
-    return this.httpClient.patch<ITask>(`/${boardId}${URL_TASK}/${taskId}/name`, {name})
+    return this.httpClient.patch<ITask>(`/${boardId}${URL_TASK}/${taskId}/name`, { name });
   }
 
   public updateTaskBackground(boardId: string, taskId: string, background: string): Observable<ITask> {
-    return this.httpClient.patch<ITask>(`/${boardId}${URL_TASK}/${taskId}/background`, {background})
+    return this.httpClient.patch<ITask>(`/${boardId}${URL_TASK}/${taskId}/background`, { background });
   }
 
   public updateTaskDescription(boardId: string, taskId: string, description: string): Observable<ITask> {
-    return this.httpClient.patch<ITask>(`/${boardId}${URL_TASK}/${taskId}/description`, {description})
+    return this.httpClient.patch<ITask>(`/${boardId}${URL_TASK}/${taskId}/description`, { description });
   }
 
   public updateTaskOrder(boardId: string, columnId: string, dragColumns): Observable<ITask[]> {
-    return this.httpClient.put<ITask[]>(`/${boardId}${URL_TASK}`, dragColumns)
+    return this.httpClient.put<ITask[]>(`/${boardId}${URL_TASK}`, dragColumns);
   }
 
 }

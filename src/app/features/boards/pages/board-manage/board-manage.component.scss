@@ -1,6 +1,5 @@
 @import "./src/app/styles/_variables.scss";
 
-
 .modal-title {
   font-weight: $font-weight-light;
 }
@@ -61,7 +60,7 @@ ul {
     border-radius: $border-radius-normal;
 
     &:hover {
-      background-color: rgba(0, 0, 0, 0.09);
+      @include hover-rgba(0.09);
     }
   }
 

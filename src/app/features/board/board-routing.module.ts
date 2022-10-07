@@ -7,12 +7,12 @@ const routes: Routes = [
   {
     path: '',
     component: ColumnsComponent,
- },
+  },
 ];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule],
 })
-export class ColumnsRoutingModule {
+export class BoardRoutingModule {
 }

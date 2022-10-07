@@ -41,11 +41,11 @@
 .modal {
   &__container {
     position: relative;
-    top: 25vh;
+    top: 33vh;
     right: 1vw;
 
     &--cover {
-      top: 31vh;
+      top: 40vh;
     }
   }
 
@@ -59,9 +59,9 @@
     padding: 6px 12px;
     font-family: $font-family-main;
 
-      &:hover {
-        opacity: 0.9;
-        background-color: #091e4214;
+    &:hover {
+      opacity: 0.9;
+      background-color: $color-text-hover;
     }
   }
 }
@@ -77,7 +77,7 @@
       display: inline-block;
 
       p {
-        color: #172B4D;
+        color: $color-text-blue;
       }
 
       .checkbox-group--icon {
@@ -93,7 +93,7 @@
 
         &--reverse {
           color: white;
-          background-color: black;
+          @include hover-rgba(1);
         }
       }
     }
@@ -127,11 +127,10 @@
       bottom: 0;
       left: 0;
       right: 222px;
-      background-color: rgba(0, 0, 0, 0.20);
+      @include hover-rgba(0.2);
       border-radius: $border-radius-normal 0 0 $border-radius-normal;
     }
   }
-
 
   &--icon {
     display: none;
@@ -144,10 +143,10 @@
     background-color: #F4F5F7;
     padding: 7px 10px;
     margin: 0;
-    border-radius: 5px;
+    border-radius: $border-radius-normal + 2;
 
     &:hover {
-      background-color: rgba(0, 0, 0, 0.09);
+      @include hover-rgba(0.09);
     }
   }
 }

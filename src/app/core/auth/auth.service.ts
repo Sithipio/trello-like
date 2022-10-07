@@ -3,7 +3,7 @@ import { Observable, tap } from 'rxjs';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { IUser } from '@shared/interfaces/user.interface';
+import { IUser } from '@shared/models/user.model';
 import { URL_SIGN_IN, URL_SIGN_UP } from '@shared/constant';
 
 @Injectable({

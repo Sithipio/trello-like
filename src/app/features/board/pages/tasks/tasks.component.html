@@ -1,39 +1,39 @@
 <!-- Modal window -->
-<div *ngIf="task && tagsByBoard" class="modal-content" (click)="clearFormView()">
+<div *ngIf="task && tagsByBoard" class="modal-content" (click)="onClearFormView()">
   <!-- Modal body -->
   <div class="modal-body p-0">
     <!-- Close button -->
-    <button type="button" class="close pull-right mt-2 mx-1 modal-body__btn" (click)="closeTask()">
+    <button type="button" class="close pull-right mt-2 mx-1 modal-body__btn" (click)="onCloseTask()">
       <span [class.modal-body__btn--bg]="taskForm.value.background === '#344563'">×</span>
     </button>
     <div
       *ngIf="taskForm.value.background !== ''"
       [style.background-color]="taskForm.value.background"
-      class="task__header-color"
+      class="header-color"
     >
     </div>
     <!-- Task form -->
     <form class="p-0 m-0 form-row form" [formGroup]="taskForm">
-      <div class="task__name p-0 m-0 col-12" (click)="$event.stopPropagation()">
+      <div class="name p-0 m-0 col-12" (click)="$event.stopPropagation()">
         <!-- Form view - tasks name -->
-        <a class="task__name__link" (click)="toggleBtnTaskName(task.id)">
+        <a class="name__link" (click)="onToggleBtnTaskName(task.id)">
           <div
             *ngIf="toggleEditTaskName === null"
             class="px-3 d-flex flex-column m-3 align-items-baseline justify-content-center"
           >
             <!-- Task name -->
-            <i class="fa-lg fas fa-window-maximize m-2 task__name__icon"></i>
-            <p class="task__name__text">{{this.taskForm.value.name}}</p>
+            <i class="fa-lg fas fa-window-maximize m-2 name__icon"></i>
+            <p class="name__text">{{this.taskForm.value.name}}</p>
           </div>
         </a>
         <!-- Form view - edit tasks name -->
         <div
           *ngIf="toggleEditTaskName"
-          class="task__name__link"
+          class="name__link"
           [class.task__name__link--bg]="taskForm.value.background"
         >
           <div class="d-flex px-3 m-2 align-items-baseline">
-            <i class="fa-lg fas fa-window-maximize m-2 task__name__icon task__name__icon--active"></i>
+            <i class="fa-lg fas fa-window-maximize m-2 name__icon name__icon--active"></i>
             <input
               mdbInput
               formControlName="name"
@@ -41,47 +41,47 @@
               autocomplete="off"
               class="form-control"
               appAutoFocus
-              (keydown.enter)="updateTaskName($event.target.value)"
+              (keydown.enter)="onUpdateTaskName($event.target.value)"
             >
           </div>
         </div>
       </div>
       <!-- Task tag -->
       <div *ngIf="tagsByBoard.length !== 0" class="col-8 ml-5">
-        <p class="task__tag__text pl-2 mt-0">
+        <p class="tag__text pl-2 mt-0">
           Tags
         </p>
         <div class="d-flex mb-2">
-          <div *ngFor="let tagTask of task.tag; let i = index" class="task__tag">
+          <div *ngFor="let tagTask of task.tag; let i = index" class="tag">
             <span
-              class="task__tag__name py-1 px-2 m-1"
+              class="tag__name py-1 px-2 m-1"
               [style.background-color]="tagTask.background"
             >
-              <a class="task__tag__link" (click)="toggleBtnEditTag(); openTags()"></a>
+              <a class="tag__link" (click)="onToggleBtnEditTag(); onOpenTags()"></a>
               {{tagTask.name}}
           </span>
           </div>
           <button
             type="button"
-            class="rounded task__tag__btn m-1"
-            (click)="toggleBtnEditTag(null,tagsByBoard.length); openTags()"
+            class="rounded tag__btn m-1"
+            (click)="onToggleBtnEditTag(null, tagsByBoard.length); onOpenTags()"
           >
-            <mdb-icon class="fa" fas icon="plus" style="color: #172b4d"></mdb-icon>
+            <mdb-icon class="fa modal__text--span" fas icon="plus"></mdb-icon>
           </button>
         </div>
       </div>
       <!-- Task description -->
-      <div class="col-9 task__desc__container">
-        <div class="d-flex px-2 mx-2 mb-1 align-items-baseline" >
-          <i class="fas fa-align-justify task__desc__icon"></i>
-          <p class="task__desc__text-header mb-2">
+      <div class="col-9 desc__container">
+        <div class="d-flex px-2 mx-2 mb-1 align-items-baseline">
+          <i class="fas fa-align-justify desc__icon"></i>
+          <p class="desc__text-header mb-2">
             Description
           </p>
           <div (click)="$event.stopPropagation()">
             <button
               *ngIf="!toggleEditTaskDesc && taskForm.value.description"
               type="button"
-              class="rounded task__desc__btn task__desc__btn--edit p-2"
+              class="rounded desc__btn desc__btn--edit p-1"
               (click)="toggleBtnTaskDesc(task.id)"
             >
               Edit
@@ -95,41 +95,41 @@
             <div *ngIf="!toggleEditTaskDesc">
             <pre
               *ngIf="task.description"
-              class="task__desc__text mb-3"
+              class="desc__text mb-3"
               [class.task__desc__text--empty]="!task.description"
             >
           {{task.description}}
               </pre>
               <pre
                 *ngIf="!task.description"
-                class="task__desc__text task__desc__text--empty"
+                class="desc__text desc__text--empty"
               >
                 Add a more detailed description...
               </pre>
             </div>
           </a>
           <!-- Form view - edit description -->
-          <div *ngIf="toggleEditTaskDesc" class="task__desc__area d-flex flex-column mb-1">
+          <div *ngIf="toggleEditTaskDesc" class="desc__area d-flex flex-column mb-1">
               <textarea
                 mdbInput
                 #textAreaDesc
                 formControlName="description"
                 type="text"
                 autocomplete="off"
-                class="form-control task__desc__text--input"
+                class="form-control desc__text--input"
                 appAutoFocus
                 [value]="task.description"
                 appAutoScrollHeight
               >
               </textarea>
-            <div class="mb-1" (click)="clearFormView()">
+            <div class="mb-1" (click)="onClearFormView()">
               <!-- Submit button -->
               <button
                 mdbBtn
                 type="submit"
                 color="primary"
-                class="rounded task__desc__btn p-2"
-                (click)="updateTaskDescription(taskForm.value.description)"
+                class="rounded desc__btn p-2"
+                (click)="onUpdateTaskDescription(taskForm.value.description)"
               >
                 Save
               </button>
@@ -137,8 +137,8 @@
               <button
                 mdbBtn
                 type="button"
-                class="rounded task__desc__btn task__desc__btn--close p-2"
-                (click)="clearFormView()"
+                class="rounded desc__btn desc__btn--close p-2"
+                (click)="onClearFormView()"
               >
                 Cancel
               </button>
@@ -148,45 +148,45 @@
       </div>
       <!-- Task manager -->
       <div class="col-3 d-flex flex-column">
-        <p class="task__sidebar__header mx-1 my-0 pb-2">
+        <p class="sidebar__header mx-1 my-0 pb-2">
           Add to card
         </p>
         <!-- Cover button -->
         <button
           mdbWavesEffect
           type="button"
-          class="task__sidebar__btn justify-content-center m-1"
-          (click)="openCover()"
+          class="sidebar__btn justify-content-center m-1"
+          (click)="onOpenCover()"
         >
-          <i class="fas fa-sm fa-book-open p-2 task__sidebar__icon"></i>
+          <i class="fas fa-sm fa-book-open p-2 sidebar__icon"></i>
           Cover
         </button>
         <!-- Tags button -->
         <button
           mdbWavesEffect
           type="button"
-          class="task__sidebar__btn justify-content-center m-1"
-          (click)="openTags()"
+          class="sidebar__btn justify-content-center m-1"
+          (click)="onOpenTags()"
         >
-          <i class="fas fa-sm fa-tags p-2 task__sidebar__icon"></i>
+          <i class="fas fa-sm fa-tags p-2 sidebar__icon"></i>
           Tags
         </button>
         <button
           mdbWavesEffect
           type="button"
-          class="task__sidebar__btn justify-content-center m-1"
-          (click)="closeTask()"
+          class="sidebar__btn justify-content-center m-1"
+          (click)="onCloseTask()"
         >
-          <i class="fas fa-sm fa-calendar-alt p-2 task__sidebar__icon"></i>
+          <i class="fas fa-sm fa-calendar-alt p-2 sidebar__icon"></i>
           Dates
         </button>
         <button
           mdbWavesEffect
           type="button"
-          class="task__sidebar__btn justify-content-center m-1"
-          (click)="closeTask()"
+          class="sidebar__btn justify-content-center m-1"
+          (click)="onCloseTask()"
         >
-          <i class="fas fa-sm fa-user-friends p-2 task__sidebar__icon"></i>
+          <i class="fas fa-sm fa-user-friends p-2 sidebar__icon"></i>
           Users
         </button>
       </div>

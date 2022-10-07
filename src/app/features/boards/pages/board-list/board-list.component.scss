@@ -48,7 +48,7 @@ ul {
     border-radius: $border-radius-normal;
 
     &:hover {
-      background-color: rgba(0, 0, 0, 0.09);
+      @include hover-rgba(0.09);
     }
   }
 
@@ -85,7 +85,7 @@ ul {
     position: relative;
     border: none;
     background-color: rgba(9, 31, 68, 0.08);
-    color: #172b4d;
+    color: $color-text-blue;
     cursor: pointer;
     font-size: $font-size-medium;
     font-weight: $font-weight-medium;

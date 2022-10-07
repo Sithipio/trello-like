@@ -11,8 +11,8 @@ import { URL_SIGN_IN } from '@shared/constant';
   selector: 'app-sign-up',
   templateUrl: './sign-up.component.html',
   styleUrls: [
-    '../../../../styles/font-styles.scss',
-    '../../../../styles/auth.scss',
+    '../../../../styles/_font-styles.scss',
+    '../../styles/auth.scss',
     './sign-up.component.scss',
   ],
 })
@@ -40,7 +40,7 @@ export class SignUpComponent implements OnInit {
       'password': [null, [Validators.required, control => this.validatePasswords(control, 'password1'),
         Validators.minLength(4)]],
       'confPassword': [null, [Validators.required, control => this.validatePasswords(control, 'password2')]],
-    })
+    });
   }
 
   get firstNameForm(): AbstractControl {
@@ -63,7 +63,7 @@ export class SignUpComponent implements OnInit {
     return this.upSignForm.get('confPassword');
   }
 
-  validatePasswords(control: AbstractControl, name: string): void {
+  public validatePasswords(control: AbstractControl, name: string): void {
     if (
       this.upSignForm === undefined ||
       this.passwordForm.value === '' ||
@@ -86,10 +86,10 @@ export class SignUpComponent implements OnInit {
       }
       return null;
     } else
-      this.confPasswordForm.setErrors({'passwordMismatch': true});
+      this.confPasswordForm.setErrors({ 'passwordMismatch': true });
   }
 
-  signUp(): void {
+ public onSignUp(): void {
     this.passwordForm.updateValueAndValidity();
     if (this.upSignForm.invalid) {
       this.upSignForm.markAllAsTouched();
@@ -100,14 +100,14 @@ export class SignUpComponent implements OnInit {
         next: () => {
           this.router.navigate([URL_SIGN_IN]);
         },
-        error: ({error}) => {
+        error: ({ error }) => {
           this.notificationService.sendMessage({
             title: error.error,
             message: error.message,
             type: NotificationType.ERROR,
           });
           if (error.statusCode === 409) {
-            this.emailForm.setErrors({emailExist: true});
+            this.emailForm.setErrors({ emailExist: true });
             this.isAlarmForm = true;
           }
         },

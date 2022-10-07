@@ -1,13 +1,13 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
-import { IBoards } from '@shared/interfaces/boards.interface';
+import { IBoards } from '@shared/models/boards.model';
 
 @Pipe({
   name: 'favoriteBoards',
 })
 export class FavoriteBoardsPipe implements PipeTransform {
 
-  transform(items: IBoards[]): IBoards[] {
+  public transform(items: IBoards[]): IBoards[] {
     if (!items) return [];
     return [...items].sort((a, b) => {
       if (a.name < b.name)
@@ -15,7 +15,7 @@ export class FavoriteBoardsPipe implements PipeTransform {
       if (a.name > b.name)
         return 1;
       return 0;
-    }).filter(item => item.isFavorite === true)
+    }).filter(item => item.isFavorite === true);
 
   }
 

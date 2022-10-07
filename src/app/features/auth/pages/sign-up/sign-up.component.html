@@ -104,7 +104,8 @@
       [class.fa-unlock]="!isHidePassConf"
       fas
       (click)="isHidePassConf = !isHidePassConf"
-    ></mdb-icon>
+    >
+    </mdb-icon>
     <input
       mdbInput
       mdbValidate
@@ -144,7 +145,7 @@
     color="outline-success"
     class="my-4 mx-auto rounded form__btn form__btn--animated"
     [disabled]="upSignForm.invalid && isAlarmForm"
-    (click)="signUp()"
+    (click)="onSignUp()"
   >
     Sign Up
   </button>

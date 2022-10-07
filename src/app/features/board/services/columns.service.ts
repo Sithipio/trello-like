@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { IColumn } from '@shared/interfaces';
-import { URL_COLUMN } from '@shared/constant';
 import { HttpClient } from '@angular/common/http';
+
+import { IColumn } from '@shared/models';
+import { URL_COLUMN } from '@shared/constant';
 
 @Injectable({
   providedIn: 'root',
@@ -29,7 +30,7 @@ export class ColumnsService {
   }
 
   public updateColumnOrder(boardId: string, dragColumns): Observable<IColumn[]> {
-    return this.httpClient.put<IColumn[]>(`/${boardId}${URL_COLUMN}`, dragColumns)
+    return this.httpClient.put<IColumn[]>(`/${boardId}${URL_COLUMN}`, dragColumns);
   }
 
 }

@@ -2,6 +2,10 @@
 
 $local-width-container: 272px;
 
+@mixin local-hover-rgba($alpha) {
+  background-color: rgba(226, 228, 234, $alpha);
+}
+
 li {
   list-style-type: none;
 }
@@ -19,12 +23,12 @@ input {
   overflow: hidden;
   overflow-wrap: break-word;
   position: relative;
-  box-shadow: inset 0 0 0 2px #0079bf;
+  box-shadow: inset 0 0 0 2px $color-input-shadow;
   display: block;
   transition: margin 85ms ease-in, background 85ms ease-in;
 
   &:focus {
-    box-shadow: inset 0 0 0 2px #0079bf;
+    box-shadow: inset 0 0 0 2px $color-input-shadow;
   }
 }
 
@@ -130,7 +134,7 @@ input {
     @include wh-100();
     font-size: $font-size-big;
     font-weight: $font-weight-medium;
-    color: #172b4d;
+    color: $color-text-blue;
   }
 
   &__form {
@@ -154,7 +158,7 @@ input {
     background-color: rgba(235, 236, 240, 0.40);
 
     &:hover {
-      background-color: rgba(226, 228, 234, 0.50);
+      @include local-hover-rgba(0.50);
     }
 
     &--icon {
@@ -212,7 +216,7 @@ input {
     border-radius: $border-radius-normal;
 
     &:hover {
-      background-color: rgba(0, 0, 0, 0.08);
+      @include hover-rgba(0.08);
     }
   }
 
@@ -230,11 +234,11 @@ input {
     top: 4px;
     color: white;
     border-radius: $border-radius-big + 2px;
-    background-color: rgba(0, 0, 0, 0.35);
+    @include hover-rgba(0.35);
   }
 
   &__item {
-    color: #172b4d;
+    color: $color-text-blue;
     overflow: hidden;
     padding: 6px 8px 2px;
     font-weight: $font-weight-light;
@@ -272,14 +276,14 @@ input {
     width: 100%;
     padding-top: 6px;
     padding-bottom: 12px;
-    border-radius: 0 0 3px 3px;
+    border-radius: 0 0 $border-radius-normal $border-radius-normal;
 
     &:hover {
-      background-color: rgba(226, 228, 234);
+      @include local-hover-rgba(1);
     }
 
     &--icon {
-      color: #172b4d;
+      color: $color-text-blue;
     }
   }
 
@@ -299,6 +303,6 @@ input {
     content: "";
     position: absolute;
     @include absolute-cover();
-    background-color: rgba(226, 228, 234, 0.5);
+    @include local-hover-rgba(0.50);
   }
 }

@@ -5,14 +5,14 @@ import { Router } from '@angular/router';
 import { AuthService } from '@core/auth/auth.service';
 import { NotificationType } from '@shared/enums';
 import { NotificationService } from '@shared/services';
-import {URL_MAIN, URL_SIGN_UP } from '@shared/constant';
+import { URL_MAIN, URL_SIGN_UP } from '@shared/constant';
 
 @Component({
   selector: 'app-sign-in',
   templateUrl: './sign-in.component.html',
   styleUrls: [
-    '../../../../styles/font-styles.scss',
-    '../../../../styles/auth.scss',
+    '../../../../styles/_font-styles.scss',
+    '../../styles/auth.scss',
     './sign-in.component.scss',
   ],
 })
@@ -44,19 +44,19 @@ export class SignInComponent implements OnInit {
     return this.inSignForm.get('password');
   }
 
-  signIn(): void {
+  public onSignIn(): void {
     if (this.inSignForm.valid) {
       this.isAlarmForm = false;
       this.authService.signIn(this.inSignForm.value).subscribe({
         next: () => {
           this.router.navigate([URL_MAIN]);
         },
-        error: ({error}) => {
+        error: ({ error }) => {
           this.notificationService.sendMessage({
             title: error.error,
             message: error.message,
             type: NotificationType.ERROR,
-          })
+          });
         },
       });
     } else {

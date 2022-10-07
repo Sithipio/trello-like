@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { MDBModalRef, MDBModalService } from 'angular-bootstrap-md';
-import { take } from 'rxjs';
 
-import { IBoards } from '@shared/interfaces/boards.interface';
+import { take } from 'rxjs';
+import { IBoards } from '@shared/models/boards.model';
 import { BoardsService } from '../../services/boards.service';
 import { BoardManageComponent } from '../board-manage/board-manage.component';
 import { NotificationType } from '@shared/enums';
@@ -12,7 +12,7 @@ import { NotificationService } from '@shared/services';
   selector: 'app-board-list',
   templateUrl: './board-list.component.html',
   styleUrls: [
-    '../../../../styles/font-styles.scss',
+    '../../../../styles/_font-styles.scss',
     './board-list.component.scss',
   ],
 })
@@ -24,7 +24,7 @@ export class BoardListComponent implements OnInit {
   constructor(private modalService: MDBModalService,
               private boardsService: BoardsService,
               private notificationService: NotificationService,
-              ) {
+  ) {
   }
 
   public ngOnInit(): void {
@@ -32,11 +32,11 @@ export class BoardListComponent implements OnInit {
   }
 
   private getBoards(): void {
-    this.boardsService.getBoards().pipe(take(1)).subscribe({
+    this.boardsService.getBoards().subscribe({
       next: (resp: IBoards[]) => {
         this.boards = resp;
       },
-      error: ({error}) => {
+      error: ({ error }) => {
         this.notificationService.sendMessage({
           title: error.error,
           message: error.message,
@@ -46,7 +46,7 @@ export class BoardListComponent implements OnInit {
     });
   }
 
-  public openManageBoard(boardId?: string): void {
+  public onOpenManageBoard(boardId?: string): void {
     this.modalRef = this.modalService.show(BoardManageComponent, {
       backdrop: false,
       keyboard: false,
@@ -65,19 +65,19 @@ export class BoardListComponent implements OnInit {
     });
   }
 
-  public toggleFavorite(board: IBoards): void {
-    this.boardsService.toggleFavorite(board.id, board.isFavorite).pipe(take(1)).subscribe({
+  public onToggleFavorite(board: IBoards): void {
+    this.boardsService.toggleFavorite(board.id, board.isFavorite).subscribe({
       next: () => {
         this.getBoards();
       },
-      error: ({error}) => {
+      error: ({ error }) => {
         this.notificationService.sendMessage({
           title: error.error,
           message: error.message,
           type: NotificationType.ERROR,
         });
       },
-    })
+    });
   }
 
 }

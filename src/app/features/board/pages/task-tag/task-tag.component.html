@@ -14,7 +14,7 @@
         <button
           type="button"
           class="close pull-right mt-1 modal__close-btn"
-          (click)="closeModal()"
+          (click)="onCloseModal()"
         >
           <span>×</span>
         </button>
@@ -61,7 +61,7 @@
                 class="rounded modal__add-btn mt-1 ml-0"
                 (click)="toggleBtnEditTag(null,tagsByBoard.length)"
               >
-                <mdb-icon fas icon="plus" style="color: #172b4d" class="fa"></mdb-icon>
+                <mdb-icon fas icon="plus" class="fa"></mdb-icon>
                 Add a new tag
               </button>
             </div>
@@ -93,8 +93,8 @@
         </button>
         <button
           type="button"
-          class="close pull-right mt-1 task__m-close-btn"
-          (click)="closeModal()"
+          class="close pull-right mt-1 modal__close-btn"
+          (click)="onCloseModal()"
         >
           <span>×</span>
         </button>
@@ -180,7 +180,7 @@
                     color="primary"
                     class="rounded px-3 py-2"
                     style="text-transform: none"
-                    (click)="toggleBtnEditTag(null); createTagByBoardId(editTagsForm.value)"
+                    (click)="toggleBtnEditTag(null); onCreateTagByBoardId(editTagsForm.value)"
                   >
                     <mdb-icon fas icon="pencil-alt pr-1"></mdb-icon>
                     Add

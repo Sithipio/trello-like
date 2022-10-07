@@ -1,4 +1,4 @@
-@import "./src/app/styles/_variables.scss";
+@import "../../../styles/variables";
 
 .modal-content {
   background-color: #F4F5F7;
@@ -19,12 +19,12 @@ li {
     box-sizing: border-box;
     margin: 0 12px;
     text-align: center;
-    color: $color-text-main;
+    color: $color-text-gray;
     font-family: $font-family-main;
   }
 
   &__text {
-    color: $color-text-main;
+    color: $color-text-gray;
     width: 200px;
     font-size: $font-size-small;
     font-weight: $font-weight-bold;
@@ -35,13 +35,14 @@ li {
 
     &--span {
       display: block;
-      color: #172b4d;
+      color: $color-text-blue;
     }
   }
 
   &__card {
     width: 270px;
   }
+
   &__close-btn {
     font-weight: $font-weight-light;
     transform: scale(0.9);

@@ -1,18 +1,18 @@
 import { Component, OnInit } from '@angular/core';
-import { TAG_BG_COLOR } from '@shared/constant';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { ITag } from '@shared/interfaces';
+import { MDBModalService } from 'angular-bootstrap-md';
+
+import { TAG_BG_COLOR } from '@shared/constant';
+import { ITag } from '@shared/models';
 import { DataUpdateService, TagsService, TasksService } from '../../services';
 import { NotificationService } from '@shared/services';
-import { MDBModalService } from 'angular-bootstrap-md';
-import { take } from 'rxjs';
 import { NotificationType } from '@shared/enums';
 
 @Component({
   selector: 'app-task-tag',
   templateUrl: './task-tag.component.html',
   styleUrls: [
-    '../../../../styles/modal.scss',
+    '../../styles/modal.scss',
     './task-tag.component.scss',
   ],
 })
@@ -42,18 +42,18 @@ export class TaskTagComponent implements OnInit {
     // console.log(this.tagsByBoard)
   }
 
-  public createEditTagsForm(): void {
+  private createEditTagsForm(): void {
     this.editTagsForm = this.fb.group({
       'name': '',
       'background': '',
     });
   }
 
-  public createTagByBoardId(dataTag: ITag): void {
-    this.tagService.createTagByBoardId(this.boardId, dataTag).pipe(take(1)).subscribe({
+  public onCreateTagByBoardId(dataTag: ITag): void {
+    this.tagService.createTagByBoardId(this.boardId, dataTag).subscribe({
       next: () => {
       },
-      error: ({error}) => {
+      error: ({ error }) => {
         this.notificationService.sendMessage({
           title: error.error,
           message: error.message,
@@ -65,11 +65,11 @@ export class TaskTagComponent implements OnInit {
 
 
   public chake() {
-    console.log('tt', this.tags)
-    let a = this.tags.map(item => item.id)
-    let b = this.tagsByBoard.filter((item) => item.id )
-    console.log('a', a)
-    console.log('b', b)
+    console.log('tt', this.tags);
+    let a = this.tags.map(item => item.id);
+    let b = this.tagsByBoard.filter((item) => item.id);
+    console.log('a', a);
+    console.log('b', b);
 
   }
 
@@ -114,7 +114,7 @@ export class TaskTagComponent implements OnInit {
 
   }
 
-  public closeModal(): void {
+  public onCloseModal(): void {
     this.modalService._hideModal(2);
   }
 

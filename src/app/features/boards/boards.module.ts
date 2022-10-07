@@ -17,14 +17,14 @@ import { AutoFocusModule } from '@shared/directives';
     FavoriteHeaderPipe,
     BoardManageComponent,
   ],
-    imports: [
-        CommonModule,
-        BoardsRoutingModule,
-        MDBBootstrapModule,
-        ReactiveFormsModule,
-        FormsModule,
-        AutoFocusModule,
-    ],
+  imports: [
+    CommonModule,
+    BoardsRoutingModule,
+    MDBBootstrapModule,
+    ReactiveFormsModule,
+    FormsModule,
+    AutoFocusModule,
+  ],
 })
 export class BoardsModule {
 }

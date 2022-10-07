@@ -2,15 +2,16 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
-import { ITag } from '@shared/interfaces';
+import { ITag } from '@shared/models';
 import { URL_TAG } from '@shared/constant';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class TagsService {
 
-  constructor(private httpClient: HttpClient) { }
+  constructor(private httpClient: HttpClient) {
+  }
 
   public getTagsByBoardId(boardId: string): Observable<ITag[]> {
     return this.httpClient.get<ITag[]>(`/${boardId}${URL_TAG}`);

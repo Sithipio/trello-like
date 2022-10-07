@@ -1,5 +1,5 @@
-import { IUser } from '@shared/interfaces/user.interface';
-import { ITag } from '@shared/interfaces/tag.interface';
+import { IUser } from '@shared/models/user.model';
+import { ITag } from '@shared/models/tag.model';
 import { TaskBackground } from '@shared/enums';
 
 export interface ITask {

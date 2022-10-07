@@ -1,9 +1,6 @@
 import { Injectable } from '@angular/core';
-import {
-  CanActivate,
-  CanActivateChild,
-  Router,
-} from '@angular/router';
+import { CanActivate, CanActivateChild, Router } from '@angular/router';
+
 import { AuthService } from '@core/auth/auth.service';
 import { URL_BOARD, URL_SIGN_IN } from '@shared/constant';
 
@@ -14,7 +11,7 @@ export class AuthGuard implements CanActivate, CanActivateChild {
   constructor(private router: Router) {
   }
 
-  canActivate(): boolean {
+  public canActivate(): boolean {
     const idToken = AuthService.getToken();
     if (idToken) {
       return true;
@@ -22,7 +19,7 @@ export class AuthGuard implements CanActivate, CanActivateChild {
       this.router.navigate([URL_SIGN_IN]);
   }
 
-  canActivateChild(): boolean {
+  public canActivateChild(): boolean {
     const idToken = AuthService.getToken();
     if (idToken) {
       this.router.navigate([URL_BOARD]);

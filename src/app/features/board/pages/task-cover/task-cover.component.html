@@ -12,7 +12,7 @@
       <button
         type="button"
         class="close pull-right mt-1 modal__close-btn"
-        (click)="closeModal()"
+        (click)="onCloseModal()"
       >
         <span>×</span>
       </button>
@@ -29,7 +29,7 @@
               formControlName="background"
               [value]="item"
               id="background+{{i}}"
-              (click)="updateTaskBackground(item)"
+              (click)="onUpdateTaskBackground(item)"
             >
             <label for="background+{{i}}" [style.background-color]=item>
               <mdb-icon fas icon="check" class="radio-group--icon"></mdb-icon>

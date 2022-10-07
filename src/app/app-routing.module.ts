@@ -21,7 +21,7 @@ const routes: Routes = [
       },
       {
         path: `${AppRoutesParam.BOARD_ID}`,
-        loadChildren: () => import('./features/board/columns.module').then(m => m.ColumnsModule),
+        loadChildren: () => import('./features/board/board.module').then(m => m.BoardModule),
       },
       {
         path: `${AppRoutesParam.TASK_ID}`,
