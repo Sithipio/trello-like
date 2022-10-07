@@ -65,12 +65,12 @@ export class TasksComponent implements OnInit, OnDestroy {
 
   private createTaskForm(): void {
     this.taskForm = this.fb.group({
-      name: ['', Validators.required],
-      description: [''],
-      tag: [''],
-      date: [''],
-      background: [''],
-      user: [],
+      'name': ['', Validators.required],
+      'description': [''],
+      'tag': [''],
+      'date': [''],
+      'background': [''],
+      'user': [],
     });
   }
 

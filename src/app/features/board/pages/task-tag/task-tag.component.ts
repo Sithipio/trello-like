@@ -44,8 +44,8 @@ export class TaskTagComponent implements OnInit {
 
   public createEditTagsForm(): void {
     this.editTagsForm = this.fb.group({
-      name: '',
-      background: '',
+      'name': '',
+      'background': '',
     });
   }
 

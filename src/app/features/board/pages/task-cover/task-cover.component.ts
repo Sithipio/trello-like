@@ -37,7 +37,7 @@ export class TaskCoverComponent implements OnInit {
 
   public createEditBackgroundForm(): void {
     this.editBackgroundForm = this.fb.group({
-      background: '',
+      'background': '',
     });
   }
 

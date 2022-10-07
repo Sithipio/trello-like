@@ -1,17 +1,17 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import { MDBModalRef, MDBModalService } from 'angular-bootstrap-md';
-import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Subscription, take } from 'rxjs';
+import {Component, OnDestroy, OnInit} from '@angular/core';
+import {ActivatedRoute, Router} from '@angular/router';
+import {MDBModalRef, MDBModalService} from 'angular-bootstrap-md';
+import {CdkDragDrop, moveItemInArray, transferArrayItem} from '@angular/cdk/drag-drop';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {Subscription, take} from 'rxjs';
 
-import { IBoards } from '@shared/interfaces/boards.interface';
-import { TasksComponent } from '../tasks/tasks.component';
-import { NotificationType } from '@shared/enums';
-import { IColumn, ITask } from '@shared/interfaces';
-import { NotificationService } from '@shared/services';
-import { BoardsService } from '../../../boards/services/boards.service';
-import { ColumnsService, DataUpdateService, TasksService } from '../../services';
+import {IBoards} from '@shared/interfaces/boards.interface';
+import {TasksComponent} from '../tasks/tasks.component';
+import {NotificationType} from '@shared/enums';
+import {IColumn, ITask} from '@shared/interfaces';
+import {NotificationService} from '@shared/services';
+import {BoardsService} from '../../../boards/services/boards.service';
+import {ColumnsService, DataUpdateService, TasksService} from '../../services';
 
 @Component({
   selector: 'app-board',
@@ -66,13 +66,13 @@ export class ColumnsComponent implements OnInit, OnDestroy {
 
   private createColumnForm(): void {
     this.columnItemForm = this.fb.group({
-      name: [null, Validators.required],
+      'name': [null, Validators.required],
     });
   }
 
   private createTaskForm(): void {
     this.taskItemForm = this.fb.group({
-      name: [null, Validators.required],
+      'name': [null, Validators.required],
     });
   }
 
@@ -92,7 +92,7 @@ export class ColumnsComponent implements OnInit, OnDestroy {
   }
 
   private getColumnsById(): void {
-    this.columnsService.getColumnById(this._boardId).pipe(take(1)).subscribe({
+    this.columnsService.getColumnById(this._boardId).subscribe({
       next: (resp: IColumn[]) => {
         this.columns = resp;
         resp.forEach((item, index) => this.column[index] = item.id)
@@ -272,10 +272,10 @@ export class ColumnsComponent implements OnInit, OnDestroy {
   }
 
   private getTaskById(taskId: string): void {
-    this.tasksService.getTask(this._boardId, taskId ).pipe(take(1)).subscribe({
+    this.tasksService.getTask(this._boardId, taskId).pipe(take(1)).subscribe({
       next: (resp: ITask) => {
         this.tasks[resp.column].forEach(item => {
-          if(item.id === taskId) {
+          if (item.id === taskId) {
             item.name = resp.name;
             item.background = resp.background;
           }

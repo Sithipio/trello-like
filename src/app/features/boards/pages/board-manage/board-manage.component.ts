@@ -47,9 +47,9 @@ export class BoardManageComponent implements OnInit {
 
   public createBoardForm(): void {
     this.boardForm = this.fb.group({
-      name: ['', [Validators.required, Validators.maxLength(15)]],
-      background: [BoardBackground.GREY, Validators.required],
-      isFavorite: [false],
+      'name': ['', [Validators.required, Validators.maxLength(15)]],
+      'background': [BoardBackground.GREY, Validators.required],
+      'isFavorite': [false],
     });
   }
 
