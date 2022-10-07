@@ -1,7 +1,7 @@
-import {AfterContentInit, ChangeDetectorRef, Directive, ElementRef, Input} from "@angular/core";
+import { AfterContentInit, ChangeDetectorRef, Directive, ElementRef, Input } from '@angular/core';
 
 @Directive({
-  selector: "[appAutoFocus]"
+  selector: '[appAutoFocus]',
 })
 
 export class AutoFocusDirective implements AfterContentInit {
@@ -11,8 +11,10 @@ export class AutoFocusDirective implements AfterContentInit {
   }
 
   public ngAfterContentInit() {
-    this.el.nativeElement.focus();
-    this.cdr.detectChanges();
+    setTimeout(() => {
+      this.el.nativeElement.focus();
+      this.cdr.detectChanges();
+    }, 0)
   }
 }
 

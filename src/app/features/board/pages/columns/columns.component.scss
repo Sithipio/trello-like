@@ -1,3 +1,7 @@
+@import "./src/app/styles/_variables.scss";
+
+$local-width-container: 272px;
+
 li {
   list-style-type: none;
 }
@@ -11,6 +15,19 @@ p {
   margin-bottom: 0;
 }
 
+input {
+  overflow: hidden;
+  overflow-wrap: break-word;
+  position: relative;
+  box-shadow: inset 0 0 0 2px #0079bf;
+  display: block;
+  transition: margin 85ms ease-in, background 85ms ease-in;
+
+  &:focus {
+    box-shadow: inset 0 0 0 2px #0079bf;
+  }
+}
+
 .column {
   position: relative;
   overflow-x: auto;
@@ -20,6 +37,10 @@ p {
   height: 90vh;
   width: 100vw;
 
+  &__scroll {
+    width: fit-content;
+  }
+
   &__header {
     &__wrapper {
       height: 40px;
@@ -27,9 +48,7 @@ p {
 
     &__container {
       position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
+      @include absolute-cover();
       height: 42px;
     }
 
@@ -43,17 +62,9 @@ p {
     }
 
     & input {
-      overflow: hidden;
-      overflow-wrap: break-word;
-      position: relative;
-      background-color: #fff;
-      box-shadow: inset 0 0 0 2px #0079bf;
-      display: block;
-      margin: 0;
-      transition: margin 85ms ease-in, background 85ms ease-in;
-      width: 100%;
-      font-size: 18px;
-      font-weight: 500;
+      @include wh-100();
+      font-size: $font-size-big;
+      font-weight: $font-weight-medium;
     }
 
     &__btn {
@@ -76,17 +87,17 @@ p {
   }
 
   &::-webkit-scrollbar-track {
-    background: rgba(185, 189, 197, 0.4);
-    border-radius: 8px;
+    @include scroll-rgba(0.4);
+    border-radius: $border-radius-big;
   }
 
   &::-webkit-scrollbar-thumb {
-    border-radius: 8px;
-    background: rgba(185, 189, 197, 0.8);
+    @include scroll-rgba(0.8);
+    border-radius: $border-radius-big;
   }
 
   &::-webkit-scrollbar-thumb:hover {
-    background: rgba(185, 189, 197, 1);
+    @include scroll-rgba(1);
   }
 
   &::-webkit-scrollbar-button {
@@ -94,22 +105,21 @@ p {
     width: 40px;
   }
 
-
   &__container {
     position: relative;
     height: 100%;
-    width: 272px;
+    width: $local-width-container;
     background-color: #ebecf0;
-    border-radius: 3px;
+    border-radius: $border-radius-normal;
   }
 
   &__item {
     position: relative;
-    font-family: "BlinkMacSystemFont", "Segoe UI", "Roboto", sans-serif;
-    width: 272px;
+    font-family: $font-family-main;
+    width: $local-width-container;
     height: 100%;
-    font-size: 14px;
-    border-radius: 3px;
+    font-size: $font-size-medium;
+    border-radius: $border-radius-normal;
 
     &__header {
       display: flex;
@@ -117,29 +127,18 @@ p {
   }
 
   &__name {
-    width: 100%;
-    font-size: 18px;
-    font-weight: 500;
+    @include wh-100();
+    font-size: $font-size-big;
+    font-weight: $font-weight-medium;
     color: #172b4d;
   }
 
   &__form {
     &--switch {
       height: 100px;
-      width: 272px;
+      width: $local-width-container;
       background-color: #ebecf0;
-      border-radius: 3px;
-    }
-
-    & input {
-      position: relative;
-      z-index: 2;
-      background-color: #fff;
-      box-shadow: inset 0 0 0 2px #0079bf;
-      display: block;
-      margin: 0;
-      transition: margin 85ms ease-in, background 85ms ease-in;
-      width: 100%;
+      border-radius: $border-radius-normal;
     }
 
     &--cross-icon {
@@ -157,7 +156,8 @@ p {
     &:hover {
       background-color: rgba(226, 228, 234, 0.50);
     }
-    &--icon{
+
+    &--icon {
       color: rgba(255, 255, 255, 0.8);
     }
   }
@@ -179,15 +179,15 @@ p {
     }
 
     &::-webkit-scrollbar-track {
-      background: rgba(185, 189, 197, 0.4);
+      @include scroll-rgba(0.4);
     }
 
     &::-webkit-scrollbar-thumb {
-      background: rgba(185, 189, 197, 0.8);
+      @include scroll-rgba(0.8);
     }
 
     &::-webkit-scrollbar-thumb:hover {
-      background: rgba(185, 189, 197, 1);
+      @include scroll-rgba(1);
     }
 
     &--mb {
@@ -197,6 +197,7 @@ p {
 
   &__content {
     position: relative;
+
     &:hover {
       .task__icon {
         display: block;
@@ -207,16 +208,12 @@ p {
   &__link {
     z-index: 10;
     position: absolute;
-    top: 0;
-    left: 0;
-    bottom: 0;
-    right: 0;
-    border-radius: 3px;
+    @include absolute-cover();
+    border-radius: $border-radius-normal;
 
     &:hover {
       background-color: rgba(0, 0, 0, 0.08);
     }
-
   }
 
   &__name {
@@ -232,7 +229,7 @@ p {
     right: 4px;
     top: 4px;
     color: white;
-    border-radius: 10px;
+    border-radius: $border-radius-big + 2px;
     background-color: rgba(0, 0, 0, 0.35);
   }
 
@@ -240,35 +237,26 @@ p {
     color: #172b4d;
     overflow: hidden;
     padding: 6px 8px 2px;
-    font-weight: 400;
-    border-radius: 6px;
+    font-weight: $font-weight-light;
+    border-radius: $border-radius-big - 2px;
     background-color: white;
+
     &--bg {
       padding-top: 24px !important;
-      font-size: 16px;
-      font-weight: 500;
+      font-size: $font-size-medium + 2px;
+      font-weight: $font-weight-medium;
+
       .task__icon {
-        font-size: 14px;
+        font-size: $font-size-medium;
       }
     }
+
     &--bg-w {
       color: white;
     }
   }
 
   &__form {
-    & input {
-      overflow: hidden;
-      overflow-wrap: break-word;
-      position: relative;
-      background-color: #fff;
-      box-shadow: inset 0 0 0 2px #0079bf;
-      display: block;
-      margin: 0;
-      transition: margin 85ms ease-in, background 85ms ease-in;
-      width: 100%;
-    }
-
     &--icon {
       transform: scale(0.8)
     }
@@ -289,6 +277,7 @@ p {
     &:hover {
       background-color: rgba(226, 228, 234);
     }
+
     &--icon {
       color: #172b4d;
     }
@@ -309,10 +298,7 @@ p {
   &:after {
     content: "";
     position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
+    @include absolute-cover();
     background-color: rgba(226, 228, 234, 0.5);
   }
 }

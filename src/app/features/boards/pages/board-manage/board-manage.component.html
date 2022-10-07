@@ -1,5 +1,5 @@
 <!-- Modal window -->
-<div *ngIf="isReady" mdbModal class="modal-side modal-top-right">
+<div mdbModal class="modal-side modal-top-right">
   <div class="modal-dialog" role="document">
     <div class="modal-content rounded">
       <!-- Modal header -->
@@ -7,7 +7,9 @@
         <button type="button" class="close pull-right pt-2 pr-2" (click)="closeBoard()">
           <span>×</span>
         </button>
-        <h5 class="modal-title" id="modalTitle">{{title}}</h5>
+        <h5 class="modal-title" id="modalTitle">
+          {{title}}
+        </h5>
       </div>
       <!-- Modal body -->
       <div class="modal-body d-flex flex-column justify-content-start pb-0">
@@ -15,13 +17,15 @@
           class="align-self-center p-2 mb-2"
           src="./assets/images/add-board-preview-img.svg"
           alt="board preview image"
-          [style.background-color]=manageBoardForm.value.background>
+          [style.background-color]=boardForm.value.background>
         <!-- Add board form -->
-        <form class="pb-0 mb-0 px-2 mx-2" [formGroup]="manageBoardForm">
+        <form class="pb-0 mb-0 px-2 mx-2" [formGroup]="boardForm">
           <!-- Background color -->
-          <div class="text-left form__background-text">Select board background</div>
+          <div class="text-left form__background-text">
+            Select board background
+          </div>
           <ul class="row no-gutters m-0 text-center">
-            <li class="radio-group col-3" *ngFor="let item of bgBoard; let i = index">
+            <li class="radio-group col-3" *ngFor="let item of boardBackground; let i = index">
               <input
                 mdbInput
                 formControlName="background"
@@ -49,14 +53,16 @@
               autocomplete="off"
               id="name"
               class="form-control"
+              appAutoFocus
             >
-            <label for="name">Enter a board name*</label>
+            <label for="name">
+              Enter a board name*
+            </label>
             <mdb-error *ngIf="getNameValueForm.invalid && (getNameValueForm.dirty || getNameValueForm.touched)">
               <span *ngIf="getNameValueForm.errors.required">Board name is required</span>
               <span *ngIf="getNameValueForm.errors.maxlength">Please enter at most 15 characters</span>
             </mdb-error>
           </div>
-        </form>
         <div *ngIf="board" class="d-flex justify-content-center">
           <!-- Delete button -->
           <button
@@ -83,7 +89,9 @@
                   <button type="button" class="close pull-right pt-1 pr-1" (click)="basicModal.hide()">
                     <span>×</span>
                   </button>
-                  <p class="mb-0 form__delete-btn mt-3">Delete {{board.name}} board?</p>
+                  <p class="mb-0 form__delete-btn mt-3">
+                    Delete {{board.name}} board?
+                  </p>
                   <!-- Confirm delete button-->
                   <button
                     mdbBtn
@@ -100,7 +108,7 @@
             </div>
           </div>
         </div>
-        <div class="modal-footer justify-content-center mx-0 px-0">
+        <div class="modal-footer d-flex justify-content-around mx-0 px-0 form__create-btn">
           <!-- Submit add button -->
           <button
             *ngIf="!board"
@@ -121,7 +129,7 @@
             type="submit"
             color="success"
             class="waves-light relative rounded"
-            (click)="updateBoard(this.manageBoardForm.value)"
+            (click)="updateBoard(this.boardForm.value)"
           >
             Edit
           </button>
@@ -137,6 +145,7 @@
             Cancel
           </button>
         </div>
+        </form>
       </div>
     </div>
   </div>

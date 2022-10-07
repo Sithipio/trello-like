@@ -1,0 +1,54 @@
+@import "./src/app/styles/_variables.scss";
+
+.modal {
+  &__container {
+    top: 25vh;
+    right: 1vw;
+  }
+}
+
+
+.radio-group {
+  position: relative;
+
+  input[type="radio"] {
+    opacity: 0;
+    width: 0;
+
+    &:checked ~ label {
+      display: inline-block;
+      color: white;
+
+      .radio-group--icon {
+        display: inline-block;
+        position: absolute;
+        top: 30%;
+        right: 35%;
+      }
+    }
+  }
+
+  label {
+    position: relative;
+    width: 50px;
+    height: 32px;
+    background-color: #ddd;
+    padding: 5px 10px;
+    margin: 1px 2px;
+    border-radius: $border-radius-normal;
+  }
+
+  &--fade {
+    position: absolute;
+    @include absolute-cover();
+    border-radius: $border-radius-normal;
+
+    &:hover {
+      background-color: rgba(0, 0, 0, 0.09);
+    }
+  }
+
+  &--icon {
+    display: none;
+  }
+}

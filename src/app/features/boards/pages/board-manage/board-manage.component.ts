@@ -8,9 +8,10 @@ import { IBoards } from '@shared/interfaces';
 import { BoardsService } from '../../services/boards.service';
 import { BoardBackground, NotificationType } from '@shared/enums';
 import { NotificationService } from '@shared/services';
+import { TagsService } from '../../../board/services';
 
 @Component({
-  selector: 'app-columns-manage',
+  selector: 'app-board-manage',
   templateUrl: './board-manage.component.html',
   styleUrls: [
     '../../../../styles/font-styles.scss',
@@ -19,69 +20,67 @@ import { NotificationService } from '@shared/services';
 })
 export class BoardManageComponent implements OnInit {
 
-  public idBoard: string;
-  public isReady: boolean = false;
-  public manageBoardForm: FormGroup;
-  public actionManageBoard$ = new Subject<any>();
-  public bgBoard = BOARD_BG_COLOR;
   public board: IBoards;
+  public boardId: string;
+  public boardBackground = BOARD_BG_COLOR;
   public title: string;
+  public boardForm: FormGroup;
+  public actionManageBoard$ = new Subject<any>();
 
   constructor(public fb: FormBuilder,
               private modalService: MDBModalService,
               private boardsService: BoardsService,
-              private notificationService: NotificationService) {
+              private notificationService: NotificationService,
+              private tagsService: TagsService,
+              ) {
   }
 
   public ngOnInit(): void {
-    this.boardManageForm();
+    this.createBoardForm();
 
-    if (this.idBoard) {
+    if (this.boardId) {
       this.getBoard();
     } else {
-      this.title = 'Create a new columns';
-      this.isReady = true;
+      this.title = 'Create a new board';
     }
   }
 
-  public boardManageForm(): void {
-    this.manageBoardForm = this.fb.group({
-      name: [null, [Validators.required, Validators.maxLength(15)]],
-      background: [BoardBackground.GREY, Validators.required],
-      isFavorite: [false],
+  public createBoardForm(): void {
+    this.boardForm = this.fb.group({
+      'name': ['', [Validators.required, Validators.maxLength(15)]],
+      'background': [BoardBackground.GREY, Validators.required],
+      'isFavorite': [false],
     });
   }
 
   get getNameValueForm(): AbstractControl {
-    return this.manageBoardForm.get('name');
+    return this.boardForm.get('name');
   }
 
   private getBoard(): void {
-    this.boardsService.getBoardById(this.idBoard).pipe(take(1)).subscribe({
+    this.boardsService.getBoardById(this.boardId).pipe(take(1)).subscribe({
       next: (resp: IBoards) => {
-          this.board = resp;
-        this.manageBoardForm.patchValue(this.board);
+        this.board = resp;
+        this.boardForm.patchValue(this.board);
         this.title = `Edit board ${this.board.name}`;
-        this.isReady = true;
       },
       error: ({error}) => {
-          this.notificationService.sendMessage({
-            title: error.error,
-            message: error.message,
-            type: NotificationType.ERROR,
-          });
+        this.notificationService.sendMessage({
+          title: error.error,
+          message: error.message,
+          type: NotificationType.ERROR,
+        });
       },
     });
   }
 
   public addBoard(): void {
-    if (this.manageBoardForm.invalid) {
-      this.manageBoardForm.markAllAsTouched();
-    } else if (this.manageBoardForm.valid) {
-      this.boardsService.addBoard(this.manageBoardForm.value).pipe(take(1)).subscribe({
+    if (this.boardForm.invalid) {
+      this.boardForm.markAllAsTouched();
+    } else if (this.boardForm.valid) {
+      this.boardsService.addBoard(this.boardForm.value).pipe(take(1)).subscribe({
         next: (resp) => {
-          this.actionManageBoard$.next(1);
-          this.modalService.hide(1);
+          this.createDefaultTags(resp.id);
           this.notificationService.sendMessage({
             message: `Board with name "${resp.name}" created`,
             type: NotificationType.SUCCESS,
@@ -98,11 +97,28 @@ export class BoardManageComponent implements OnInit {
     }
   }
 
+  private createDefaultTags(boardId): void {
+    this.tagsService.createDefaultTags(boardId).pipe(take(1)).subscribe({
+      next: () => {
+        this.actionManageBoard$.next(1);
+        this.modalService.hide(1);
+      },
+      error: ({error}) => {
+        this.notificationService.sendMessage({
+          title: error.error,
+          message: error.message,
+          type: NotificationType.ERROR,
+        });
+      },
+    })
+  }
+
+
   public updateBoard(form): void {
-    if (this.manageBoardForm.invalid) {
-      this.manageBoardForm.markAllAsTouched();
-    } else if (this.manageBoardForm.valid) {
-      this.boardsService.updateBoard(this.idBoard, form).pipe(take(1)).subscribe({
+    if (this.boardForm.invalid) {
+      this.boardForm.markAllAsTouched();
+    } else if (this.boardForm.valid) {
+      this.boardsService.updateBoard(this.boardId, form).pipe(take(1)).subscribe({
         next: (resp) => {
           this.actionManageBoard$.next(1);
           this.modalService.hide(1);
@@ -123,7 +139,7 @@ export class BoardManageComponent implements OnInit {
   }
 
   public deleteBoard(name): void {
-    this.boardsService.deleteBoard(this.idBoard).pipe((take(1))).subscribe({
+    this.boardsService.deleteBoard(this.boardId).pipe((take(1))).subscribe({
       next: () => {
         this.modalService.hide(1);
         this.actionManageBoard$.next(1);

@@ -1,0 +1,156 @@
+@import "./src/app/styles/_variables.scss";
+
+.modal-body {
+  overflow-x: hidden;
+  max-height: 395px;
+
+  &--cover {
+    max-height: 500px;
+  }
+
+  &::-webkit-scrollbar {
+    width: 9px;
+  }
+
+  &::-webkit-scrollbar-track {
+    @include scroll-rgba(0.4);
+    border-radius: $border-radius-big;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    border-radius: $border-radius-big;
+    @include scroll-rgba(0.8);
+  }
+
+  &::-webkit-scrollbar-thumb:hover {
+    @include scroll-rgba(1);
+  }
+
+
+  &__btn {
+    position: relative;
+    z-index: 20;
+    transform: scale(1.2);
+
+    &--bg {
+      color: white;
+    }
+  }
+}
+
+.modal {
+  &__container {
+    position: relative;
+    top: 25vh;
+    right: 1vw;
+
+    &--cover {
+      top: 31vh;
+    }
+  }
+
+  &__add-btn {
+    width: 230px;
+    background-color: #091e420a;
+    border: none;
+    border-radius: $border-radius-normal;
+    font-size: $font-size-medium;
+    font-weight: $font-weight-light;
+    padding: 6px 12px;
+    font-family: $font-family-main;
+
+      &:hover {
+        opacity: 0.9;
+        background-color: #091e4214;
+    }
+  }
+}
+
+.checkbox-group {
+  height: 40px;
+
+  input[type="checkbox"] {
+    opacity: 0;
+    width: 0;
+
+    &:checked ~ label {
+      display: inline-block;
+
+      p {
+        color: #172B4D;
+      }
+
+      .checkbox-group--icon {
+        display: inline-block;
+        position: absolute;
+        top: 14%;
+        right: 3%;
+        transform: scale(0.7);
+        padding: 4px;
+        background-color: white;
+        border-radius: 50%;
+        font-weight: $font-weight-bold;
+
+        &--reverse {
+          color: white;
+          background-color: black;
+        }
+      }
+    }
+  }
+
+  label {
+    position: relative;
+    width: 230px;
+    height: 32px;
+    font-size: $font-size-medium;
+    font-weight: $font-weight-medium;
+    padding: 5px 10px;
+    margin: 1px 2px;
+    border-radius: $border-radius-normal;
+    font-family: $font-family-main;
+
+    &:hover {
+      padding-left: 14px;
+    }
+  }
+
+  &--fade {
+    position: absolute;
+    @include absolute-cover();
+    border-radius: $border-radius-normal;
+
+    &:hover:before {
+      position: absolute;
+      content: "";
+      top: 0;
+      bottom: 0;
+      left: 0;
+      right: 222px;
+      background-color: rgba(0, 0, 0, 0.20);
+      border-radius: $border-radius-normal 0 0 $border-radius-normal;
+    }
+  }
+
+
+  &--icon {
+    display: none;
+  }
+
+  &__btn-edit {
+    border: none;
+    color: #42526e;
+    transform: scale(0.85);
+    background-color: #F4F5F7;
+    padding: 7px 10px;
+    margin: 0;
+    border-radius: 5px;
+
+    &:hover {
+      background-color: rgba(0, 0, 0, 0.09);
+    }
+  }
+}
+
+
+

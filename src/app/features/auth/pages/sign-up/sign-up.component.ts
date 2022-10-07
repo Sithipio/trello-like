@@ -32,14 +32,14 @@ export class SignUpComponent implements OnInit {
 
   ngOnInit() {
     this.upSignForm = this.fb.group({
-      firstName: [null, [Validators.required, Validators.pattern(/^[a-zA-Z]{2,20}$/),
+      'firstName': [null, [Validators.required, Validators.pattern(/^[a-zA-Z]{2,20}$/),
         Validators.minLength(2), Validators.maxLength(20)]],
-      lastName: [null, [Validators.required, Validators.pattern(/^[a-zA-Z]{2,20}$/),
+      'lastName': [null, [Validators.required, Validators.pattern(/^[a-zA-Z]{2,20}$/),
         Validators.minLength(2), Validators.maxLength(20)]],
-      email: [null, [Validators.required, Validators.email]],
-      password: [null, [Validators.required, control => this.validatePasswords(control, 'password1'),
+      'email': [null, [Validators.required, Validators.email]],
+      'password': [null, [Validators.required, control => this.validatePasswords(control, 'password1'),
         Validators.minLength(4)]],
-      confPassword: [null, [Validators.required, control => this.validatePasswords(control, 'password2')]],
+      'confPassword': [null, [Validators.required, control => this.validatePasswords(control, 'password2')]],
     })
   }
 

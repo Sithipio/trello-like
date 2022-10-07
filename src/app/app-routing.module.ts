@@ -5,6 +5,7 @@ import { MainContainerComponent } from '@core/components/main-container/main-con
 import { AuthContainerComponent } from '@core/components/auth-container/auth-container.component';
 import { AuthGuard } from '@core/guards/auth.guard';
 import { AppRoutes, AppRoutesParam } from '@shared/enums/app-routes';
+import { TasksComponent } from './features/board/pages/tasks/tasks.component';
 
 
 const routes: Routes = [
@@ -20,12 +21,14 @@ const routes: Routes = [
       },
       {
         path: `${AppRoutesParam.BOARD_ID}`,
-        loadChildren: () => import('./features/columns/columns.module').then(m => m.ColumnsModule),
+        loadChildren: () => import('./features/board/columns.module').then(m => m.ColumnsModule),
       },
       {
-        path: `${AppRoutes.TASK}`,
-        loadChildren: () => import('./features/tasks/tasks.module').then(m => m.TasksModule),
+        path: `${AppRoutesParam.TASK_ID}`,
+        component: TasksComponent,
+        outlet: 'task',
       },
+
       /*     {
              path: AppRoutes.PROFILE,
              loadChildren: () =>import('./features/profile/profile.module').then(m => m.BoardsModule)
@@ -43,8 +46,7 @@ const routes: Routes = [
       },
     ],
   },
-
-  {path: '**', redirectTo: ''},
+  {path: '**', redirectTo: '',},
 ];
 
 @NgModule({

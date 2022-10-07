@@ -1,4 +1,4 @@
-export enum TaskTag {
+export enum TagBackground {
   PINK = '#FF8ED4',
   ORANGE = '#FFAF3F',
   GREEN = '#7BC86C',

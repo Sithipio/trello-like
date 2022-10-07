@@ -1,7 +1,9 @@
 <!-- Form login -->
 <form class="pt-5 px-5 pb-1 mt-5 form__box z-depth-1" [formGroup]="inSignForm">
   <!-- Form header -->
-  <h3 class="form__header">Sign In</h3>
+  <h3 class="form__header">
+    Sign In
+  </h3>
   <!-- Email -->
   <div class="md-form">
     <div [ngSwitch]="emailForm.status">
@@ -15,7 +17,9 @@
         autocomplete="off"
         class="form-control mb-4"
       >
-      <label for="email">Type your email*</label>
+      <label for="email">
+        Type your email*
+      </label>
       <mdb-error *ngIf="emailForm.invalid && (emailForm.dirty || emailForm.touched)">
         <span *ngIf="emailForm.errors.required">Email is required</span>
         <span *ngIf="emailForm.errors.email">Enter valid email address</span>
@@ -23,12 +27,14 @@
     </div>
     <!-- Password -->
     <div class="md-form">
-      <mdb-icon class="prefix btn-lock form__icon"
-                [class.fa-lock]="isHidePass"
-                [class.fa-unlock]="!isHidePass"
-                fas
-                (click)="isHidePass = !isHidePass"
-      ></mdb-icon>
+      <mdb-icon
+        class="prefix btn-lock form__icon"
+        [class.fa-lock]="isHidePass"
+        [class.fa-unlock]="!isHidePass"
+        fas
+        (click)="isHidePass = !isHidePass"
+      >
+      </mdb-icon>
       <input
         mdbInput
         formControlName="password"
@@ -37,7 +43,9 @@
         autocomplete="off"
         class="form-control"
       >
-      <label for="password">Type your password*</label>
+      <label for="password">
+        Type your password*
+      </label>
       <mdb-error *ngIf="passwordForm.invalid && (passwordForm.dirty || passwordForm.touched)">
         <span *ngIf="passwordForm.errors.required">Password is required</span>
       </mdb-error>
@@ -59,8 +67,10 @@
       Sign in
     </button>
     <!-- Register -->
-    <p class="text-center form__footer-text">Not a member?
-      <a [routerLink]=urlToReg>Register
+    <p class="text-center form__footer-text">
+      Not a member?
+      <a [routerLink]=urlToReg>
+        Register
       </a>
     </p>
   </div>

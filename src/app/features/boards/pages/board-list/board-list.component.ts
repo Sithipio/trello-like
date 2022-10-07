@@ -9,7 +9,7 @@ import { NotificationType } from '@shared/enums';
 import { NotificationService } from '@shared/services';
 
 @Component({
-  selector: 'app-columns-list',
+  selector: 'app-board-list',
   templateUrl: './board-list.component.html',
   styleUrls: [
     '../../../../styles/font-styles.scss',
@@ -23,7 +23,8 @@ export class BoardListComponent implements OnInit {
 
   constructor(private modalService: MDBModalService,
               private boardsService: BoardsService,
-              private notificationService: NotificationService) {
+              private notificationService: NotificationService,
+              ) {
   }
 
   public ngOnInit(): void {
@@ -45,7 +46,7 @@ export class BoardListComponent implements OnInit {
     });
   }
 
-  public openManageBoard(idBoard?: string): void {
+  public openManageBoard(boardId?: string): void {
     this.modalRef = this.modalService.show(BoardManageComponent, {
       backdrop: false,
       keyboard: false,
@@ -56,7 +57,7 @@ export class BoardListComponent implements OnInit {
       containerClass: 'right',
       animated: true,
       data: {
-        idBoard,
+        boardId,
       },
     });
     this.modalRef.content.actionManageBoard$.pipe(take(1)).subscribe(() => {

@@ -21,7 +21,7 @@ export class NotificationService {
       next: (message) => {
         switch (message.type) {
           case NotificationType.SUCCESS:
-            this.toastrService.success(message.message, message.title, {});
+            this.toastrService.success(message.message, message.title);
             break;
           case NotificationType.ERROR:
             this.toastrService.error(message.message, message.title, {
