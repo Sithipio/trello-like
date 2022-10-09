@@ -2,9 +2,9 @@
 <div
   mdbModal
   class="modal__container"
-  [class.modal__container--cover]="background"
 >
-  <div class="modal-side modal-sm"
+  <div class="modal-side modal-sm modal--position"
+       [class.modal--cover]="background"
   >
     <!-- Toggle content tasks - list-->
     <div *ngIf="!toggleEditTaskTag else changeTagView">
@@ -19,12 +19,16 @@
           <span>×</span>
         </button>
         <!-- Modal list of tags -->
-        <div class="modal-body d-flex flex-column align-items-start pt-1 pb-0"
-             [class.modal-body--cover]="background"
+        <div
+          class="modal-body d-flex flex-column align-items-start pt-1 pb-0"
+          [class.modal-body--cover]="background"
         >
           <p class="modal__text mt-0">Tags</p>
           <div class="d-flex flex-column modal__card mt-0 mb-3">
-            <li class="checkbox-group d-flex align-items-center" *ngFor="let item of tagsByBoard; let i = index">
+            <li
+              class="checkbox-group d-flex align-items-center"
+              *ngFor="let item of tagsByBoard; let i = index"
+            >
               <input
                 mdbInput
                 type="checkbox"
@@ -36,7 +40,8 @@
               <label for="tag+{{i}}" [style.background-color]=item.background>
                 <p class="p-0"
                    [style.color]="item.background === '#344563'? 'white' : ''"
-                >{{item.name}}</p>
+                >
+                  {{item.name}}</p>
                 <mdb-icon
                   fas
                   icon="check"
@@ -59,7 +64,7 @@
             <div>
               <button
                 class="rounded modal__add-btn mt-1 ml-0"
-                (click)="toggleBtnEditTag(null,tagsByBoard.length)"
+                (click)="toggleBtnEditTag(null, tagsByBoard.length)"
               >
                 <mdb-icon fas icon="plus" class="fa"></mdb-icon>
                 Add a new tag
@@ -139,7 +144,7 @@
                         <span [style.color]="'#172b4d'">
                           No background.
                         </span>
-                  <br/>
+                  <br />
                   This won't show up on the background of tag.
                 </p>
               </div>
