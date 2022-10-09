@@ -2,7 +2,7 @@
 
 .modal {
   &__container {
-    top: 25vh;
+    top: 24vh;
     right: 1vw;
   }
 }
@@ -38,8 +38,9 @@
   }
 
   &--fade {
-    position: absolute;
     @include absolute-cover();
+
+    position: absolute;
     border-radius: $border-radius-normal;
 
     &:hover {

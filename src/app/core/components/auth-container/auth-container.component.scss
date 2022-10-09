@@ -12,8 +12,9 @@ body {
 }
 
 .background-image {
-  position: fixed;
   @include wh-100;
+
+  position: fixed;
   z-index: -1;
   top: 0;
   margin-left: -15px;

@@ -36,15 +36,17 @@ ul {
   }
 
   &__link {
+    @include wh-100;
+
     z-index: 0;
     position: absolute;
-    @include wh-100;
     border-radius: $border-radius-normal;
   }
 
   &--fade {
-    position: absolute;
     @include absolute-cover();
+
+    position: absolute;
     border-radius: $border-radius-normal;
 
     &:hover {

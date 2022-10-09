@@ -30,11 +30,16 @@ export class SignInComponent implements OnInit {
   }
 
   ngOnInit() {
+   this.createSignInForm();
+  }
+
+  public createSignInForm(): void {
     this.inSignForm = this.fb.group({
       'email': [null, [Validators.required, Validators.email]],
       'password': [null, Validators.required],
     });
   }
+
 
   get emailForm(): AbstractControl {
     return this.inSignForm.get('email');

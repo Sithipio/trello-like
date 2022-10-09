@@ -32,13 +32,11 @@ The build artifacts will be stored in the dist/ directory.
 
 <h3>Production server</h3>
 <hr>
-
 You can find production app via that link: <br>
 <strong>https://trello-like-project.herokuapp.com</strong>
 
 
 <h2>Stay in touch</h2>
 <hr>
-
 - Author - [Berezos Valentyn](https://www.linkedin.com/in/berezos-valentyn/)
 - GitHub - [Sithipio](http://github.com/Sithipio)

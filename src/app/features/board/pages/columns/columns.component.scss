@@ -38,7 +38,7 @@ input {
   overflow-y: hidden;
   margin: 0;
   padding: 0;
-  height: 90vh;
+  height: calc(100vh - 66px);
   width: 100vw;
 
   &__scroll {
@@ -51,8 +51,9 @@ input {
     }
 
     &__container {
-      position: absolute;
       @include absolute-cover();
+
+      position: absolute;
       height: 42px;
     }
 
@@ -67,6 +68,7 @@ input {
 
     & input {
       @include wh-100();
+
       font-size: $font-size-big;
       font-weight: $font-weight-medium;
     }
@@ -92,11 +94,13 @@ input {
 
   &::-webkit-scrollbar-track {
     @include scroll-rgba(0.4);
+
     border-radius: $border-radius-big;
   }
 
   &::-webkit-scrollbar-thumb {
     @include scroll-rgba(0.8);
+
     border-radius: $border-radius-big;
   }
 
@@ -132,6 +136,7 @@ input {
 
   &__name {
     @include wh-100();
+
     font-size: $font-size-big;
     font-weight: $font-weight-medium;
     color: $color-text-blue;
@@ -210,9 +215,10 @@ input {
   }
 
   &__link {
+    @include absolute-cover();
+
     z-index: 10;
     position: absolute;
-    @include absolute-cover();
     border-radius: $border-radius-normal;
 
     &:hover {
@@ -226,6 +232,8 @@ input {
   }
 
   &__icon {
+    @include hover-rgba(0.35);
+
     display: none;
     position: absolute;
     height: 28px;
@@ -234,7 +242,6 @@ input {
     top: 4px;
     color: white;
     border-radius: $border-radius-big + 2px;
-    @include hover-rgba(0.35);
   }
 
   &__item {
@@ -300,9 +307,10 @@ input {
   position: relative;
 
   &:after {
-    content: "";
-    position: absolute;
     @include absolute-cover();
     @include local-hover-rgba(0.50);
+
+    content: "";
+    position: absolute;
   }
 }

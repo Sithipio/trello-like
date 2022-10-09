@@ -14,12 +14,14 @@
 
   &::-webkit-scrollbar-track {
     @include scroll-rgba(0.4);
+
     border-radius: $border-radius-big;
   }
 
   &::-webkit-scrollbar-thumb {
-    border-radius: $border-radius-big;
     @include scroll-rgba(0.8);
+
+    border-radius: $border-radius-big;
   }
 
   &::-webkit-scrollbar-thumb:hover {
@@ -41,11 +43,11 @@
 .modal {
   &__container {
     position: relative;
-    top: 33vh;
+    top: 24vh;
     right: 1vw;
 
     &--cover {
-      top: 40vh;
+      top: 29vh;
     }
   }
 
@@ -92,8 +94,9 @@
         font-weight: $font-weight-bold;
 
         &--reverse {
-          color: white;
           @include hover-rgba(1);
+
+          color: white;
         }
       }
     }
@@ -116,18 +119,20 @@
   }
 
   &--fade {
-    position: absolute;
     @include absolute-cover();
+
+    position: absolute;
     border-radius: $border-radius-normal;
 
     &:hover:before {
+      @include hover-rgba(0.2);
+
       position: absolute;
       content: "";
       top: 0;
       bottom: 0;
       left: 0;
       right: 222px;
-      @include hover-rgba(0.2);
       border-radius: $border-radius-normal 0 0 $border-radius-normal;
     }
   }
