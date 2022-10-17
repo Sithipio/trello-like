@@ -1,16 +1,15 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { MDBModalRef, MDBModalService } from 'angular-bootstrap-md';
+import { MDBModalService } from 'angular-bootstrap-md';
 import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Subscription } from 'rxjs';
 
-import { IBoards } from '@shared/models/boards.model';
 import { TasksComponent } from '../tasks/tasks.component';
 import { NotificationType } from '@shared/enums';
-import { IColumn, ITask } from '@shared/models';
+import { IBoards, IColumn, ITag, ITask } from '@shared/models';
 import { NotificationService } from '@shared/services';
-import { BoardsService } from '../../../boards/services/boards.service';
+import { BoardsService } from '../../../boards/services';
 import { ColumnsService, DataUpdateService, TasksService } from '../../services';
 
 @Component({
@@ -24,15 +23,16 @@ export class ColumnsComponent implements OnInit, OnDestroy {
   public board: IBoards;
   public columns: IColumn[];
   public tasks: { [key: string]: ITask[] } = {};
+  public tag: { [key: string]: ITag[] } = {};
   public column = [];
   public columnItemForm: FormGroup;
   public taskItemForm: FormGroup;
   public toggleAddColumn: string = null;
   public toggleAddTask: string = null;
   public toggleEditColumn: string = null;
-  public modalRef: MDBModalRef | null = null;
   private readonly _boardId: string = this.route.snapshot.paramMap.get('boardId');
-  private watcher = new Subscription;
+  private _taskSub = new Subscription;
+  private _tagSub = new Subscription;
 
   constructor(private modalService: MDBModalService,
               private columnsService: ColumnsService,
@@ -41,7 +41,7 @@ export class ColumnsComponent implements OnInit, OnDestroy {
               private dataUpdateService: DataUpdateService,
               private route: ActivatedRoute,
               private notificationService: NotificationService,
-              public fb: FormBuilder,
+              private fb: FormBuilder,
               private router: Router,
   ) {
   }
@@ -52,13 +52,23 @@ export class ColumnsComponent implements OnInit, OnDestroy {
     this.getBoard();
     this.getColumnsById();
     this.subscribeOnUpdateTask();
+    this.subscribeOnUpdateTag();
     this.onOpenModalTask();
   }
 
   private subscribeOnUpdateTask(): void {
-    this.watcher = this.dataUpdateService.getUpdateTaskId().subscribe({
+    this._taskSub = this.dataUpdateService.getUpdateTaskId().subscribe({
         next: (taskId) => {
           this.getTaskById(taskId);
+        },
+      },
+    );
+  }
+
+  private subscribeOnUpdateTag(): void {
+    this._tagSub = this.dataUpdateService.getUpdateTagsByTask().subscribe({
+        next: () => {
+          this.getTasksById();
         },
       },
     );
@@ -76,17 +86,17 @@ export class ColumnsComponent implements OnInit, OnDestroy {
     });
   }
 
+  public trackByFn(index, item) {
+    return item.id;
+  }
+
   private getBoard(): void {
     this.boardsService.getBoardById(this._boardId).subscribe({
       next: (resp: IBoards) => {
         this.board = resp;
       },
       error: ({ error }) => {
-        this.notificationService.sendMessage({
-          title: error.error,
-          message: error.message,
-          type: NotificationType.ERROR,
-        });
+        this.notificationService.sendMessages(error);
       },
     });
   }
@@ -99,11 +109,7 @@ export class ColumnsComponent implements OnInit, OnDestroy {
         this.getTasksById();
       },
       error: ({ error }) => {
-        this.notificationService.sendMessage({
-          title: error.error,
-          message: error.message,
-          type: NotificationType.ERROR,
-        });
+        this.notificationService.sendMessages(error);
       },
     });
   }
@@ -112,20 +118,17 @@ export class ColumnsComponent implements OnInit, OnDestroy {
     if (this.columnItemForm.valid) {
       this.columnsService.createColumn(this._boardId, name).subscribe({
         next: (resp: IColumn) => {
-          this.toggleAddColumn = null;
-          this.columnItemForm.reset();
-          this.getColumnsById();
-          this.notificationService.sendMessage({
+
+          this.updateColumn();
+
+          this.notificationService.sendMessages({
             message: `Column with name "${resp.name}" created`,
             type: NotificationType.SUCCESS,
           });
+
         },
         error: ({ error }) => {
-          this.notificationService.sendMessage({
-            title: error.error,
-            message: error.message,
-            type: NotificationType.ERROR,
-          });
+          this.notificationService.sendMessages(error);
         },
       });
     }
@@ -135,40 +138,40 @@ export class ColumnsComponent implements OnInit, OnDestroy {
     if (this.columnItemForm.valid) {
       this.columnsService.updateColumn(this._boardId, columnId, name).subscribe({
         next: (resp: IColumn) => {
-          this.toggleEditColumn = null;
-          this.columnItemForm.reset();
-          this.getColumnsById();
-          this.notificationService.sendMessage({
+
+          this.updateColumn();
+
+          this.notificationService.sendMessages({
             message: `Column with name "${resp.name}" updated`,
             type: NotificationType.SUCCESS,
           });
+
         },
         error: ({ error }) => {
-          this.notificationService.sendMessage({
-            title: error.error,
-            message: error.message,
-            type: NotificationType.ERROR,
-          });
+          this.notificationService.sendMessages(error);
         },
       });
     }
+  }
+
+  private updateColumn(): void {
+    this.toggleAddColumn = null;
+    this.toggleEditColumn = null;
+    this.columnItemForm.reset();
+    this.getColumnsById();
   }
 
   public onDeleteColumn(name: string, columnId: string): void {
     this.columnsService.deleteColumn(this._boardId, columnId).subscribe({
       next: () => {
         this.getColumnsById();
-        this.notificationService.sendMessage({
+        this.notificationService.sendMessages({
           message: `Column with name "${name}" deleted`,
           type: NotificationType.INFO,
         });
       },
       error: ({ error }) => {
-        this.notificationService.sendMessage({
-          title: error.error,
-          message: error.message,
-          type: NotificationType.ERROR,
-        });
+        this.notificationService.sendMessages(error);
       },
     });
   }
@@ -205,11 +208,7 @@ export class ColumnsComponent implements OnInit, OnDestroy {
         this.getColumnsById();
       },
       error: ({ error }) => {
-        this.notificationService.sendMessage({
-          title: error.error,
-          message: error.message,
-          type: NotificationType.ERROR,
-        });
+        this.notificationService.sendMessages(error);
       },
     });
   }
@@ -255,18 +254,16 @@ export class ColumnsComponent implements OnInit, OnDestroy {
     this.tasksService.getTasks(this._boardId).subscribe({
       next: (resp: ITask[]) => {
         this.column.forEach(columnId => {
-          this.tasks[columnId] = resp.filter(task => task.column === columnId);
+          this.tasks[columnId] = resp.filter(task => {
+            this.tag[task.id] = task.tag;
+            return task.column === columnId});
         });
         if (columnId) {
           this.scrollTaskList(columnId);
         }
       },
       error: ({ error }) => {
-        this.notificationService.sendMessage({
-          title: error.error,
-          message: error.message,
-          type: NotificationType.ERROR,
-        });
+        this.notificationService.sendMessages(error);
       },
     });
   }
@@ -282,11 +279,7 @@ export class ColumnsComponent implements OnInit, OnDestroy {
         });
       },
       error: ({ error }) => {
-        this.notificationService.sendMessage({
-          title: error.error,
-          message: error.message,
-          type: NotificationType.ERROR,
-        });
+        this.notificationService.sendMessages(error);
       },
     });
   }
@@ -297,11 +290,7 @@ export class ColumnsComponent implements OnInit, OnDestroy {
         this.getTasksById();
       },
       error: ({ error }) => {
-        this.notificationService.sendMessage({
-          title: error.error,
-          message: error.message,
-          type: NotificationType.ERROR,
-        });
+        this.notificationService.sendMessages(error);
       },
     });
   }
@@ -313,17 +302,13 @@ export class ColumnsComponent implements OnInit, OnDestroy {
           this.toggleAddTask = null;
           this.taskItemForm.reset();
           this.getTasksById(columnId);
-          this.notificationService.sendMessage({
+          this.notificationService.sendMessages({
             message: `Task with name "${resp.name}" created`,
             type: NotificationType.SUCCESS,
           });
         },
         error: ({ error }) => {
-          this.notificationService.sendMessage({
-            title: error.error,
-            message: error.message,
-            type: NotificationType.ERROR,
-          });
+          this.notificationService.sendMessages(error);
         },
       });
     }
@@ -343,7 +328,7 @@ export class ColumnsComponent implements OnInit, OnDestroy {
   }
 
   private openTask(taskId: string): void {
-    this.modalRef = this.modalService.show(TasksComponent, {
+    this.modalService.show(TasksComponent, {
       backdrop: true,
       keyboard: true,
       focus: true,
@@ -359,7 +344,8 @@ export class ColumnsComponent implements OnInit, OnDestroy {
   }
 
   public ngOnDestroy(): void {
-    this.watcher.unsubscribe();
+    this._taskSub.unsubscribe();
+    this._tagSub.unsubscribe();
   }
 
 }

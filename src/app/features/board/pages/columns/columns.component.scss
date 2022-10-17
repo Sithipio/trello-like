@@ -1,4 +1,4 @@
-@import "./src/app/styles/_variables.scss";
+@import "./src/app/styles/_variables";
 
 $local-width-container: 272px;
 
@@ -312,5 +312,23 @@ input {
 
     content: "";
     position: absolute;
+  }
+}
+
+.tag {
+  &__container {
+    width: fit-content;
+    background-color: white;
+    border-radius: $border-radius-big;
+  }
+
+  &__item {
+    height: 10px;
+    width: 24px;
+    border-radius: $border-radius-normal;
+
+    &--non-cover {
+      background-color: $border-color-non-cover;
+    }
   }
 }

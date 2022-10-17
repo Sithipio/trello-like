@@ -9,7 +9,7 @@ export const TAG_BG_COLOR = [
   TagBackground.ORANGE,
   TagBackground.VIOLET,
   TagBackground.LIGHT_GREEN,
-  TagBackground.EMPTY,
-  TagBackground.DARK_BLUE,
   TagBackground.YELLOW,
+  TagBackground.DARK_BLUE,
+  TagBackground.EMPTY,
 ]

@@ -1,7 +1,11 @@
-@import "./src/app/styles/_variables.scss";
+@import "./src/app/styles/_variables";
 
 .modal-title {
   font-weight: $font-weight-light;
+}
+
+input {
+  font-weight: $font-weight-medium;
 }
 
 .form {
@@ -20,6 +24,7 @@
 
   &__background-text {
     font-family: $font-family-main;
+    font-weight: $font-weight-light - 100;
   }
 
   &__delete-btn {

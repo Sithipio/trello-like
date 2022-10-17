@@ -16,7 +16,7 @@
   >
     <!-- Column list -->
     <div
-      *ngFor="let column of columns"
+      *ngFor="let column of columns; trackBy: trackByFn"
       cdkDrag
       [cdkDragDisabled]="!!toggleEditColumn"
       class="m-2 z-depth-1 column__container"
@@ -94,7 +94,7 @@
         >
           <!-- Task list -->
           <li
-            *ngFor="let task of tasks[column.id]; let i = index"
+            *ngFor="let task of tasks[column.id]; let i = index; trackBy: trackByFn"
             cdkDrag
             [style.background-color]="task.background"
             [ngClass]="{
@@ -108,6 +108,15 @@
             <a class="task__link" (click)="onOpenModalTask(task.id)"> </a>
             <!-- Task name -->
             <p class="task__name">{{task.name}}</p>
+            <div class="d-flex flex-wrap mt-2 tag__container">
+            <span
+              *ngFor="let tag of tag[task.id]; trackBy: trackByFn"
+              class="m-1 tag__item"
+              [style.background-color]="tag.background"
+              [class.tag__item--non-cover]="tag.background === ''"
+            >
+            </span>
+            </div>
             <!-- Task edit icon -->
             <span class="pt-1 pl-2 task__icon">
                 <mdb-icon fas icon="pencil"></mdb-icon>
@@ -149,7 +158,7 @@
                 <button
                   type="button"
                   class="ml-2 close"
-                  (click)="toggleAddTask = null; this.taskItemForm.reset()"
+                  (click)="toggleAddTask = null; taskItemForm.reset()"
                 >
                   <mdb-icon class="task__form--icon" fas icon="times"></mdb-icon>
                 </button>

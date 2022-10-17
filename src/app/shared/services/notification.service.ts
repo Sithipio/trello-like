@@ -9,19 +9,14 @@ import { NotificationType } from '@shared/enums/notification';
   providedIn: 'root',
 })
 export class NotificationService {
-
   private notificationSubject: Subject<NotificationMessage> = new Subject<NotificationMessage>();
-
-  public sendMessage(message: NotificationMessage) {
-    this.notificationSubject.next(message);
-  }
 
   constructor(private toastrService: ToastrService) {
     this.notificationSubject.subscribe({
       next: (message) => {
         switch (message.type) {
           case NotificationType.SUCCESS:
-            this.toastrService.success(message.message, message.title);
+            this.toastrService.success(message.message);
             break;
           case NotificationType.ERROR:
             this.toastrService.error(message.message, message.title, {
@@ -34,7 +29,7 @@ export class NotificationService {
             break;
           default:
           case NotificationType.INFO:
-            this.toastrService.info(message.message, message.title);
+            this.toastrService.info(message.message);
             break;
         }
       },
@@ -43,4 +38,17 @@ export class NotificationService {
       },
     });
   }
+
+  public sendMessages(mes: NotificationMessage): void {
+    if (!mes.type) {
+      mes.type = NotificationType.ERROR;
+    }
+    const message: NotificationMessage = {
+      title: mes.title,
+      message: mes.message,
+      type: mes.type,
+    };
+    this.notificationSubject.next(message);
+  }
+
 }

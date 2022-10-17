@@ -1,4 +1,8 @@
-@import "./src/app/styles/_variables.scss";
+@import "./src/app/styles/_variables";
+
+input {
+  font-weight: $font-weight-medium;
+}
 
 .container {
   font-family: $font-family-main;

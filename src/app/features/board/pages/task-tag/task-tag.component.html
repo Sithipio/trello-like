@@ -7,7 +7,7 @@
        [class.modal--cover]="background"
   >
     <!-- Toggle content tasks - list-->
-    <div *ngIf="!toggleEditTaskTag else changeTagView">
+    <div *ngIf="operationTag === '' else changeTagView">
       <div class="modal-content">
         <!-- Modal body -->
         <p class="modal__header my-1">Tags</p>
@@ -27,35 +27,38 @@
           <div class="d-flex flex-column modal__card mt-0 mb-3">
             <li
               class="checkbox-group d-flex align-items-center"
-              *ngFor="let item of tagsByBoard; let i = index"
+              *ngFor="let tag of modifiedTags; let i = index; trackBy: trackByFn"
             >
               <input
                 mdbInput
                 type="checkbox"
                 id="tag+{{i}}"
                 name="tag"
-                [checked]="checkTagActive(item.id)"
-                (change)="toggleTags($event, i)"
+                [checked]="tag.checked"
+                (change)="onToggleTags($event, tag)"
               >
-              <label for="tag+{{i}}" [style.background-color]=item.background>
+              <label for="tag+{{i}}" [style.background-color]=tag.background>
                 <p class="p-0"
-                   [style.color]="item.background === '#344563'? 'white' : ''"
+                   [class.checkbox-group--white-color]="tag.background === '#172B4D'"
                 >
-                  {{item.name}}</p>
+                  {{tag.name}}</p>
                 <mdb-icon
                   fas
                   icon="check"
                   class="checkbox-group--icon"
-                  [class.checkbox-group--icon--reverse]="item.background === null || ''"
+                  [class.checkbox-group--icon--reverse]="tag.background === null || ''"
                 >
                 </mdb-icon>
-                <span class="checkbox-group--fade"></span>
+                <span
+                  class="checkbox-group--fade"
+                  [class.checkbox-group--fade--non-cover]="tag.background === ''"
+                ></span>
               </label>
               <!-- Tag edit button -->
               <button
                 type="button"
                 class="checkbox-group__btn-edit"
-                (click)="toggleBtnEditTag(item.id)"
+                (click)="onOperationWithTag('edit', tag.id)"
               >
                 <mdb-icon fas icon="pencil-alt"></mdb-icon>
               </button>
@@ -64,7 +67,7 @@
             <div>
               <button
                 class="rounded modal__add-btn mt-1 ml-0"
-                (click)="toggleBtnEditTag(null, tagsByBoard.length)"
+                (click)="onOperationWithTag('create')"
               >
                 <mdb-icon fas icon="plus" class="fa"></mdb-icon>
                 Add a new tag
@@ -79,7 +82,7 @@
       <div class="modal-content">
         <!-- Modal body -->
         <p
-          *ngIf="toggleEditTaskTag else AddTagHeaderView"
+          *ngIf="operationTag === 'edit' || operationTag === 'editFromTask' else AddTagHeaderView"
           class="modal__header my-1"
         >
           Change tag
@@ -92,7 +95,7 @@
         <button
           type="button"
           class="pull-right mt-1 modal__change-btn"
-          (click)="toggleBtnEditTag(null)"
+          (click)="onOperationWithTag('')"
         >
           <i class="fas fa-chevron-left"></i>
         </button>
@@ -107,10 +110,10 @@
         <form [formGroup]="editTagsForm">
           <div
             class="modal-body d-flex flex-column align-items-start pt-1 pb-0 modal-body--height"
-            style="max-height:290px"
           >
             <div class="d-flex flex-column modal__card modal__card--edit mt-0 mb-3">
-              <p class="modal__text mt-0">
+           <div class="mb-4">
+             <p class="modal__text mt-0">
                 Name
               </p>
               <input
@@ -119,8 +122,13 @@
                 type="text"
                 autocomplete="off"
                 id="name"
-                class="form-control my-2 task__modal__input"
+                class="form-control my-2 modal__input"
+                appAutoFocus
               >
+             <mdb-error class="tag__error" *ngIf="nameControl.invalid && (nameControl.dirty || nameControl.touched)">
+               <span *ngIf="nameControl.errors.maxlength">Please enter at most 20 characters</span>
+             </mdb-error>
+           </div>
               <p class="modal__text mt-0">
                 Select a color
               </p>
@@ -141,7 +149,7 @@
                 </li>
                 <!-- No background of tag -->
                 <p class="modal__text m-0 px-2 pb-1">
-                        <span [style.color]="'#172b4d'">
+                        <span class="tag__text">
                           No background.
                         </span>
                   <br />
@@ -150,16 +158,16 @@
               </div>
               <!-- Edit tag - bottom button -->
               <div
-                *ngIf="toggleEditTaskTag !== tagsByBoard.length.toString() else AddTagBtnView"
-                class="d-flex justify-content-between"
+                *ngIf="operationTag === 'edit' || operationTag === 'editFromTask' else AddTagBtnView"
+                class="d-flex justify-content-between mt-3"
               >
                 <button
                   mdbBtn
-                  type="button"
+                  type="submit"
                   color="primary"
-                  class="rounded px-3 py-2"
-                  style="text-transform: none; width: 95px"
-                  (click)="toggleBtnEditTag(null); editTag(editTagsForm.value)"
+                  class="rounded px-3 py-2 tag__btn"
+                  [disabled]="editTagsForm.invalid"
+                  (click)="onUpdateTag(editTagsForm.value)"
                 >
                   <mdb-icon fas icon="pencil-alt pr-1"></mdb-icon>
                   Edit
@@ -168,9 +176,8 @@
                   mdbBtn
                   type="button"
                   color="outline-danger"
-                  class="rounded px-3 py-2"
-                  style="text-transform: none"
-                  (click)="toggleBtnEditTag(null); deleteTag()"
+                  class="rounded px-3 py-2 tag__btn"
+                  (click)="onDeleteTag(editTagsForm.value)"
                 >
                   <mdb-icon fas icon="pencil-alt pr-1"></mdb-icon>
                   Delete
@@ -178,14 +185,14 @@
               </div>
               <!-- Add tag - bottom button -->
               <ng-template #AddTagBtnView>
-                <div class="d-flex justify-content-between">
+                <div class="mt-3">
                   <button
                     mdbBtn
-                    type="button"
+                    type="submit"
                     color="primary"
-                    class="rounded px-3 py-2"
-                    style="text-transform: none"
-                    (click)="toggleBtnEditTag(null); onCreateTagByBoardId(editTagsForm.value)"
+                    class="rounded px-3 py-2 tag__btn tag__btn--add"
+                    [disabled]="editTagsForm.invalid"
+                    (click)="onCreateTag(editTagsForm.value)"
                   >
                     <mdb-icon fas icon="pencil-alt pr-1"></mdb-icon>
                     Add

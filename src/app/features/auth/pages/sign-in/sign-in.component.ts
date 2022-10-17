@@ -3,18 +3,13 @@ import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/fo
 import { Router } from '@angular/router';
 
 import { AuthService } from '@core/auth/auth.service';
-import { NotificationType } from '@shared/enums';
 import { NotificationService } from '@shared/services';
 import { URL_MAIN, URL_SIGN_UP } from '@shared/constant';
 
 @Component({
   selector: 'app-sign-in',
   templateUrl: './sign-in.component.html',
-  styleUrls: [
-    '../../../../styles/_font-styles.scss',
-    '../../styles/auth.scss',
-    './sign-in.component.scss',
-  ],
+  styleUrls: ['./sign-in.component.scss'],
 })
 export class SignInComponent implements OnInit {
 
@@ -23,7 +18,7 @@ export class SignInComponent implements OnInit {
   public isAlarmForm: boolean = false;
   public urlToReg = URL_SIGN_UP;
 
-  constructor(public fb: FormBuilder,
+  constructor(private fb: FormBuilder,
               private router: Router,
               private authService: AuthService,
               private notificationService: NotificationService) {
@@ -41,11 +36,11 @@ export class SignInComponent implements OnInit {
   }
 
 
-  get emailForm(): AbstractControl {
+  get emailControl(): AbstractControl {
     return this.inSignForm.get('email');
   }
 
-  get passwordForm(): AbstractControl {
+  get passwordControl(): AbstractControl {
     return this.inSignForm.get('password');
   }
 
@@ -57,11 +52,7 @@ export class SignInComponent implements OnInit {
           this.router.navigate([URL_MAIN]);
         },
         error: ({ error }) => {
-          this.notificationService.sendMessage({
-            title: error.error,
-            message: error.message,
-            type: NotificationType.ERROR,
-          });
+          this.notificationService.sendMessages(error);
         },
       });
     } else {

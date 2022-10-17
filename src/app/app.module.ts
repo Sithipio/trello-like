@@ -40,7 +40,8 @@ import { ToastrModule } from 'ngx-toastr';
     useClass: HttpTokenInterceptor,
     multi: true,
   },
-    AuthGuard,],
+    AuthGuard,
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule {

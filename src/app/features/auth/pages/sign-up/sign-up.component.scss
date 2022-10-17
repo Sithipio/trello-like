@@ -1,4 +1,5 @@
-@import "./src/app/styles/_variables.scss";
+@import "./src/app/styles/_variables";
+@import "src/app/features/auth/styles/auth";
 
 .form {
   &__box {

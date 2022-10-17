@@ -3,20 +3,17 @@ import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/fo
 import { MDBModalService } from 'angular-bootstrap-md';
 import { Subject } from 'rxjs';
 
+import { BoardsService } from '../../services';
+import { BoardBackground, NotificationType } from '@shared/enums';
 import { BOARD_BG_COLOR } from '@shared/constant';
 import { IBoards } from '@shared/models';
-import { BoardsService } from '../../services/boards.service';
-import { BoardBackground, NotificationType } from '@shared/enums';
 import { NotificationService } from '@shared/services';
 import { TagsService } from '../../../board/services';
 
 @Component({
   selector: 'app-board-manage',
   templateUrl: './board-manage.component.html',
-  styleUrls: [
-    '../../../../styles/_font-styles.scss',
-    './board-manage.component.scss',
-  ],
+  styleUrls: ['./board-manage.component.scss'],
 })
 export class BoardManageComponent implements OnInit {
 
@@ -27,7 +24,7 @@ export class BoardManageComponent implements OnInit {
   public boardForm: FormGroup;
   public actionManageBoard$ = new Subject<any>();
 
-  constructor(public fb: FormBuilder,
+  constructor(private fb: FormBuilder,
               private modalService: MDBModalService,
               private boardsService: BoardsService,
               private notificationService: NotificationService,
@@ -53,7 +50,7 @@ export class BoardManageComponent implements OnInit {
     });
   }
 
-  get getNameValueForm(): AbstractControl {
+  get nameControl(): AbstractControl {
     return this.boardForm.get('name');
   }
 
@@ -65,11 +62,7 @@ export class BoardManageComponent implements OnInit {
         this.title = `Edit board ${this.board.name}`;
       },
       error: ({ error }) => {
-        this.notificationService.sendMessage({
-          title: error.error,
-          message: error.message,
-          type: NotificationType.ERROR,
-        });
+        this.notificationService.sendMessages(error);
       },
     });
   }
@@ -81,17 +74,13 @@ export class BoardManageComponent implements OnInit {
       this.boardsService.addBoard(this.boardForm.value).subscribe({
         next: (resp) => {
           this.createDefaultTags(resp.id);
-          this.notificationService.sendMessage({
+          this.notificationService.sendMessages({
             message: `Board with name "${resp.name}" created`,
             type: NotificationType.SUCCESS,
           });
         },
         error: ({ error }) => {
-          this.notificationService.sendMessage({
-            title: error.error,
-            message: error.message,
-            type: NotificationType.ERROR,
-          });
+          this.notificationService.sendMessages(error);
         },
       });
     }
@@ -100,15 +89,10 @@ export class BoardManageComponent implements OnInit {
   private createDefaultTags(boardId): void {
     this.tagsService.createDefaultTags(boardId).subscribe({
       next: () => {
-        this.actionManageBoard$.next(1);
-        this.modalService.hide(1);
+        this.updateBoard();
       },
       error: ({ error }) => {
-        this.notificationService.sendMessage({
-          title: error.error,
-          message: error.message,
-          type: NotificationType.ERROR,
-        });
+        this.notificationService.sendMessages(error);
       },
     });
   }
@@ -120,19 +104,17 @@ export class BoardManageComponent implements OnInit {
     } else if (this.boardForm.valid) {
       this.boardsService.updateBoard(this.boardId, form).subscribe({
         next: (resp) => {
-          this.actionManageBoard$.next(1);
-          this.modalService.hide(1);
-          this.notificationService.sendMessage({
+
+          this.updateBoard();
+
+          this.notificationService.sendMessages({
             message: `Board with name "${resp.name}" updated`,
             type: NotificationType.SUCCESS,
           });
+
         },
         error: ({ error }) => {
-          this.notificationService.sendMessage({
-            title: error.error,
-            message: error.message,
-            type: NotificationType.ERROR,
-          });
+          this.notificationService.sendMessages(error);
         },
       });
     }
@@ -141,21 +123,24 @@ export class BoardManageComponent implements OnInit {
   public onDeleteBoard(name): void {
     this.boardsService.deleteBoard(this.boardId).subscribe({
       next: () => {
-        this.modalService.hide(1);
-        this.actionManageBoard$.next(1);
-        this.notificationService.sendMessage({
+
+        this.updateBoard();
+
+        this.notificationService.sendMessages({
           message: `Board with name "${name}" deleted`,
           type: NotificationType.INFO,
         });
+
       },
       error: ({ error }) => {
-        this.notificationService.sendMessage({
-          title: error.error,
-          message: error.message,
-          type: NotificationType.ERROR,
-        });
+        this.notificationService.sendMessages(error);
       },
     });
+  }
+
+  private updateBoard(): void {
+    this.modalService.hide(1);
+    this.actionManageBoard$.next(1);
   }
 
   public onCloseBoard(): void {

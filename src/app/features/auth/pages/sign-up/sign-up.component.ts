@@ -3,18 +3,13 @@ import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/fo
 import { Router } from '@angular/router';
 
 import { AuthService } from '@core/auth/auth.service';
-import { NotificationType } from '@shared/enums';
 import { NotificationService } from '@shared/services';
 import { URL_SIGN_IN } from '@shared/constant';
 
 @Component({
   selector: 'app-sign-up',
   templateUrl: './sign-up.component.html',
-  styleUrls: [
-    '../../../../styles/_font-styles.scss',
-    '../../styles/auth.scss',
-    './sign-up.component.scss',
-  ],
+  styleUrls: ['./sign-up.component.scss'],
 })
 export class SignUpComponent implements OnInit {
 
@@ -24,14 +19,14 @@ export class SignUpComponent implements OnInit {
   public isAlarmForm: boolean = false;
   public urlToLog = URL_SIGN_IN;
 
-  constructor(public fb: FormBuilder,
+  constructor(private fb: FormBuilder,
               private router: Router,
               private authService: AuthService,
               private notificationService: NotificationService) {
   }
 
   ngOnInit() {
-   this.createSignUpForm();
+    this.createSignUpForm();
   }
 
   public createSignUpForm(): void {
@@ -47,54 +42,54 @@ export class SignUpComponent implements OnInit {
     });
   }
 
-  get firstNameForm(): AbstractControl {
+  get firstNameControl(): AbstractControl {
     return this.upSignForm.get('firstName');
   }
 
-  get lastNameForm(): AbstractControl {
+  get lastNameControl(): AbstractControl {
     return this.upSignForm.get('lastName');
   }
 
-  get emailForm(): AbstractControl {
+  get emailControl(): AbstractControl {
     return this.upSignForm.get('email');
   }
 
-  get passwordForm(): AbstractControl {
+  get passwordControl(): AbstractControl {
     return this.upSignForm.get('password');
   }
 
-  get confPasswordForm(): AbstractControl {
+  get confPasswordControl(): AbstractControl {
     return this.upSignForm.get('confPassword');
   }
 
   public validatePasswords(control: AbstractControl, name: string): void {
     if (
       this.upSignForm === undefined ||
-      this.passwordForm.value === '' ||
-      this.confPasswordForm.value === ''
+      this.passwordControl.value === '' ||
+      this.confPasswordControl.value === ''
     ) {
       return null;
-    } else if (this.passwordForm.value === this.confPasswordForm.value) {
+    } else if (this.passwordControl.value === this.confPasswordControl.value) {
       if (
         name === 'password1' &&
-        this.confPasswordForm.hasError('passwordMismatch')
+        this.confPasswordControl.hasError('passwordMismatch')
       ) {
-        this.passwordForm.setErrors(null);
-        this.confPasswordForm.updateValueAndValidity();
+        this.passwordControl.setErrors(null);
+        this.confPasswordControl.updateValueAndValidity();
       } else if (
         name === 'password2' &&
-        this.passwordForm.hasError('passwordMismatch')
+        this.passwordControl.hasError('passwordMismatch')
       ) {
-        this.confPasswordForm.setErrors(null);
-        this.passwordForm.updateValueAndValidity();
+        this.confPasswordControl.setErrors(null);
+        this.passwordControl.updateValueAndValidity();
       }
       return null;
     } else
-      this.confPasswordForm.setErrors({ 'passwordMismatch': true });
+      this.confPasswordControl.setErrors({ 'passwordMismatch': true });
   }
 
- public onSignUp(): void {
-    this.passwordForm.updateValueAndValidity();
+  public onSignUp(): void {
+    this.passwordControl.updateValueAndValidity();
     if (this.upSignForm.invalid) {
       this.upSignForm.markAllAsTouched();
       this.isAlarmForm = true;
@@ -105,13 +100,9 @@ export class SignUpComponent implements OnInit {
           this.router.navigate([URL_SIGN_IN]);
         },
         error: ({ error }) => {
-          this.notificationService.sendMessage({
-            title: error.error,
-            message: error.message,
-            type: NotificationType.ERROR,
-          });
+          this.notificationService.sendMessages(error);
           if (error.statusCode === 409) {
-            this.emailForm.setErrors({ emailExist: true });
+            this.emailControl.setErrors({ emailExist: true });
             this.isAlarmForm = true;
           }
         },

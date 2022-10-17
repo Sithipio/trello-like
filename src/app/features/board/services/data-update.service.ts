@@ -5,23 +5,40 @@ import { Observable, Subject } from 'rxjs';
   providedIn: 'root',
 })
 export class DataUpdateService {
-  private subjectId$ = new Subject<string>();
-  private subjectData$ = new Subject<string>();
+  private subjectTaskId$ = new Subject<string>();
+  private subjectBackground$ = new Subject<string>();
+  private subjectTagByBoard$ = new Subject<any>();
+  private subjectTagByTask$ = new Subject<any>();
 
   public sendUpdateTaskId(taskId: string) {
-    this.subjectId$.next(taskId);
+    this.subjectTaskId$.next(taskId);
   }
 
   public getUpdateTaskId(): Observable<any> {
-    return this.subjectId$.asObservable();
+    return this.subjectTaskId$.asObservable();
   }
 
-  public sendUpdateTaskData(data: string) {
-    this.subjectData$.next(data);
+  public sendUpdateBackground(background: string) {
+    this.subjectBackground$.next(background);
   }
 
-  public getUpdateTaskData(): Observable<any> {
-    return this.subjectData$.asObservable();
+  public getUpdateBackground(): Observable<any> {
+    return this.subjectBackground$.asObservable();
   }
 
+  public sendUpdateTagsByBoard(toggleTag: {}) {
+    this.subjectTagByBoard$.next(toggleTag);
+  }
+
+  public getUpdateTagsByBoard(): Observable<any> {
+    return this.subjectTagByBoard$.asObservable();
+  }
+
+  public sendUpdateTagsByTask(task: {}) {
+    this.subjectTagByTask$.next(task);
+  }
+
+  public getUpdateTagsByTask(): Observable<any> {
+    return this.subjectTagByTask$.asObservable();
+  }
 }
