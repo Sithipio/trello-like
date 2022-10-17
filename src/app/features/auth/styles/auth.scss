@@ -8,11 +8,7 @@ $local-border-radius: 30px;
   position: absolute;
   width: 30px;
   height: 30px;
-  top: -7px;
-  left: -7px;
   z-index: 5;
-  border-top: $local-border-btn;
-  border-left: $local-border-btn;
   transition: 0.5s;
 }
 
@@ -53,14 +49,23 @@ input {
     z-index: 6;
 
     &--animated {
-
       &:before {
         @include local-btn-pseudo;
 
+        top: -7px;
+        left: -7px;
+        border-top: $local-border-btn;
+        border-left: $local-border-btn;
+        transition: 0.5s;
       }
 
       &:after {
         @include local-btn-pseudo;
+
+        bottom: -7px;
+        right: -7px;
+        border-right: $local-border-btn;
+        border-bottom: $local-border-btn;
 
       }
 
