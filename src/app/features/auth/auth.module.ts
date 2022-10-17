@@ -1,11 +1,8 @@
-import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
-import {FormsModule, ReactiveFormsModule} from "@angular/forms";
-import {MDBBootstrapModule} from "angular-bootstrap-md";
 
-import { SignInComponent } from './pages/sign-in/sign-in.component';
-import { SignUpComponent } from './pages/sign-up/sign-up.component';
-import {AuthRoutingModule} from "./auth-routing.module";
+import { AuthRoutingModule } from './auth-routing.module';
+import { SignUpComponent, SignInComponent } from './pages';
+import { SharedAngularModule } from '@shared/shared-angular.module';
 
 
 @NgModule({
@@ -13,12 +10,10 @@ import {AuthRoutingModule} from "./auth-routing.module";
     SignInComponent,
     SignUpComponent,
   ],
-    imports: [
-        CommonModule,
-        AuthRoutingModule,
-        MDBBootstrapModule,
-        ReactiveFormsModule,
-        FormsModule,
-    ]
+  imports: [
+    SharedAngularModule,
+    AuthRoutingModule,
+  ],
 })
-export class AuthModule { }
+export class AuthModule {
+}

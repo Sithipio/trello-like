@@ -1,5 +1,5 @@
 <!-- Modal window -->
-<div *ngIf="task && tagsByBoard" class="modal-content" (click)="onClearFormView()">
+<div *ngIf="task" class="modal-content" (click)="onClearFormView()">
   <!-- Modal body -->
   <div class="modal-body p-0">
     <!-- Close button -->
@@ -23,7 +23,7 @@
           >
             <!-- Task name -->
             <i class="fa-lg fas fa-window-maximize m-2 name__icon"></i>
-            <p class="name__text">{{this.taskForm.value.name}}</p>
+            <p class="name__text">{{taskForm.value.name}}</p>
           </div>
         </a>
         <!-- Form view - edit tasks name -->
@@ -47,24 +47,30 @@
         </div>
       </div>
       <!-- Task tag -->
-      <div *ngIf="tagsByBoard.length !== 0" class="col-8 ml-5">
+      <div *ngIf="task.tag.length > 0" class="col-8 ml-5">
         <p class="tag__text pl-2 mt-0">
           Tags
         </p>
-        <div class="d-flex mb-2">
-          <div *ngFor="let tagTask of task.tag; let i = index" class="tag">
+        <div class="tag__container mb-2">
+          <div *ngFor="let tagTask of task.tag | tagSort; let i = index; trackBy: trackByFn" class="tag">
             <span
               class="tag__name py-1 px-2 m-1"
               [style.background-color]="tagTask.background"
+              [class.tag__name--white-color]="tagTask.background === '#172B4D'"
             >
-              <a class="tag__link" (click)="onToggleBtnEditTag(); onOpenTags()"></a>
-              {{tagTask.name}}
+              <a
+                class="tag__link"
+                [class.tag__link--non-cover]="tagTask.background === ''"
+                (click)="onOpenTags('editFromTask', tagTask)"
+              >
+              </a>
+              {{tagTask.name }}
           </span>
           </div>
           <button
             type="button"
             class="rounded tag__btn m-1"
-            (click)="onToggleBtnEditTag(null, tagsByBoard.length); onOpenTags()"
+            (click)="onOpenTags('createFromTask')"
           >
             <mdb-icon class="fa modal__text--span" fas icon="plus"></mdb-icon>
           </button>
@@ -82,7 +88,7 @@
               *ngIf="!toggleEditTaskDesc && taskForm.value.description"
               type="button"
               class="rounded desc__btn desc__btn--edit p-1"
-              (click)="toggleBtnTaskDesc(task.id)"
+              (click)="onToggleBtnTaskDesc(task.id)"
             >
               Edit
             </button>
@@ -90,7 +96,7 @@
         </div>
         <!-- Form view - description -->
         <div class="mb-5 ml-5" (click)="$event.stopPropagation()">
-          <a (click)="toggleBtnTaskDesc(task.id)">
+          <a (click)="onToggleBtnTaskDesc(task.id)">
             <!-- Description -->
             <div *ngIf="!toggleEditTaskDesc">
             <pre
@@ -166,7 +172,7 @@
           mdbWavesEffect
           type="button"
           class="sidebar__btn justify-content-center m-1"
-          (click)="onOpenTags()"
+          (click)="onOpenTags('')"
         >
           <i class="fas fa-sm fa-tags p-2 sidebar__icon"></i>
           Tags

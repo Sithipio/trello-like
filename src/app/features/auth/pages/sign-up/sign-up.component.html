@@ -19,11 +19,11 @@
     <label for="firstName">
       Type your first name*
     </label>
-    <mdb-error *ngIf="firstNameForm.invalid && (firstNameForm.dirty || firstNameForm.touched)">
-      <span *ngIf="firstNameForm.errors.required">First name is required</span>
-      <span *ngIf="firstNameForm.errors.minlength">Please enter at least 2 characters</span>
-      <span *ngIf="firstNameForm.errors.maxlength">Please enter at most	20 characters</span>
-      <span *ngIf="firstNameForm.errors.pattern && !firstNameForm.errors.minlength">Enter only latin letters</span>
+    <mdb-error *ngIf="firstNameControl.invalid && (firstNameControl.dirty || firstNameControl.touched)">
+      <span *ngIf="firstNameControl.errors.required">First name is required</span>
+      <span *ngIf="firstNameControl.errors.minlength">Please enter at least 2 characters</span>
+      <span *ngIf="firstNameControl.errors.maxlength">Please enter at most	20 characters</span>
+      <span *ngIf="firstNameControl.errors.pattern && !firstNameControl.errors.minlength">Enter only latin letters</span>
     </mdb-error>
   </div>
   <!-- Last Name -->
@@ -41,11 +41,11 @@
     <label for="lastName">
       Type your last name*
     </label>
-    <mdb-error *ngIf="lastNameForm.invalid && (lastNameForm.dirty || lastNameForm.touched)">
-      <span *ngIf="lastNameForm.errors.required">First name is required</span>
-      <span *ngIf="lastNameForm.errors.minlength">Please enter at least 2 characters</span>
-      <span *ngIf="lastNameForm.errors.maxlength">Please enter at most 20 characters</span>
-      <span *ngIf="lastNameForm.errors.pattern && !lastNameForm.errors.minlength">Please enter only latin letters</span>
+    <mdb-error *ngIf="lastNameControl.invalid && (lastNameControl.dirty || lastNameControl.touched)">
+      <span *ngIf="lastNameControl.errors.required">First name is required</span>
+      <span *ngIf="lastNameControl.errors.minlength">Please enter at least 2 characters</span>
+      <span *ngIf="lastNameControl.errors.maxlength">Please enter at most 20 characters</span>
+      <span *ngIf="lastNameControl.errors.pattern && !lastNameControl.errors.minlength">Please enter only latin letters</span>
     </mdb-error>
   </div>
   <!-- Email -->
@@ -63,10 +63,10 @@
     <label for="email">
       Type your email*
     </label>
-    <mdb-error *ngIf="emailForm.invalid && (emailForm.dirty || emailForm.touched)">
-      <span *ngIf="emailForm.errors.required">Email is required</span>
-      <span *ngIf="emailForm.errors.email">Enter valid email address</span>
-      <span *ngIf="emailForm.errors.emailExist">User with that email already exists</span>
+    <mdb-error *ngIf="emailControl.invalid && (emailControl.dirty || emailControl.touched)">
+      <span *ngIf="emailControl.errors.required">Email is required</span>
+      <span *ngIf="emailControl.errors.email">Enter valid email address</span>
+      <span *ngIf="emailControl.errors.emailExist">User with that email already exists</span>
     </mdb-error>
   </div>
   <!-- Password -->
@@ -91,9 +91,9 @@
     <label for="password">
       Type your password*
     </label>
-    <mdb-error *ngIf="passwordForm.invalid && (passwordForm.dirty || passwordForm.touched)">
-      <span *ngIf="passwordForm.errors.required">Password is required</span>
-      <span *ngIf="passwordForm.errors.minlength">Please enter at least 4 characters</span>
+    <mdb-error *ngIf="passwordControl.invalid && (passwordControl.dirty || passwordControl.touched)">
+      <span *ngIf="passwordControl.errors.required">Password is required</span>
+      <span *ngIf="passwordControl.errors.minlength">Please enter at least 4 characters</span>
     </mdb-error>
   </div>
   <!-- Confirm password -->
@@ -118,19 +118,19 @@
     <label for="confirmPassword">
       Confirm your password*
     </label>
-    <mdb-error *ngIf="confPasswordForm.invalid && (confPasswordForm.dirty || confPasswordForm.touched)">
-      <span *ngIf="confPasswordForm.errors.required">Confirm password is required</span>
-      <span *ngIf="confPasswordForm.errors.passwordMismatch && !confPasswordForm.errors.required"
+    <mdb-error *ngIf="confPasswordControl.invalid && (confPasswordControl.dirty || confPasswordControl.touched)">
+      <span *ngIf="confPasswordControl.errors.required">Confirm password is required</span>
+      <span *ngIf="confPasswordControl.errors.passwordMismatch && !confPasswordControl.errors.required"
       >
         The password does not match
       </span>
     </mdb-error>
   </div>
   <!-- Alarm -->
-  <div *ngIf="!emailForm.errors?.emailExist && isAlarmForm" class="alert alert-danger text-center form-alert">
+  <div *ngIf="!emailControl.errors?.emailExist && isAlarmForm" class="alert alert-danger text-center form-alert">
     Please correctly fill out all the fields
   </div>
-  <div *ngIf="emailForm.errors?.emailExist" class="alert alert-danger text-center form-alert">
+  <div *ngIf="emailControl.errors?.emailExist" class="alert alert-danger text-center form-alert">
     A user with this email already exists, try
     <a [routerLink]=urlToLog>
       logging in?

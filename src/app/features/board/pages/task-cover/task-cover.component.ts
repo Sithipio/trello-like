@@ -3,7 +3,6 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { MDBModalService } from 'angular-bootstrap-md';
 
 import { TASK_BG_COLOR } from '@shared/constant';
-import { NotificationType } from '@shared/enums';
 import { DataUpdateService, TasksService } from '../../services';
 import { NotificationService } from '@shared/services';
 
@@ -12,7 +11,7 @@ import { NotificationService } from '@shared/services';
   templateUrl: './task-cover.component.html',
   styleUrls: [
     '../../styles/modal.scss',
-    './task-cover.component.scss',
+    '../../styles/radio.scss',
   ],
 })
 export class TaskCoverComponent implements OnInit {
@@ -22,7 +21,7 @@ export class TaskCoverComponent implements OnInit {
   public bgTask = TASK_BG_COLOR;
   public editBackgroundForm: FormGroup;
 
-  constructor(public fb: FormBuilder,
+  constructor(private fb: FormBuilder,
               private tasksService: TasksService,
               private dataUpdateService: DataUpdateService,
               private notificationService: NotificationService,
@@ -45,15 +44,11 @@ export class TaskCoverComponent implements OnInit {
     this.tasksService.updateTaskBackground(this.boardId, this.taskId, background).subscribe({
       next: () => {
         this.dataUpdateService.sendUpdateTaskId(this.taskId);
-        this.dataUpdateService.sendUpdateTaskData(background);
+        this.dataUpdateService.sendUpdateBackground(background);
         this.editBackgroundForm.patchValue({ background: background });
       },
       error: ({ error }) => {
-        this.notificationService.sendMessage({
-          title: error.error,
-          message: error.message,
-          type: NotificationType.ERROR,
-        });
+        this.notificationService.sendMessages(error);
       },
     });
   }

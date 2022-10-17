@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
-import { BoardListComponent } from './pages/board-list/board-list.component';
+import { BoardListComponent } from './pages';
 
 
 const routes: Routes = [

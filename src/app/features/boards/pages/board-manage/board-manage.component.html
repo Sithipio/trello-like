@@ -58,9 +58,9 @@
             <label for="name">
               Enter a board name*
             </label>
-            <mdb-error *ngIf="getNameValueForm.invalid && (getNameValueForm.dirty || getNameValueForm.touched)">
-              <span *ngIf="getNameValueForm.errors.required">Board name is required</span>
-              <span *ngIf="getNameValueForm.errors.maxlength">Please enter at most 15 characters</span>
+            <mdb-error *ngIf="nameControl.invalid && (nameControl.dirty || nameControl.touched)">
+              <span *ngIf="nameControl.errors.required">Board name is required</span>
+              <span *ngIf="nameControl.errors.maxlength">Please enter at most 15 characters</span>
             </mdb-error>
           </div>
         <div *ngIf="board" class="d-flex justify-content-center">
@@ -129,7 +129,7 @@
             type="submit"
             color="success"
             class="waves-light relative rounded"
-            (click)="onUpdateBoard(this.boardForm.value)"
+            (click)="onUpdateBoard(boardForm.value)"
           >
             Edit
           </button>

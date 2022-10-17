@@ -3,7 +3,11 @@
   mdbModal
   class="modal__container"
 >
-  <div class="modal-side modal-sm">
+  <div
+    class="modal-side modal-sm modal--position"
+    [class.modal--cover]="background"
+  >
+
     <div class="modal-content">
       <!-- Modal body -->
       <p class="modal__header my-1">
@@ -32,7 +36,12 @@
               (click)="onUpdateTaskBackground(item)"
             >
             <label for="background+{{i}}" [style.background-color]=item>
-              <mdb-icon fas icon="check" class="radio-group--icon"></mdb-icon>
+              <mdb-icon
+                fas
+                icon="check"
+                class="radio-group--icon"
+              >
+              </mdb-icon>
               <span class="radio-group--fade"></span>
             </label>
           </li>

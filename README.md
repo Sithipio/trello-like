@@ -38,5 +38,6 @@ You can find production app via that link: <br>
 
 <h2>Stay in touch</h2>
 <hr>
+
 - Author - [Berezos Valentyn](https://www.linkedin.com/in/berezos-valentyn/)
 - GitHub - [Sithipio](http://github.com/Sithipio)

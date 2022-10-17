@@ -1,13 +1,10 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { MDBBootstrapModule } from 'angular-bootstrap-md';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
-import { BoardsRoutingModule } from './boards-routing.module';
-import { BoardListComponent } from './pages/board-list/board-list.component';
-import { BoardManageComponent } from './pages/board-manage/board-manage.component';
-import { FavoriteBoardsPipe, FavoriteHeaderPipe } from './pipes';
 import { AutoFocusModule } from '@shared/directives';
+import { BoardsRoutingModule } from './boards-routing.module';
+import { BoardListComponent, BoardManageComponent } from './pages';
+import { FavoriteBoardsPipe, FavoriteHeaderPipe } from './pipes';
+import { SharedAngularModule } from '@shared/shared-angular.module';
 
 
 @NgModule({
@@ -18,11 +15,8 @@ import { AutoFocusModule } from '@shared/directives';
     BoardManageComponent,
   ],
   imports: [
-    CommonModule,
+    SharedAngularModule,
     BoardsRoutingModule,
-    MDBBootstrapModule,
-    ReactiveFormsModule,
-    FormsModule,
     AutoFocusModule,
   ],
 })

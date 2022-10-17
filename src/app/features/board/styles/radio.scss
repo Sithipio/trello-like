@@ -1,11 +1,4 @@
-@import "./src/app/styles/_variables.scss";
-
-.modal {
-  &__container {
-    top: 24vh;
-    right: 1vw;
-  }
-}
+@import "./src/app/styles/_variables";
 
 .radio-group {
   position: relative;

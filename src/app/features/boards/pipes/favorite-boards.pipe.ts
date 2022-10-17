@@ -1,6 +1,6 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
-import { IBoards } from '@shared/models/boards.model';
+import { IBoards } from '@shared/models';
 
 @Pipe({
   name: 'favoriteBoards',

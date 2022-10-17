@@ -9,7 +9,7 @@
   </h3>
   <ul class="mt-4 d-flex flex-wrap align-items-center">
     <li
-      *ngFor="let item of boards | favoriteBoards"
+      *ngFor="let item of boards | favoriteBoards; trackBy: trackByFn"
       class="board__list m-2 z-depth-1"
       [style.background]=item.background
     >
@@ -45,7 +45,7 @@
   <!-- Boards list -->
   <ul class="mt-4 d-flex flex-wrap align-items-center">
     <li
-      *ngFor="let item of boards"
+      *ngFor="let item of boards; trackBy: trackByFn"
       class="board__list m-2 z-depth-1"
       [style.background]=item.background
     >

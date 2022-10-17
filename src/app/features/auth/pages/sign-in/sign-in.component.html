@@ -6,7 +6,7 @@
   </h3>
   <!-- Email -->
   <div class="md-form mt-5">
-    <div [ngSwitch]="emailForm.status">
+    <div [ngSwitch]="emailControl.status">
       <mdb-icon class="prefix form__icon" fas icon="envelope-circle-check" *ngSwitchCase="'VALID'"></mdb-icon>
       <mdb-icon class="prefix form__icon" fas icon="envelope" *ngSwitchDefault></mdb-icon>
       <input
@@ -20,9 +20,9 @@
       <label for="email">
         Type your email*
       </label>
-      <mdb-error *ngIf="emailForm.invalid && (emailForm.dirty || emailForm.touched)">
-        <span *ngIf="emailForm.errors.required">Email is required</span>
-        <span *ngIf="emailForm.errors.email">Enter valid email address</span>
+      <mdb-error *ngIf="emailControl.invalid && (emailControl.dirty || emailControl.touched)">
+        <span *ngIf="emailControl.errors.required">Email is required</span>
+        <span *ngIf="emailControl.errors.email">Enter valid email address</span>
       </mdb-error>
     </div>
     <!-- Password -->
@@ -46,8 +46,8 @@
       <label for="password">
         Type your password*
       </label>
-      <mdb-error *ngIf="passwordForm.invalid && (passwordForm.dirty || passwordForm.touched)">
-        <span *ngIf="passwordForm.errors.required">Password is required</span>
+      <mdb-error *ngIf="passwordControl.invalid && (passwordControl.dirty || passwordControl.touched)">
+        <span *ngIf="passwordControl.errors.required">Password is required</span>
       </mdb-error>
     </div>
     <!-- Alarm -->
