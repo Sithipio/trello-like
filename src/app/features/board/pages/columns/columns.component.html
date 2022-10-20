@@ -94,7 +94,7 @@
         >
           <!-- Task list -->
           <li
-            *ngFor="let task of tasks[column.id]; let i = index; trackBy: trackByFn"
+            *ngFor="let task of tasks[column.id] | taskSort; let i = index; trackBy: trackByFn"
             cdkDrag
             [style.background-color]="task.background"
             [ngClass]="{
@@ -108,6 +108,13 @@
             <a class="task__link" (click)="onOpenModalTask(task.id)"> </a>
             <!-- Task name -->
             <p class="task__name">{{task.name}}</p>
+            <p
+              *ngIf="task.date" class="task__date"
+              [class.task__date--overdue]="dateOverdue(task.date)"
+            >
+              <i *ngIf="dateOverdue(task.date)" class="far fa-clock"></i>
+              {{task.date | date:'MMM d'}}
+            </p>
             <div class="d-flex flex-wrap mt-2 tag__container">
             <span
               *ngFor="let tag of tag[task.id]; trackBy: trackByFn"

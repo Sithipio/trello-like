@@ -4,7 +4,7 @@
 
 .modal-body {
   overflow-x: hidden;
-  max-height: 395px;
+  max-height: 350px;
 
   &--cover {
     max-height: 440px;
@@ -46,7 +46,7 @@
 
   &__add-btn {
     width: 230px;
-    background-color: #091e420a;
+    background-color: $color-btn-primary;
     border: none;
     border-radius: $border-radius-normal;
     font-size: $font-size-medium;

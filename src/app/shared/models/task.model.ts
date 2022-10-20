@@ -7,7 +7,7 @@ export interface ITask {
   name: string;
   description: string;
   tag: ITag[];
-  date: string;
+  date: Date;
   background: TaskBackground;
   order: number;
   column : string;

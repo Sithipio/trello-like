@@ -231,17 +231,36 @@ input {
     z-index: 9;
   }
 
+  &__date {
+    position: absolute;
+    right: 5px;
+    top: 5px;
+    font-size: $font-size-small;
+    font-weight: $font-weight-light;
+
+    &--overdue {
+      font-weight: $font-weight-bold + 100;
+    }
+  }
+
   &__icon {
     @include hover-rgba(0.35);
 
     display: none;
     position: absolute;
-    height: 28px;
-    width: 30px;
-    right: 4px;
-    top: 4px;
+    height: 20px;
+    width: 20px;
+    right: 5px;
+    top: 20px;
     color: white;
     border-radius: $border-radius-big + 2px;
+
+    & mdb-icon {
+      position: absolute;
+      font-size: $font-size-small;
+      left: 4px;
+      top: 4px;
+    }
   }
 
   &__item {
@@ -257,9 +276,6 @@ input {
       font-size: $font-size-medium + 2px;
       font-weight: $font-weight-medium;
 
-      .task__icon {
-        font-size: $font-size-medium;
-      }
     }
 
     &--bg-w {

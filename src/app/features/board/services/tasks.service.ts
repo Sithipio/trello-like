@@ -37,6 +37,10 @@ export class TasksService {
     return this.httpClient.patch<ITask>(`/${boardId}${URL_TASK}/${taskId}/description`, { description });
   }
 
+  public updateTaskDate(boardId: string, taskId: string, date: Date): Observable<ITask> {
+    return this.httpClient.patch<ITask>(`/${boardId}${URL_TASK}/${taskId}/date`,  {date} );
+  }
+
   public updateTaskOrder(boardId: string, columnId: string, dragColumns): Observable<ITask[]> {
     return this.httpClient.put<ITask[]>(`/${boardId}${URL_TASK}`, dragColumns);
   }
