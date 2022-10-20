@@ -32,7 +32,6 @@ export class BoardListComponent implements OnInit {
       next: (resp: IBoards[]) => {
         this.boards = resp;
       },
-
     });
   }
 

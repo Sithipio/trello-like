@@ -33,6 +33,7 @@ export class ColumnsComponent implements OnInit, OnDestroy {
   private readonly _boardId: string = this.route.snapshot.paramMap.get('boardId');
   private _taskSub = new Subscription;
   private _tagSub = new Subscription;
+  public currentNumberDate: number = new Date().getTime();
 
   constructor(private modalService: MDBModalService,
               private columnsService: ColumnsService,
@@ -256,7 +257,8 @@ export class ColumnsComponent implements OnInit, OnDestroy {
         this.column.forEach(columnId => {
           this.tasks[columnId] = resp.filter(task => {
             this.tag[task.id] = task.tag;
-            return task.column === columnId});
+            return task.column === columnId;
+          });
         });
         if (columnId) {
           this.scrollTaskList(columnId);
@@ -268,6 +270,12 @@ export class ColumnsComponent implements OnInit, OnDestroy {
     });
   }
 
+  public dateOverdue(taskDate): boolean {
+    const numberTaskDate = new Date(taskDate).getTime();
+
+    return this.currentNumberDate >= numberTaskDate;
+  }
+
   private getTaskById(taskId: string): void {
     this.tasksService.getTask(this._boardId, taskId).subscribe({
       next: (resp: ITask) => {
@@ -275,6 +283,7 @@ export class ColumnsComponent implements OnInit, OnDestroy {
           if (item.id === taskId) {
             item.name = resp.name;
             item.background = resp.background;
+            item.date = resp.date;
           }
         });
       },

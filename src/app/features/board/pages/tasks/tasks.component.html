@@ -181,10 +181,24 @@
           mdbWavesEffect
           type="button"
           class="sidebar__btn justify-content-center m-1"
-          (click)="onCloseTask()"
+          (click)="dp.show()"
         >
           <i class="fas fa-sm fa-calendar-alt p-2 sidebar__icon"></i>
           Dates
+          <input
+            bsDatepicker
+            #dp="bsDatepicker"
+            [(bsValue)]=datePickerValue
+            (onHidden)="onUpdateTaskDate(datePickerValue)"
+            [dateCustomClasses]="dateCustomClasses"
+            [bsConfig]="datePickerConfig"
+            [minDate]="datePickerMinDate"
+            class="date__input"
+          >
+          <div *ngIf="task.date" class="d-flex align-items-center">
+            <p class="date__text"> {{task.date | date:'mediumDate'}}</p>
+            <i class="far fa-times-circle date__icon ml-2" (click)="$event.stopPropagation(); onDeleteTaskDate()"></i>
+          </div>
         </button>
         <button
           mdbWavesEffect

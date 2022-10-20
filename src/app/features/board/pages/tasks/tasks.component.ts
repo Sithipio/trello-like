@@ -9,6 +9,7 @@ import { NotificationService } from '@shared/services';
 import { ITag, ITask } from '@shared/models';
 import { TaskCoverComponent } from '../task-cover/task-cover.component';
 import { TaskTagComponent } from '../task-tag/task-tag.component';
+import { DatepickerDateCustomClasses } from 'ngx-bootstrap/datepicker';
 
 @Component({
   selector: 'app-tasks',
@@ -20,7 +21,7 @@ import { TaskTagComponent } from '../task-tag/task-tag.component';
 
 export class TasksComponent implements OnInit, OnDestroy {
 
-  private boardId: string;
+  public boardId: string;
   public taskId: string;
   public taskForm: FormGroup;
   public task: ITask;
@@ -29,6 +30,15 @@ export class TasksComponent implements OnInit, OnDestroy {
   public toggleEditTaskDesc: string = null;
   private _backgroundSub = new Subscription;
   private _tagSub = new Subscription;
+  public datePickerValue: Date;
+  public datePickerMinDate: Date = new Date();
+  public datePickerConfig = {
+    containerClass: 'theme-green',
+    adaptivePosition: true,
+    selectFromOtherMonth: true,
+    todayPosition: 'center',
+  };
+  public dateCustomClasses: DatepickerDateCustomClasses[];
   @ViewChild('textAreaDesc') textAreaDesc: ElementRef;
 
   constructor(private fb: FormBuilder,
@@ -39,6 +49,10 @@ export class TasksComponent implements OnInit, OnDestroy {
               private notificationService: NotificationService,
               private router: Router,
   ) {
+    this.datePickerMinDate.setDate(this.datePickerMinDate.getDate() - 10);
+    this.dateCustomClasses = [
+      { date: new Date(), classes: ['current-date'] },
+    ];
   }
 
   ngOnInit() {
@@ -74,7 +88,6 @@ export class TasksComponent implements OnInit, OnDestroy {
       'name': ['', Validators.required],
       'description': [''],
       'tag': [''],
-      'date': [''],
       'background': [''],
       'user': [],
     });
@@ -89,7 +102,8 @@ export class TasksComponent implements OnInit, OnDestroy {
       next: (resp: ITask) => {
         this.task = resp;
         this.taskForm.patchValue(this.task);
-        this.dataUpdateService.sendUpdateTagsByTask(this.task)
+        this.dataUpdateService.sendUpdateTagsByTask(this.task);
+        this.datePickerValue = new Date(this.task.date);
       },
       error: ({ error }) => {
         this.notificationService.sendMessages(error);
@@ -134,6 +148,33 @@ export class TasksComponent implements OnInit, OnDestroy {
         this.notificationService.sendMessages(error);
       },
     });
+  }
+
+  public onUpdateTaskDate(date?: Date) {
+    if (date.getFullYear() >= this.datePickerMinDate.getFullYear()) {
+      this.tasksService.updateTaskDate(this.boardId, this.taskId, date).subscribe({
+        next: () => {
+          this.dataUpdateService.sendUpdateTaskId(this.taskId);
+          this.task.date = date;
+        },
+        error: ({ error }) => {
+          this.notificationService.sendMessages(error);
+        },
+      });
+    }
+  }
+
+  public onDeleteTaskDate() {
+      this.tasksService.updateTaskDate(this.boardId, this.taskId, null).subscribe({
+        next: () => {
+          this.dataUpdateService.sendUpdateTaskId(this.taskId);
+          this.task.date = null;
+          this.datePickerValue = null;
+        },
+        error: ({ error }) => {
+          this.notificationService.sendMessages(error);
+        },
+      });
   }
 
   private backTaskDescription(): void {
@@ -206,4 +247,5 @@ export class TasksComponent implements OnInit, OnDestroy {
     this._backgroundSub.unsubscribe();
     this._tagSub.unsubscribe();
   }
+
 }

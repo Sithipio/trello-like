@@ -7,6 +7,8 @@ import { BoardRoutingModule } from './board-routing.module';
 import { ColumnsComponent, TaskCoverComponent, TasksComponent, TaskTagComponent } from './pages';
 import { TagSortPipe } from './pipes';
 import { SharedAngularModule } from '@shared/shared-angular.module';
+import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
+import { TaskSortPipe } from './pipes';
 
 
 @NgModule({
@@ -16,6 +18,7 @@ import { SharedAngularModule } from '@shared/shared-angular.module';
     TaskCoverComponent,
     TaskTagComponent,
     TagSortPipe,
+    TaskSortPipe,
   ],
   imports: [
     SharedAngularModule,
@@ -23,6 +26,7 @@ import { SharedAngularModule } from '@shared/shared-angular.module';
     DragDropModule,
     AutoFocusModule,
     AutoScrollHeightModule,
+    BsDatepickerModule,
   ],
 })
 export class BoardModule {

@@ -47,6 +47,7 @@ input {
   &__btn {
     position: relative;
     z-index: 6;
+    font-weight: $font-weight-medium;
 
     &--animated {
       &:before {

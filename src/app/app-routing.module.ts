@@ -5,7 +5,7 @@ import { MainContainerComponent } from '@core/components/main-container/main-con
 import { AuthContainerComponent } from '@core/components/auth-container/auth-container.component';
 import { AuthGuard } from '@core/guards/auth.guard';
 import { AppRoutes, AppRoutesParam } from '@shared/enums/app-routes';
-import { TasksComponent } from './features/board/pages/tasks/tasks.component';
+import { TasksComponent } from './features/board/pages';
 
 
 const routes: Routes = [

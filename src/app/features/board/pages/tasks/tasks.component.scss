@@ -129,7 +129,7 @@ pre {
   }
 
   &__btn {
-    background-color: #091e420a;
+    background-color: $color-btn-primary;
     border: none;
     font-size: $font-size-medium;
     height: 30px;
@@ -179,23 +179,25 @@ pre {
     }
 
     &::-webkit-scrollbar-track {
-      background: rgba(185, 189, 197, 0.4);
+      @include scroll-rgba(0.4);
+
       border-radius: $border-radius-big;
     }
 
     &::-webkit-scrollbar-thumb {
+      @include scroll-rgba(0.8);
+
       border-radius: $border-radius-big;
-      background: rgba(185, 189, 197, 0.8);
     }
 
     &::-webkit-scrollbar-thumb:hover {
-      background: rgba(185, 189, 197, 1);
+      @include scroll-rgba(1);
     }
 
     &--empty {
       font-size: $font-size-medium;
       opacity: 0.8;
-      background-color: #091e420a;
+      background-color: $color-btn-primary;
       border: none;
       border-radius: $border-radius-normal;
       box-shadow: none;
@@ -211,8 +213,8 @@ pre {
   }
 
   &__text-header {
-    font-size: 16px;
-    font-weight: 500;
+    font-size: $font-size-medium + 2;
+    font-weight: $font-weight-medium;
     margin-left: 18px;
     color: $color-text-blue;
     padding-top: 6px;
@@ -222,7 +224,7 @@ pre {
   &__btn {
     text-transform: none;
     min-width: 65px;
-    font-weight: 500;
+    font-weight: $font-weight-medium;
 
     &--close {
       opacity: 0.7;
@@ -234,13 +236,13 @@ pre {
 
     &--edit {
       align-items: center;
-      background-color: #091e420a;
+      background-color: $color-btn-primary;
       border: none;
       border-radius: $border-radius-normal;
       box-shadow: none;
       color: $color-text-blue;
-      font-size: 14px;
-      font-weight: 400;
+      font-size: $font-size-medium;
+      font-weight: $font-weight-light;
       padding: 6px 12px;
       font-family: $font-family-main;
       margin-left: 10px;
@@ -325,4 +327,43 @@ pre {
     min-width: 32px;
   }
 }
+
+::ng-deep {
+
+  &.bs-datepicker-container {
+    padding: 0;
+  }
+
+  &.bs-datepicker {
+    border-radius: $border-radius-normal;
+  }
+
+  &.current-date:not(.selected) {
+    color: coral;
+    background-color: rgba(94, 108, 132, 0.05);
+  }
+}
+
+.date {
+
+  &__input {
+    position: absolute;
+    visibility: hidden;
+  }
+
+  &__text {
+    margin-left: 30px;
+    margin-bottom: 0;
+    background-color: $border-color-non-cover;
+    padding: 5px;
+    width: fit-content;
+    border-radius: $border-radius-big;
+  }
+
+  &__icon {
+    transform: scale(1.3);
+  }
+}
+
+
 
